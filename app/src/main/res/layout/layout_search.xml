@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="@dimen/toolbar_height"
+    android:orientation="vertical" android:background="@color/white"
+    android:paddingLeft="@dimen/common_horizontal_margin" android:paddingRight="@dimen/common_horizontal_margin"
+    android:paddingTop="@dimen/common_vertical_margin" android:paddingBottom="@dimen/common_vertical_margin">
+
+  <LinearLayout
+      android:layout_width="match_parent" android:layout_height="match_parent"
+      android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1" android:background="@drawable/bg_message_search">
+
+      <!-- 左边的 搜索 图标 -->
+      <ImageView
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_gravity="center" android:layout_marginLeft="10dp"
+          android:src="@drawable/common_search" android:scaleType="center"/>
+
+      <!-- 搜索输入栏 -->
+      <FrameLayout
+          android:layout_width="0dp" android:layout_height="match_parent"
+          android:layout_weight="1">
+
+        <EditText android:id="@+id/edt_search"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:background="@null" android:layout_marginLeft="10dp"
+            android:hint="@string/search" android:textSize="@dimen/common_text_size"
+            android:imeOptions="actionSearch" android:singleLine="true"/>
+
+        <TextView android:id="@+id/tv_cover"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:background="@null" android:layout_marginLeft="10dp"
+            android:text="@string/search" android:textSize="@dimen/common_text_size"
+            android:textColor="@color/divider" android:visibility="gone"/>
+      </FrameLayout>
+    </LinearLayout>
+
+    <!-- 右边的 action -->
+    <TextView android:id="@+id/tv_action"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" android:layout_marginLeft="16dp"
+        android:text="@string/cancel" android:textSize="@dimen/common_text_size"/>
+  </LinearLayout>
+
+  <!-- 底部一个分割线 -->
+  <View android:layout_width="match_parent" android:layout_height="0.5dp"
+      android:background="@color/divider"/>
+
+</LinearLayout>

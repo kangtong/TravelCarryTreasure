@@ -1,0 +1,12 @@
+<resources>
+
+  <!-- common -->
+  <dimen name="common_horizontal_margin">16dp</dimen>
+  <dimen name="common_vertical_margin">10dp</dimen>
+  <dimen name="common_text_size">15sp</dimen>
+
+  <!-- search view -->
+  <dimen name="toolbar_height">56dp</dimen>
+
+
+</resources>
