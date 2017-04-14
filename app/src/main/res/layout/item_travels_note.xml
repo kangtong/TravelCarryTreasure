@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:background="@color/white">
+
+  <FrameLayout android:layout_width="match_parent" android:layout_height="180dp">
+
+    <ImageView android:id="@+id/img"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:src="@drawable/temp_hulunbeier" android:scaleType="centerCrop"/>
+
+    <TextView
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="精华游记" android:textSize="10sp"
+        android:textColor="@color/white" android:background="@android:color/holo_orange_dark"/>
+  </FrameLayout>
+
+  <TextView android:id="@+id/tv_title"
+      android:layout_width="wrap_content" android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:text="四色草原多彩心——今夏走进呼伦贝尔" android:textSize="15sp"
+      android:textColor="@android:color/black"/>
+
+  <LinearLayout
+      android:layout_width="wrap_content" android:layout_height="wrap_content"
+      android:layout_marginTop="8dp" android:layout_marginBottom="20dp">
+
+    <TextView android:id="@+id/tv_look_num"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="80731" android:textSize="12sp" android:textColor="#999999"
+        android:drawableLeft="@drawable/ic_look" android:drawablePadding="8dp"/>
+
+    <TextView android:id="@+id/tv_time"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="2014-07-01" android:textSize="12sp" android:textColor="#999999"
+        android:drawableLeft="@drawable/ic_time" android:drawablePadding="8dp"/>
+  </LinearLayout>
+
+</LinearLayout>

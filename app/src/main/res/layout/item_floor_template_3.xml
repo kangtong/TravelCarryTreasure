@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:background="@color/white">
+
+  <!-- 顶部一个分割线 -->
+  <View android:layout_width="match_parent" android:layout_height="7dp"
+      android:background="@color/page_bg"/>
+
+  <!-- 上方栏目名 -->
+  <RelativeLayout android:id="@+id/linear_title"
+      android:layout_width="match_parent" android:layout_height="75dp"
+      android:layout_marginLeft="20dp" android:layout_marginRight="20dp">
+
+    <com.wx.ovalimageview.RoundImageView android:id="@+id/img_title"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_centerVertical="true" android:layout_marginLeft="5dp"
+        android:src="@drawable/discover_title_discovery"/>
+
+    <TextView android:id="@+id/tv_title"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/img_title"
+        android:text="每日·发现" android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:layout_marginTop="17dp" android:layout_marginLeft="16dp"/>
+
+    <TextView android:id="@+id/tv_title_sub"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/img_title" android:layout_below="@id/tv_title"
+        android:layout_alignLeft="@id/tv_title"
+        android:text="热门精选 旅行谈"
+        android:layout_marginTop="5dp"
+        android:textSize="12sp"/>
+
+    <ImageView
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:src="@drawable/public_icon_next_normal"
+        android:layout_alignParentRight="true" android:layout_centerVertical="true"
+    />
+
+  </RelativeLayout>
+
+  <!-- 中间多张图 : 此模板2张图 -->
+  <LinearLayout android:id="@+id/linear_content"
+      android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_marginLeft="18dp" android:layout_marginRight="18dp">
+
+    <!-- 这里是: 挑战刺激旅游胜地 -->
+    <!-- https://lvyou.baidu.com/main/webapp/explore/card/detail?&card_id=6e0f323b51b55264c32ec9cc&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=gps&LVCODE=1d08f8ffbde58870f1ef36dc6106adff&T=1491985207&locEnabled=YES&locType=GPS -->
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+
+      <ImageView android:id="@+id/img_content_1"
+          android:layout_width="120dp" android:layout_height="120dp"
+          android:layout_alignParentLeft="true" android:scaleType="fitXY"
+          android:src="@drawable/temp_ciji"/>
+
+      <TextView android:id="@+id/tv_label_1"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_toRightOf="@id/img_content_1" android:layout_marginLeft="15dp"
+          android:paddingTop="2dp" android:paddingBottom="2dp"
+          android:paddingLeft="3dp" android:paddingRight="3dp"
+          android:background="@drawable/bg_fresh_things"
+          android:text="新鲜事" android:textSize="11sp"
+          android:textColor="@android:color/holo_blue_dark"/>
+
+      <TextView android:id="@+id/tv_content_1"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:text="【挑战刺激旅游胜地】" android:textColor="@android:color/black"
+          android:textSize="15sp"
+          android:layout_below="@+id/tv_label_1" android:layout_alignLeft="@+id/tv_content_sub_1"
+          android:layout_alignStart="@+id/tv_content_sub_1"/>
+
+      <TextView android:id="@+id/tv_content_sub_1"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_1"
+          android:layout_below="@id/tv_content_1"
+          android:text="你是否空有一颗挑战的心，却不知去哪里？别担心，小编为你整理出了国内的几条最值得挑战的玻璃栈道，这个黄金周就去接受挑“栈”吧！"
+          android:textSize="12sp" android:maxLines="2" android:ellipsize="end"/>
+
+      <TextView
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_1"
+          android:layout_below="@id/tv_content_sub_1"
+          android:drawableLeft="@drawable/ic_time" android:drawablePadding="8dp"
+          android:text="2017.03.31 00:00:00" android:textSize="12sp"
+          android:textColor="#999999"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" android:layout_marginBottom="20dp">
+
+      <ImageView android:id="@+id/img_content_2"
+          android:layout_width="120dp" android:layout_height="120dp"
+          android:layout_alignParentLeft="true" android:scaleType="centerCrop"
+          android:src="@drawable/temp_gucheng"/>
+
+      <TextView android:id="@+id/tv_label_2"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_toRightOf="@id/img_content_2" android:layout_marginLeft="15dp"
+          android:paddingTop="2dp" android:paddingBottom="2dp"
+          android:paddingLeft="3dp" android:paddingRight="3dp"
+          android:background="@drawable/bg_fresh_things"
+          android:text="新鲜事" android:textSize="11sp"
+          android:textColor="@android:color/holo_blue_dark"/>
+
+      <TextView android:id="@+id/tv_content_2"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:text="【中国最美水下古城】" android:textColor="@android:color/black"
+          android:textSize="15sp"
+          android:layout_below="@+id/tv_label_2" android:layout_alignLeft="@+id/tv_content_sub_2"
+          android:layout_alignStart="@+id/tv_content_sub_2"/>
+
+      <TextView android:id="@+id/tv_content_sub_2"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_2"
+          android:layout_below="@id/tv_content_2"
+          android:text="中国的水下古城比较少，可谁又知道在这么美丽的千岛湖下面竟然藏着一个千年古城，而这些古老的建筑，全部都隐藏在这片蔚蓝千岛湖之下，你能想像吗？"
+          android:textSize="12sp" android:maxLines="2" android:ellipsize="end"/>
+
+      <TextView
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_2"
+          android:layout_below="@id/tv_content_sub_2"
+          android:drawableLeft="@drawable/ic_time" android:drawablePadding="8dp"
+          android:text="2017.03.24 00:00:00" android:textSize="12sp"
+          android:textColor="#999999"/>
+    </RelativeLayout>
+
+  </LinearLayout>
+
+</LinearLayout>

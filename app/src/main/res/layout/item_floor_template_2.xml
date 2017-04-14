@@ -15,12 +15,12 @@
     <com.wx.ovalimageview.RoundImageView android:id="@+id/img_title"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_centerVertical="true" android:layout_marginLeft="5dp"
-        android:src="@drawable/discover_title_season"/>
+        android:src="@drawable/discover_title_theme"/>
 
     <TextView android:id="@+id/tv_title"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_toRightOf="@id/img_title"
-        android:text="本季热门" android:textColor="@android:color/black"
+        android:text="主题游" android:textColor="@android:color/black"
         android:textSize="16sp"
         android:layout_marginTop="17dp" android:layout_marginLeft="16dp"/>
 
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_toRightOf="@id/img_title" android:layout_below="@id/tv_title"
         android:layout_alignLeft="@id/tv_title"
-        android:text="04月最热门的地方" android:textColor="#dc5a00"
+        android:text="寻找最合适你的主题"
         android:layout_marginTop="5dp"
         android:textSize="12sp"/>
 
@@ -42,7 +42,7 @@
 
   <!-- 中间多张图 : 此模板3张图 -->
   <LinearLayout android:id="@+id/linear_content"
-      android:layout_width="match_parent" android:layout_height="150dp"
+      android:layout_width="match_parent" android:layout_height="125dp"
       android:orientation="horizontal"
       android:layout_marginLeft="18dp" android:layout_marginRight="18dp">
 
@@ -52,17 +52,12 @@
 
       <ImageView android:id="@+id/img_content_1"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_xishuangbanna" android:scaleType="fitXY"/>
+          android:src="@drawable/temp_zijia" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_1"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="西双版纳" android:textColor="@android:color/black"
+          android:text="自驾" android:textColor="@android:color/black"
           android:textSize="16sp"
-          android:layout_marginTop="5dp"/>
-
-      <TextView android:id="@+id/tv_content_sub_1"
-          android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="泼水节，你敢来么" android:textSize="12sp"
           android:layout_marginTop="5dp"/>
     </LinearLayout>
 
@@ -73,19 +68,13 @@
 
       <ImageView android:id="@+id/img_content_2"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_shaoxing" android:scaleType="fitXY"/>
+          android:src="@drawable/temp_shanghua" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_2"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="绍兴" android:textColor="@android:color/black"
+          android:text="赏花" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
-
-      <TextView android:id="@+id/tv_content_sub_2"
-          android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="江南春色浓" android:textSize="12sp"
-          android:layout_marginTop="5dp"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -94,19 +83,13 @@
 
       <ImageView android:id="@+id/img_content_3"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_changtandao" android:scaleType="fitXY"/>
+          android:src="@drawable/temp_taqing" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_3"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="长滩岛" android:textColor="@android:color/black"
+          android:text="踏青" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
-
-      <TextView android:id="@+id/tv_content_sub_3"
-          android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="全世界最浪漫的白沙滩" android:textSize="12sp"
-          android:layout_marginTop="5dp"/>
-
     </LinearLayout>
 
   </LinearLayout>
