@@ -2,19 +2,22 @@ package com.dq.android.travelcarrytreasure.ui.discover;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
-import com.dq.android.travelcarrytreasure.api.PhoneNumberService;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
+import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverResponse;
-import com.dq.android.travelcarrytreasure.model.common.PhoneNumberResponse;
+import com.dq.android.travelcarrytreasure.util.NetworkUtil;
+import com.dq.android.travelcarrytreasure.util.SPUtils;
+import com.dq.android.travelcarrytreasure.util.TimeUtils;
 import com.dq.android.travelcarrytreasure.widget.CustomSearchView;
+import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import support.ui.adapters.EasyRecyclerAdapter;
 import support.ui.utilities.ToastUtils;
 
@@ -22,6 +25,9 @@ import support.ui.utilities.ToastUtils;
  * Created by DQDana on 2017/4/5
  */
 public class DiscoverFragment extends BaseFragment {
+
+  private static final String TAG = DiscoverFragment.class.getSimpleName();
+  private static final String KEY_DISCOVER_RESPONSE = "key_discover_response";
 
   private CustomSearchView mSearchView;
   private RecyclerView mRecyclerTravels; // 精华游记
@@ -40,105 +46,158 @@ public class DiscoverFragment extends BaseFragment {
     return R.layout.fragment_discover;
   }
 
-  @Override public void initViews() {
-    mSearchView = findView(R.id.search_view);
-    mRecyclerTravels = findView(R.id.recycle_travels);
-    mFloor_1 = findView(R.id.floor_1);
-    mFloor_2 = findView(R.id.floor_2);
-    mFloor_3 = findView(R.id.floor_3);
-  }
+  @Override protected void initView(View view, Bundle savedInstanceState) {
+    // 初始化
+    mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
+    mRecyclerTravels = (RecyclerView) view.findViewById(R.id.recycle_travels);
+    mFloor_1 = view.findViewById(R.id.floor_1);
+    mFloor_2 = view.findViewById(R.id.floor_2);
+    mFloor_3 = view.findViewById(R.id.floor_3);
 
-  @Override public void initListener() {
+    // 监听事件
     mSearchView.setSearchListener(new CustomSearchView.SearchListener() {
       @Override public void search(String keyWords) {
-        request();
       }
 
       @Override public void cancel() {
 
       }
     });
-  }
-
-  @Override public void initData() {
-    // 初始化前三个模板
-    initFloor();
 
     // 初始化 adapter
-    mAdapter = new EasyRecyclerAdapter(getContext(),DiscoverResponse.class,);
+    mAdapter =
+        new EasyRecyclerAdapter(getContext(), DiscoverResponse.class, DiscoverViewHolder.class);
     mRecyclerTravels.setHasFixedSize(true);
     mRecyclerTravels.setAdapter(mAdapter);
+
+    // 数据请求
+    onLoadDataWithSP();
+    if (NetworkUtil.isNetworkAvailable()) {
+      onLoadData();
+    } else {
+      ToastUtils.toast("本地网络检查错误!!!");
+    }
   }
 
-  private void initFloor() {
-    // 本季热门
-    //((TextView) mFloor_1.findViewById(R.id.tv_content_1)).setText();
-    //((TextView) mFloor_1.findViewById(R.id.tv_content_sub_1)).setText();
-    //ImageView img1_1 = (ImageView) mFloor_1.findViewById(R.id.img_content_1);
-    //Glide.with(DiscoverFragment.this).load("").into(img1_1);
-    //
-    //((TextView) mFloor_1.findViewById(R.id.tv_content_2)).setText();
-    //((TextView) mFloor_1.findViewById(R.id.tv_content_sub_2)).setText();
-    //ImageView img1_2 = (ImageView) mFloor_1.findViewById(R.id.img_content_2);
-    //Glide.with(DiscoverFragment.this).load("").into(img1_2);
-    //
-    //((TextView) mFloor_1.findViewById(R.id.tv_content_3)).setText();
-    //((TextView) mFloor_1.findViewById(R.id.tv_content_sub_3)).setText();
-    //ImageView img1_3 = (ImageView) mFloor_1.findViewById(R.id.img_content_3);
-    //Glide.with(DiscoverFragment.this).load("").into(img1_3);
+  private void initFloor(List<DiscoverResponse.DataBean.ModListBean> data) {
+    // 2,本季热门 3,主题游 4,每日发现 5, 精华游记
 
-    // 主题游
-    //((TextView) mFloor_2.findViewById(R.id.tv_content_1)).setText();
-    //ImageView img2_1 = (ImageView) mFloor_2.findViewById(R.id.img_content_1);
-    //Glide.with(DiscoverFragment.this).load("").into(img2_1);
-    //
-    //((TextView) mFloor_2.findViewById(R.id.tv_content_2)).setText();
-    //ImageView img2_2 = (ImageView) mFloor_2.findViewById(R.id.img_content_2);
-    //Glide.with(DiscoverFragment.this).load("").into(img2_2);
-    //
-    //((TextView) mFloor_2.findViewById(R.id.tv_content_3)).setText();
-    //ImageView img2_3 = (ImageView) mFloor_2.findViewById(R.id.img_content_3);
-    //Glide.with(DiscoverFragment.this).load("").into(img2_3);
+    // 本季热门 2
+    ((TextView) mFloor_1.findViewById(R.id.tv_content_1)).setText(
+        data.get(2).getList().get(0).getSname());
+    ((TextView) mFloor_1.findViewById(R.id.tv_content_sub_1)).setText(
+        data.get(2).getList().get(0).getAbs_desc());
+    ImageView img1_1 = (ImageView) mFloor_1.findViewById(R.id.img_content_1);
+    Glide.with(DiscoverFragment.this).load(data.get(2).getList().get(0).getPic_url()).into(img1_1);
 
-    // 每日发现
-    //((TextView) mFloor_3.findViewById(R.id.tv_content_1)).setText();
-    //((TextView) mFloor_3.findViewById(R.id.tv_content_sub_1)).setText();
-    //ImageView img3_1 = (ImageView) mFloor_3.findViewById(R.id.img_content_1);
-    //Glide.with(DiscoverFragment.this).load("").into(img3_1);
-    //
-    //((TextView) mFloor_3.findViewById(R.id.tv_content_2)).setText();
-    //((TextView) mFloor_3.findViewById(R.id.tv_content_sub_2)).setText();
-    //ImageView img3_2 = (ImageView) mFloor_3.findViewById(R.id.img_content_2);
-    //Glide.with(DiscoverFragment.this).load("").into(img3_2);
+    ((TextView) mFloor_1.findViewById(R.id.tv_content_2)).setText(
+        data.get(2).getList().get(1).getSname());
+    ((TextView) mFloor_1.findViewById(R.id.tv_content_sub_2)).setText(
+        data.get(2).getList().get(1).getAbs_desc());
+    ImageView img1_2 = (ImageView) mFloor_1.findViewById(R.id.img_content_2);
+    Glide.with(DiscoverFragment.this).load(data.get(2).getList().get(1).getPic_url()).into(img1_2);
+
+    ((TextView) mFloor_1.findViewById(R.id.tv_content_3)).setText(
+        data.get(2).getList().get(2).getSname());
+    ((TextView) mFloor_1.findViewById(R.id.tv_content_sub_3)).setText(
+        data.get(2).getList().get(2).getAbs_desc());
+    ImageView img1_3 = (ImageView) mFloor_1.findViewById(R.id.img_content_3);
+    Glide.with(DiscoverFragment.this).load(data.get(2).getList().get(2).getPic_url()).into(img1_3);
+
+    // 主题游 3
+    ((TextView) mFloor_2.findViewById(R.id.tv_content_1)).setText(
+        data.get(3).getList().get(0).getTitle());
+    ImageView img2_1 = (ImageView) mFloor_2.findViewById(R.id.img_content_1);
+    Glide.with(DiscoverFragment.this).load(data.get(3).getList().get(0).getPic_url()).into(img2_1);
+
+    ((TextView) mFloor_2.findViewById(R.id.tv_content_2)).setText(
+        data.get(3).getList().get(1).getTitle());
+    ImageView img2_2 = (ImageView) mFloor_2.findViewById(R.id.img_content_2);
+    Glide.with(DiscoverFragment.this).load(data.get(3).getList().get(1).getPic_url()).into(img2_2);
+
+    ((TextView) mFloor_2.findViewById(R.id.tv_content_3)).setText(
+        data.get(3).getList().get(2).getTitle());
+    ImageView img2_3 = (ImageView) mFloor_2.findViewById(R.id.img_content_3);
+    Glide.with(DiscoverFragment.this).load(data.get(3).getList().get(2).getPic_url()).into(img2_3);
+
+    // 每日发现 4
+    ((TextView) mFloor_3.findViewById(R.id.tv_label_1)).setText(
+        data.get(4).getList().get(0).getChannel_name());
+    ((TextView) mFloor_3.findViewById(R.id.tv_content_1)).setText(
+        data.get(4).getList().get(0).getTitle());
+    ((TextView) mFloor_3.findViewById(R.id.tv_content_sub_1)).setText(
+        data.get(4).getList().get(0).getDesc());
+    ((TextView) mFloor_3.findViewById(R.id.tv_date_1)).setText(
+        TimeUtils.getDateFromTime(data.get(4).getList().get(0).getCreate_time(),
+            "yyyy.MM.dd HH:mm:ss")
+    );
+    ImageView img3_1 = (ImageView) mFloor_3.findViewById(R.id.img_content_1);
+    Glide.with(DiscoverFragment.this).load(data.get(4).getList().get(0).getPic_url()).into(img3_1);
+
+    ((TextView) mFloor_3.findViewById(R.id.tv_label_2)).setText(
+        data.get(4).getList().get(1).getChannel_name());
+    ((TextView) mFloor_3.findViewById(R.id.tv_content_2)).setText(
+        data.get(4).getList().get(1).getTitle());
+    ((TextView) mFloor_3.findViewById(R.id.tv_content_sub_2)).setText(
+        data.get(4).getList().get(1).getDesc());
+    ((TextView) mFloor_3.findViewById(R.id.tv_date_2)).setText(
+        TimeUtils.getDateFromTime(data.get(4).getList().get(1).getCreate_time(),
+            "yyyy.MM.dd HH:mm:ss")
+    );
+    ImageView img3_2 = (ImageView) mFloor_3.findViewById(R.id.img_content_2);
+    Glide.with(DiscoverFragment.this).load(data.get(4).getList().get(1).getPic_url()).into(img3_2);
   }
 
-  @Override public void processClick(View v) {
-
+  /**
+   * 加载上次的缓存, 已存储在本地的sp
+   */
+  private void onLoadDataWithSP() {
+    String json = SPUtils.getString(getContext(), KEY_DISCOVER_RESPONSE);
+    if (!json.isEmpty()) {
+      Gson gson = new Gson();
+      DiscoverResponse response = gson.fromJson(json, DiscoverResponse.class);
+      initFloor(response.getData().getMod_list());
+      Log.d(TAG, "onLoadDataWithSP: " + "读取本地缓存数据成功~");
+    } else {
+      ToastUtils.toast("本地无缓存数据!!!");
+      Log.d(TAG, "onLoadDataWithSP: " + "本地无缓存数据!!!");
+    }
   }
 
-  private void request() {
-    // step1
-    Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://apis.juhe.cn")
-        .addConverterFactory(GsonConverterFactory.create()) // 返回的似的 实体
-        // .addConverterFactory(ScalarsConverterFactory.create()) // 返回的 string
-        .build();
-    // step2
-    PhoneNumberService service = retrofit.create(PhoneNumberService.class);
-    // step3
-    Call<PhoneNumberResponse> call =
-        service.getPhoneNumberBelong("13263272974", "3135e16b7d85b72565426b2c1e5fed60");
-    // step4
-    call.enqueue(new Callback<PhoneNumberResponse>() {
-      @Override
-      public void onResponse(Call<PhoneNumberResponse> call,
-          Response<PhoneNumberResponse> response) {
-        ToastUtils.toast(response.body().getResult().toString());
-      }
+  /* 加载网络数据 */
+  private void onLoadData() {
+    String url =
+        "http://lvyou.baidu.com/main/app/index?apiv=v4&sid=795ac511463263cf7ae3def3&y=40.001797&x=116.488096&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=4d95e25f12c37daa09394aa2848e906b&T=1492223512&locEnabled=YES&locType=GPS";
+    OkHttpUtils
+        .get()
+        .url(url)
+        .build()
+        .execute(new DiscoverCallBack() {
+          @Override public void onError(okhttp3.Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "网络错误");
+          }
 
-      @Override public void onFailure(Call<PhoneNumberResponse> call, Throwable t) {
-        ToastUtils.toast("网络错误");
-      }
-    });
+          @Override public void onResponse(DiscoverResponse response, int id) {
+            if (response.getErrno() == 0) { // 成功
+              Log.d(TAG, "onResponse: " + "api返回数据成功~");
+              // 展示数据
+              onShowData(response.getData().getMod_list());
+              // 保存至SP
+              Gson gson = new Gson();
+              String discover = gson.toJson(response);
+              SPUtils.setString(getContext(), KEY_DISCOVER_RESPONSE, discover);
+              Log.d(TAG, "onResponse: " + "成功保存response至SP~");
+            } else {
+              Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
+            }
+            onShowData(response.getData().getMod_list());
+          }
+        });
+  }
+
+  /* 对返回的数据 进行 处理 + 显示 */
+  private void onShowData(List<DiscoverResponse.DataBean.ModListBean> data) {
+    // 处理前三个模板的数据
+    initFloor(data);
   }
 }

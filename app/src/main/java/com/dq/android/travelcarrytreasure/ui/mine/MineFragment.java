@@ -1,7 +1,6 @@
 package com.dq.android.travelcarrytreasure.ui.mine;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.dq.android.travelcarrytreasure.R;
@@ -28,20 +27,8 @@ public class MineFragment extends BaseFragment {
     return R.layout.fragment_mine;
   }
 
-  @Override public void initViews() {
-    mMessage = findView(R.id.message);
-  }
+  @Override protected void initView(View view, Bundle savedInstanceState) {
 
-  @Override public void initListener() {
-
-  }
-
-  @Override public void initData() {
-    Log.d("dengqi", "走到这一步了");
-    mMessage.setText("dq");
-  }
-
-  @Override public void processClick(View v) {
-
+    mMessage = (TextView) view.findViewById(R.id.message);
   }
 }

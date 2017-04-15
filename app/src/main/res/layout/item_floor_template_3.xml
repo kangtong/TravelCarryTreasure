@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:temp="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical" android:background="@color/white">
 
@@ -54,7 +55,7 @@
       <ImageView android:id="@+id/img_content_1"
           android:layout_width="120dp" android:layout_height="120dp"
           android:layout_alignParentLeft="true" android:scaleType="fitXY"
-          android:src="@drawable/temp_ciji"/>
+          temp:src="@drawable/temp_ciji"/>
 
       <TextView android:id="@+id/tv_label_1"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -62,13 +63,13 @@
           android:paddingTop="2dp" android:paddingBottom="2dp"
           android:paddingLeft="3dp" android:paddingRight="3dp"
           android:background="@drawable/bg_fresh_things"
-          android:text="新鲜事" android:textSize="11sp"
+          temp:text="新鲜事" android:textSize="11sp"
           android:textColor="@android:color/holo_blue_dark"/>
 
       <TextView android:id="@+id/tv_content_1"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_marginTop="10dp"
-          android:text="【挑战刺激旅游胜地】" android:textColor="@android:color/black"
+          temp:text="【挑战刺激旅游胜地】" android:textColor="@android:color/black"
           android:textSize="15sp"
           android:layout_below="@+id/tv_label_1" android:layout_alignLeft="@+id/tv_content_sub_1"
           android:layout_alignStart="@+id/tv_content_sub_1"/>
@@ -77,15 +78,15 @@
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_1"
           android:layout_below="@id/tv_content_1"
-          android:text="你是否空有一颗挑战的心，却不知去哪里？别担心，小编为你整理出了国内的几条最值得挑战的玻璃栈道，这个黄金周就去接受挑“栈”吧！"
+          temp:text="你是否空有一颗挑战的心，却不知去哪里？别担心，小编为你整理出了国内的几条最值得挑战的玻璃栈道，这个黄金周就去接受挑“栈”吧！"
           android:textSize="12sp" android:maxLines="2" android:ellipsize="end"/>
 
-      <TextView
+      <TextView android:id="@+id/tv_date_1"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_1"
           android:layout_below="@id/tv_content_sub_1"
           android:drawableLeft="@drawable/ic_time" android:drawablePadding="8dp"
-          android:text="2017.03.31 00:00:00" android:textSize="12sp"
+          temp:text="2017.03.31 00:00:00" android:textSize="12sp"
           android:textColor="#999999"/>
     </RelativeLayout>
 
@@ -96,7 +97,7 @@
       <ImageView android:id="@+id/img_content_2"
           android:layout_width="120dp" android:layout_height="120dp"
           android:layout_alignParentLeft="true" android:scaleType="centerCrop"
-          android:src="@drawable/temp_gucheng"/>
+          temp:src="@drawable/temp_gucheng"/>
 
       <TextView android:id="@+id/tv_label_2"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -104,13 +105,13 @@
           android:paddingTop="2dp" android:paddingBottom="2dp"
           android:paddingLeft="3dp" android:paddingRight="3dp"
           android:background="@drawable/bg_fresh_things"
-          android:text="新鲜事" android:textSize="11sp"
+          temp:text="新鲜事" android:textSize="11sp"
           android:textColor="@android:color/holo_blue_dark"/>
 
       <TextView android:id="@+id/tv_content_2"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_marginTop="10dp"
-          android:text="【中国最美水下古城】" android:textColor="@android:color/black"
+          temp:text="【中国最美水下古城】" android:textColor="@android:color/black"
           android:textSize="15sp"
           android:layout_below="@+id/tv_label_2" android:layout_alignLeft="@+id/tv_content_sub_2"
           android:layout_alignStart="@+id/tv_content_sub_2"/>
@@ -119,15 +120,15 @@
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_2"
           android:layout_below="@id/tv_content_2"
-          android:text="中国的水下古城比较少，可谁又知道在这么美丽的千岛湖下面竟然藏着一个千年古城，而这些古老的建筑，全部都隐藏在这片蔚蓝千岛湖之下，你能想像吗？"
+          temp:text="中国的水下古城比较少，可谁又知道在这么美丽的千岛湖下面竟然藏着一个千年古城，而这些古老的建筑，全部都隐藏在这片蔚蓝千岛湖之下，你能想像吗？"
           android:textSize="12sp" android:maxLines="2" android:ellipsize="end"/>
 
-      <TextView
+      <TextView android:id="@+id/tv_date_2"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_marginTop="10dp" android:layout_alignLeft="@id/tv_label_2"
           android:layout_below="@id/tv_content_sub_2"
           android:drawableLeft="@drawable/ic_time" android:drawablePadding="8dp"
-          android:text="2017.03.24 00:00:00" android:textSize="12sp"
+          temp:text="2017.03.24 00:00:00" android:textSize="12sp"
           android:textColor="#999999"/>
     </RelativeLayout>
 

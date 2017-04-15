@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:temp="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical" android:background="@color/white">
 
@@ -52,17 +53,17 @@
 
       <ImageView android:id="@+id/img_content_1"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_xishuangbanna" android:scaleType="fitXY"/>
+          temp:src="@drawable/temp_xishuangbanna" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_1"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="西双版纳" android:textColor="@android:color/black"
+          temp:text="西双版纳" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
 
       <TextView android:id="@+id/tv_content_sub_1"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="泼水节，你敢来么" android:textSize="12sp"
+          temp:text="泼水节，你敢来么" android:textSize="12sp"
           android:layout_marginTop="5dp"/>
     </LinearLayout>
 
@@ -73,17 +74,17 @@
 
       <ImageView android:id="@+id/img_content_2"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_shaoxing" android:scaleType="fitXY"/>
+          temp:src="@drawable/temp_shaoxing" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_2"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="绍兴" android:textColor="@android:color/black"
+          temp:text="绍兴" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
 
       <TextView android:id="@+id/tv_content_sub_2"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="江南春色浓" android:textSize="12sp"
+          temp:text="江南春色浓" android:textSize="12sp"
           android:layout_marginTop="5dp"/>
 
     </LinearLayout>
@@ -94,17 +95,17 @@
 
       <ImageView android:id="@+id/img_content_3"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_changtandao" android:scaleType="fitXY"/>
+          temp:src="@drawable/temp_changtandao" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_3"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="长滩岛" android:textColor="@android:color/black"
+          temp:text="长滩岛" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
 
       <TextView android:id="@+id/tv_content_sub_3"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="全世界最浪漫的白沙滩" android:textSize="12sp"
+          temp:text="全世界最浪漫的白沙滩" android:textSize="12sp"
           android:layout_marginTop="5dp"/>
 
     </LinearLayout>

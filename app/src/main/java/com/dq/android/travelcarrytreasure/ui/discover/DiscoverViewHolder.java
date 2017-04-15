@@ -26,6 +26,5 @@ public class DiscoverViewHolder extends EasyViewHolder<DiscoverResponse> {
   }
 
   @Override public void bindTo(int position, DiscoverResponse value) {
-    Glide.with(itemView.getContext()).load(value.getData().)
   }
 }

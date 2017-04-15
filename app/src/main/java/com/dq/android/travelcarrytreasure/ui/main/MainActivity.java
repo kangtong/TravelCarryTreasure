@@ -1,5 +1,6 @@
 package com.dq.android.travelcarrytreasure.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
-import android.view.View;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.ui.discover.DiscoverFragment;
@@ -44,24 +44,30 @@ public class MainActivity extends BaseActivity {
     }
   };
 
-  @Override public int getLayoutId() {
-    return R.layout.activity_main;
+  public static void start(BaseActivity activity) {
+    Intent intent = new Intent(activity, MainActivity.class);
+    activity.startActivity(intent);
   }
 
-  @Override public void initViews() {
-    mNavigation = findView(R.id.navigation);
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    setContentView(R.layout.activity_main);
+    initViews();
+    initListener();
+    initData();
   }
 
-  @Override public void initListener() {
+  private void initViews() {
+    mNavigation = (BottomNavigationView) findViewById(R.id.navigation);
+  }
+
+  private void initListener() {
     mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
   }
 
-  @Override public void initData() {
+  private void initData() {
     changeFragment(TAG_DISCOVER_FRAGMENT);
-  }
-
-  @Override public void processClick(View v) {
-
   }
 
   private void switchCurrentFragment(String tags) {

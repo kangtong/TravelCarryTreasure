@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:temp="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical" android:background="@color/white">
 
@@ -52,11 +53,11 @@
 
       <ImageView android:id="@+id/img_content_1"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_zijia" android:scaleType="fitXY"/>
+          temp:src="@drawable/temp_zijia" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_1"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="自驾" android:textColor="@android:color/black"
+          temp:text="自驾" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
     </LinearLayout>
@@ -68,11 +69,11 @@
 
       <ImageView android:id="@+id/img_content_2"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_shanghua" android:scaleType="fitXY"/>
+          temp:src="@drawable/temp_shanghua" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_2"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="赏花" android:textColor="@android:color/black"
+          temp:text="赏花" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
     </LinearLayout>
@@ -83,11 +84,11 @@
 
       <ImageView android:id="@+id/img_content_3"
           android:layout_width="match_parent" android:layout_height="82dp"
-          android:src="@drawable/temp_taqing" android:scaleType="fitXY"/>
+          temp:src="@drawable/temp_taqing" android:scaleType="fitXY"/>
 
       <TextView android:id="@+id/tv_content_3"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="踏青" android:textColor="@android:color/black"
+          temp:text="踏青" android:textColor="@android:color/black"
           android:textSize="16sp"
           android:layout_marginTop="5dp"/>
     </LinearLayout>

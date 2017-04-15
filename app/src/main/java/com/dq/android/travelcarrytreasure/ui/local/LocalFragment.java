@@ -34,10 +34,11 @@ import support.ui.utilities.ToastUtils;
  * Created by DQDana on 2017/4/5
  */
 
-public class LocalFragment extends BaseFragment {
+public class LocalFragment extends BaseFragment implements View.OnClickListener {
 
   private String[] mNeedPermissionsList =
-      new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+      new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
+          Manifest.permission.ACCESS_COARSE_LOCATION};
 
   private CustomSearchView mSearchView;
   private Button mBtnLocation;
@@ -55,12 +56,11 @@ public class LocalFragment extends BaseFragment {
     return R.layout.fragment_local;
   }
 
-  @Override public void initViews() {
-    mSearchView = findView(R.id.search_view);
-    mBtnLocation = findView(R.id.btn_location);
-  }
+  @Override protected void initView(View view, Bundle savedInstanceState) {
 
-  @Override public void initListener() {
+    mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
+    mBtnLocation = (Button) view.findViewById(R.id.btn_location);
+
     mSearchView.setHint("搜索当地景点、美食、攻略");
     mSearchView.setPriorityJump(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -80,23 +80,22 @@ public class LocalFragment extends BaseFragment {
     mBtnLocation.setOnClickListener(this);
   }
 
-  @Override public void initData() {
+  @Override public void onClick(View v) {
 
-  }
-
-  @Override public void processClick(View v) {
     if (v.getId() == R.id.btn_location) {
       // 使用了 EasyPermissionsEx 类来管理动态权限配置
       if (EasyPermissionsEx.hasPermissions(getContext(), mNeedPermissionsList)) {
         initLocation();
       } else {
-        EasyPermissionsEx.requestPermissions(getContext(), "需要定位权限来获取当地天气信息", 1, mNeedPermissionsList);
+        EasyPermissionsEx.requestPermissions(getContext(), "需要定位权限来获取当地天气信息", 1,
+            mNeedPermissionsList);
       }
     }
   }
 
   @Override
-  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+  public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     switch (requestCode) {
       case 1: {
@@ -147,7 +146,8 @@ public class LocalFragment extends BaseFragment {
         Log.d("dengqi", "UpdateLastLocation.getLatitude():" + location.getLatitude());
         Log.d("dengqi", "UpdateLastLocation.getLongitude():" + location.getLongitude());
         // ToastUtils.toast(location.getLatitude() + " : " + location.getLongitude());
-        Toast.makeText(getContext(), location.getLatitude() + " : " + location.getLongitude(), Toast.LENGTH_SHORT)
+        Toast.makeText(getContext(), location.getLatitude() + " : " + location.getLongitude(),
+            Toast.LENGTH_SHORT)
             .show();
       }
     });
@@ -170,10 +170,12 @@ public class LocalFragment extends BaseFragment {
     PhoneNumberService mApi = retrofit.create(PhoneNumberService.class);
 
     // 调用我们的响应的方法
-    Call<PhoneNumberResponse> news = mApi.getPhoneNumberBelong("13263272974", "3135e16b7d85b72565426b2c1e5fed60");
+    Call<PhoneNumberResponse> news =
+        mApi.getPhoneNumberBelong("13263272974", "3135e16b7d85b72565426b2c1e5fed60");
     news.enqueue(new Callback<PhoneNumberResponse>() {
 
-      @Override public void onResponse(Call<PhoneNumberResponse> call, Response<PhoneNumberResponse> response) {
+      @Override public void onResponse(Call<PhoneNumberResponse> call,
+          Response<PhoneNumberResponse> response) {
         PhoneNumberResponse pnRes = response.body();
         Log.d("dengqi", "onResponse: " + pnRes.getResult().getCompany());
         ToastUtils.toast(pnRes.getResult().toString());
