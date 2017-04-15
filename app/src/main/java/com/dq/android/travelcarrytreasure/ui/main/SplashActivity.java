@@ -1,16 +1,16 @@
 package com.dq.android.travelcarrytreasure.ui.main;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
+import pl.droidsonroids.gif.AnimationListener;
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Created by DQDana on 2017/4/15
@@ -21,7 +21,8 @@ public class SplashActivity extends BaseActivity {
   private static final String TAG = SplashActivity.class.getSimpleName();
   private static final String KEY_FIRST_IN = "first_in";
 
-  private ImageView mImgSplash;
+  private GifImageView mGifSplash;
+  private int mLoopTimes = 0;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -39,20 +40,15 @@ public class SplashActivity extends BaseActivity {
   }
 
   private void initViews() {
-    mImgSplash = (ImageView) findViewById(R.id.img_splash);
-    Glide.with(this).load(R.drawable.gif_splash).into(mImgSplash);
-    initData();
-  }
-
-  private void initData() {
-    Log.d(TAG, "initData: " + "延迟三秒");
-    Handler handler = new Handler();
-    handler.postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        initJumpLogic();
+    mGifSplash = (GifImageView) findViewById(R.id.gif_guide);
+    ((GifDrawable) mGifSplash.getDrawable()).addAnimationListener(new AnimationListener() {
+      @Override public void onAnimationCompleted(int loopNumber) {
+        Log.d(TAG, "onAnimationCompleted: " + loopNumber);
+        if (++mLoopTimes == 3) {
+          initJumpLogic();
+        }
       }
-    }, 3000);
+    });
   }
 
   // 跳转至下一阶段

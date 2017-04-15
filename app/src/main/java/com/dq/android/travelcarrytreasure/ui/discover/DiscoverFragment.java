@@ -88,37 +88,55 @@ public class DiscoverFragment extends BaseFragment {
     ((TextView) mFloor_1.findViewById(R.id.tv_content_sub_1)).setText(
         data.get(2).getList().get(0).getAbs_desc());
     ImageView img1_1 = (ImageView) mFloor_1.findViewById(R.id.img_content_1);
-    Glide.with(DiscoverFragment.this).load(data.get(2).getList().get(0).getPic_url()).into(img1_1);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(2).getList().get(0).getPic_url())
+        .thumbnail(0.1f)
+        .into(img1_1);
 
     ((TextView) mFloor_1.findViewById(R.id.tv_content_2)).setText(
         data.get(2).getList().get(1).getSname());
     ((TextView) mFloor_1.findViewById(R.id.tv_content_sub_2)).setText(
         data.get(2).getList().get(1).getAbs_desc());
     ImageView img1_2 = (ImageView) mFloor_1.findViewById(R.id.img_content_2);
-    Glide.with(DiscoverFragment.this).load(data.get(2).getList().get(1).getPic_url()).into(img1_2);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(2).getList().get(1).getPic_url())
+        .thumbnail(0.1f)
+        .into(img1_2);
 
     ((TextView) mFloor_1.findViewById(R.id.tv_content_3)).setText(
         data.get(2).getList().get(2).getSname());
     ((TextView) mFloor_1.findViewById(R.id.tv_content_sub_3)).setText(
         data.get(2).getList().get(2).getAbs_desc());
     ImageView img1_3 = (ImageView) mFloor_1.findViewById(R.id.img_content_3);
-    Glide.with(DiscoverFragment.this).load(data.get(2).getList().get(2).getPic_url()).into(img1_3);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(2).getList().get(2).getPic_url())
+        .thumbnail(0.1f)
+        .into(img1_3);
 
     // 主题游 3
     ((TextView) mFloor_2.findViewById(R.id.tv_content_1)).setText(
         data.get(3).getList().get(0).getTitle());
     ImageView img2_1 = (ImageView) mFloor_2.findViewById(R.id.img_content_1);
-    Glide.with(DiscoverFragment.this).load(data.get(3).getList().get(0).getPic_url()).into(img2_1);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(3).getList().get(0).getPic_url())
+        .thumbnail(0.1f)
+        .into(img2_1);
 
     ((TextView) mFloor_2.findViewById(R.id.tv_content_2)).setText(
         data.get(3).getList().get(1).getTitle());
     ImageView img2_2 = (ImageView) mFloor_2.findViewById(R.id.img_content_2);
-    Glide.with(DiscoverFragment.this).load(data.get(3).getList().get(1).getPic_url()).into(img2_2);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(3).getList().get(1).getPic_url())
+        .thumbnail(0.1f)
+        .into(img2_2);
 
     ((TextView) mFloor_2.findViewById(R.id.tv_content_3)).setText(
         data.get(3).getList().get(2).getTitle());
     ImageView img2_3 = (ImageView) mFloor_2.findViewById(R.id.img_content_3);
-    Glide.with(DiscoverFragment.this).load(data.get(3).getList().get(2).getPic_url()).into(img2_3);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(3).getList().get(2).getPic_url())
+        .thumbnail(0.1f)
+        .into(img2_3);
 
     // 每日发现 4
     ((TextView) mFloor_3.findViewById(R.id.tv_label_1)).setText(
@@ -132,7 +150,10 @@ public class DiscoverFragment extends BaseFragment {
             "yyyy.MM.dd HH:mm:ss")
     );
     ImageView img3_1 = (ImageView) mFloor_3.findViewById(R.id.img_content_1);
-    Glide.with(DiscoverFragment.this).load(data.get(4).getList().get(0).getPic_url()).into(img3_1);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(4).getList().get(0).getPic_url())
+        .thumbnail(0.1f)
+        .into(img3_1);
 
     ((TextView) mFloor_3.findViewById(R.id.tv_label_2)).setText(
         data.get(4).getList().get(1).getChannel_name());
@@ -145,7 +166,10 @@ public class DiscoverFragment extends BaseFragment {
             "yyyy.MM.dd HH:mm:ss")
     );
     ImageView img3_2 = (ImageView) mFloor_3.findViewById(R.id.img_content_2);
-    Glide.with(DiscoverFragment.this).load(data.get(4).getList().get(1).getPic_url()).into(img3_2);
+    Glide.with(DiscoverFragment.this)
+        .load(data.get(4).getList().get(1).getPic_url())
+        .thumbnail(0.1f)
+        .into(img3_2);
   }
 
   /**
@@ -159,7 +183,6 @@ public class DiscoverFragment extends BaseFragment {
       initFloor(response.getData().getMod_list());
       Log.d(TAG, "onLoadDataWithSP: " + "读取本地缓存数据成功~");
     } else {
-      ToastUtils.toast("本地无缓存数据!!!");
       Log.d(TAG, "onLoadDataWithSP: " + "本地无缓存数据!!!");
     }
   }

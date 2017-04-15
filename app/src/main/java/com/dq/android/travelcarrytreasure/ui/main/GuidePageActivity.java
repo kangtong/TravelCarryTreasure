@@ -79,16 +79,16 @@ public class GuidePageActivity extends BaseActivity {
     mGuideIndex = this.getIntent().getIntExtra(EXTRA_GUIDE, 0);
     switch (mGuideIndex) {
       case 0:
-        Glide.with(this).load(R.drawable.empty_album_tips_1).into(mImgGuide);
+        Glide.with(this).load(R.drawable.empty_album_tips_1).thumbnail(0.1f).into(mImgGuide);
         break;
       case 1:
-        Glide.with(this).load(R.drawable.empty_album_tips_2).into(mImgGuide);
+        Glide.with(this).load(R.drawable.empty_album_tips_2).thumbnail(0.1f).into(mImgGuide);
         break;
       case 2:
-        Glide.with(this).load(R.drawable.empty_album_tips_3).into(mImgGuide);
+        Glide.with(this).load(R.drawable.empty_album_tips_3).thumbnail(0.1f).into(mImgGuide);
         break;
       case 3:
-        Glide.with(this).load(R.drawable.empty_album_tips_4).into(mImgGuide);
+        Glide.with(this).load(R.drawable.empty_album_tips_4).thumbnail(0.1f).into(mImgGuide);
         break;
     }
   }
