@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class NetworkUtil {
+
   public static final boolean ping() {
     try {
       String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
@@ -47,4 +48,5 @@ public class NetworkUtil {
     }
     return false;
   }
+
 }

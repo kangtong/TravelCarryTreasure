@@ -44,7 +44,7 @@ public class SplashActivity extends BaseActivity {
     ((GifDrawable) mGifSplash.getDrawable()).addAnimationListener(new AnimationListener() {
       @Override public void onAnimationCompleted(int loopNumber) {
         Log.d(TAG, "onAnimationCompleted: " + loopNumber);
-        if (++mLoopTimes == 3) {
+        if (++mLoopTimes == 2) {
           initJumpLogic();
         }
       }

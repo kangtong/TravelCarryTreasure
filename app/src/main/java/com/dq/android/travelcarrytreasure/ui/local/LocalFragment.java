@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.util.EasyPermissionsEx;
@@ -120,12 +119,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
       @Override
       public void UpdateLastLocation(Location location) {
-        Log.d("dengqi", "UpdateLastLocation.getLatitude():" + location.getLatitude());
-        Log.d("dengqi", "UpdateLastLocation.getLongitude():" + location.getLongitude());
-        // ToastUtils.toast(location.getLatitude() + " : " + location.getLongitude());
-        Toast.makeText(getContext(), location.getLatitude() + " : " + location.getLongitude(),
-            Toast.LENGTH_SHORT)
-            .show();
+        ToastUtils.toast(location.getLatitude() + " : " + location.getLongitude());
       }
     });
   }
