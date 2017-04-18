@@ -10,24 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.dq.android.travelcarrytreasure.R;
-import com.dq.android.travelcarrytreasure.api.PhoneNumberService;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
-import com.dq.android.travelcarrytreasure.model.common.PhoneNumberResponse;
-import com.dq.android.travelcarrytreasure.retrofit.Api;
-import com.dq.android.travelcarrytreasure.retrofit.RxHelper;
-import com.dq.android.travelcarrytreasure.retrofit.RxRetrofitCache;
-import com.dq.android.travelcarrytreasure.retrofit.RxSubscribe;
 import com.dq.android.travelcarrytreasure.util.EasyPermissionsEx;
 import com.dq.android.travelcarrytreasure.util.LocationHelper;
 import com.dq.android.travelcarrytreasure.util.LocationUtils;
 import com.dq.android.travelcarrytreasure.widget.CustomSearchView;
-import com.orhanobut.logger.Logger;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 import support.ui.utilities.ToastUtils;
 
 /**
@@ -119,17 +106,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     local.initLocation(new LocationHelper() {
       @Override
       public void UpdateLocation(Location location) {
-        Log.d("dengqi", "UpdateLocation.getLatitude():" + location.getLatitude());
-        Log.d("dengqi", "UpdateLocation.getLongitude():" + location.getLongitude());
-        // ToastUtils.toast(location.getLatitude() + " : " + location.getLongitude());
-        //Toast.makeText(getContext(), location.getLatitude() + " : " + location.getLongitude(), Toast.LENGTH_SHORT)
-        //    .show();
-        // 请求 api
-        //request(location.getLatitude() + "," + location.getLongitude());
-        //start();
-
         ToastUtils.toast(local.updateWithNewLocation(location));
-        Log.d("dengqi", "UpdateLocation: " + local.updateWithNewLocation(location));
       }
 
       @Override
@@ -158,52 +135,5 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 在页面销毁时取消定位监听
     LocationUtils.getInstance(getContext()).removeLocationUpdatesListener();
     super.onDestroy();
-  }
-
-  private void request(String latlng) {
-    //创建retrofit对象
-    Retrofit retrofit = new Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("http://apis.juhe.cn")
-        .build();
-    // 实例化我们的mApi对象
-    PhoneNumberService mApi = retrofit.create(PhoneNumberService.class);
-
-    // 调用我们的响应的方法
-    Call<PhoneNumberResponse> news =
-        mApi.getPhoneNumberBelong("13263272974", "3135e16b7d85b72565426b2c1e5fed60");
-    news.enqueue(new Callback<PhoneNumberResponse>() {
-
-      @Override public void onResponse(Call<PhoneNumberResponse> call,
-          Response<PhoneNumberResponse> response) {
-        PhoneNumberResponse pnRes = response.body();
-        Log.d("dengqi", "onResponse: " + pnRes.getResult().getCompany());
-        ToastUtils.toast(pnRes.getResult().toString());
-      }
-
-      @Override public void onFailure(Call<PhoneNumberResponse> call, Throwable t) {
-        Logger.i("onResponse:   =" + t.getMessage());
-      }
-    });
-  }
-
-  private void start() {
-    Observable<PhoneNumberResponse> fromNetwork = Api.getDefault()
-        .getPhoneNumberBelong("18829011995", "3135e16b7d85b72565426b2c1e5fed60")
-        .compose(RxHelper.<PhoneNumberResponse>handleResult());
-
-    RxRetrofitCache.load(getContext(), "1234", 100000L, fromNetwork, false)
-        .subscribe(new RxSubscribe<PhoneNumberResponse>(getContext(), "登录中") {
-          @Override protected void _onNext(PhoneNumberResponse response) {
-            Log.d("dengqi", response.getResultcode());
-            Log.d("dengqi", response.getReason());
-            Log.d("dengqi", response.getResult().getCity());
-          }
-
-          @Override
-          protected void _onError(String message) {
-            ToastUtils.toast(message);
-          }
-        });
   }
 }

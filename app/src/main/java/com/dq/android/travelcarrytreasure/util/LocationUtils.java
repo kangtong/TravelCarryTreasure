@@ -10,13 +10,10 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import java.io.IOException;
 import java.util.List;
+import support.ui.utilities.ToastUtils;
 
-/**
- * Created by MoLin on 16/9/25.
- */
 public class LocationUtils {
 
   private volatile static LocationUtils uniqueInstance;
@@ -38,7 +35,7 @@ public class LocationUtils {
     mGeocoder = new Geocoder(context);
   }
 
-  //采用Double CheckLock(DCL)实现单例
+  //采用 Double CheckLock(DCL) 实现单例
   public static LocationUtils getInstance(Context context) {
     if (uniqueInstance == null) {
       synchronized (LocationUtils.class) {
@@ -63,38 +60,35 @@ public class LocationUtils {
     }
     // 需要检查权限,否则编译报错,想抽取成方法都不行,还是会报错。只能这样重复 code 了。
     if (Build.VERSION.SDK_INT >= 23 &&
-        ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        ActivityCompat.checkSelfPermission(mContext,
+            android.Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED &&
-        ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        ActivityCompat.checkSelfPermission(mContext,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
       return;
     }
     if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
       location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-      Log.d("dengqi", "LocationManager.NETWORK_PROVIDER");
       if (location != null) {
         locationHelper.UpdateLastLocation(location);
       }
-      mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-          0, 0, myLocationListener);
+      mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
+          myLocationListener);
     } else {
-      Log.d("dengqi", "LocationManager.GPS_PROVIDER");
       location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-      Log.d("dengqi", (location == null) + "");
       if (location != null) {
         locationHelper.UpdateLastLocation(location);
       }
-      mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-          0, 0, myLocationListener);
+      mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+          myLocationListener);
     }
   }
 
   private class MyLocationListener implements LocationListener {
     //定位服务状态改变会触发此函数
     @Override
-    public void onStatusChanged(String provider, int status,
-        Bundle extras) {
-      Log.d("dengqi", "onStatusChanged!");
+    public void onStatusChanged(String provider, int status, Bundle extras) {
       if (mLocationHelper != null) {
         mLocationHelper.UpdateStatus(provider, status, extras);
       }
@@ -103,19 +97,16 @@ public class LocationUtils {
     // 定位功能开启时会触发该函数
     @Override
     public void onProviderEnabled(String provider) {
-      Log.e("MoLin", "onProviderEnabled!" + provider);
     }
 
     // 定位功能关闭时会触发该函数
     @Override
     public void onProviderDisabled(String provider) {
-      Log.e("MoLin", "onProviderDisabled!" + provider);
     }
 
     // 当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
     @Override
     public void onLocationChanged(Location location) {
-      Log.d("dengqi", "onLocationChanged!");
       if (mLocationHelper != null) {
         mLocationHelper.UpdateLocation(location);
       }
@@ -126,9 +117,11 @@ public class LocationUtils {
   public void removeLocationUpdatesListener() {
     // 需要检查权限,否则编译不过
     if (Build.VERSION.SDK_INT >= 23 &&
-        ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        ActivityCompat.checkSelfPermission(mContext,
+            android.Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED &&
-        ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        ActivityCompat.checkSelfPermission(mContext,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
       return;
     }
@@ -144,24 +137,20 @@ public class LocationUtils {
     List<Address> addList = null;
     if (location != null) {
       lat = location.getLatitude();
-      // lat = 34.27;
-      // lng = 108.93;
       lng = location.getLongitude();
     } else {
-      System.out.println("无法获取地理信息");
+      ToastUtils.toast("无法获取地理信息");
     }
 
     try {
       addList = mGeocoder.getFromLocation(lat, lng, 1);    //解析经纬度
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     if (addList != null && addList.size() > 0) {
       for (int i = 0; i < addList.size(); i++) {
         Address add = addList.get(i);
         mcityName += add.toString();
-        //mcityName += add.getLocality();
       }
     }
     return mcityName;
