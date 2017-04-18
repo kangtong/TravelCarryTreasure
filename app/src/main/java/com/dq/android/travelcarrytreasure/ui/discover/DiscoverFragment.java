@@ -1,6 +1,7 @@
 package com.dq.android.travelcarrytreasure.ui.discover;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
 import support.ui.adapters.EasyRecyclerAdapter;
+import support.ui.adapters.EasyViewHolder;
 import support.ui.utilities.ToastUtils;
 
 /**
@@ -32,7 +34,6 @@ public class DiscoverFragment extends BaseFragment {
   private CustomSearchView mSearchView;
   private RecyclerView mRecyclerTravels; // 精华游记
   private EasyRecyclerAdapter mAdapter;
-  private List<DiscoverResponse> mDataLists;
   private View mFloor_1, mFloor_2, mFloor_3; // 本季热门 - 主题游 - 每日发现
 
   public static DiscoverFragment newInstance() {
@@ -65,9 +66,13 @@ public class DiscoverFragment extends BaseFragment {
     });
 
     // 初始化 adapter
-    mAdapter =
-        new EasyRecyclerAdapter(getContext(), DiscoverResponse.class, DiscoverViewHolder.class);
-    mRecyclerTravels.setHasFixedSize(true);
+    mRecyclerTravels.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+    mAdapter = new EasyRecyclerAdapter(getContext(), DiscoverResponse.DataBean.ModListBean.ListBean.class, DiscoverViewHolder.class);
+    mAdapter.setOnClickListener(new EasyViewHolder.OnItemClickListener() {
+      @Override public void onItemClick(int i, View view) {
+        ToastUtils.toast("点击了第" + i + "个item~");
+      }
+    });
     mRecyclerTravels.setAdapter(mAdapter);
 
     // 数据请求
@@ -222,5 +227,18 @@ public class DiscoverFragment extends BaseFragment {
   private void onShowData(List<DiscoverResponse.DataBean.ModListBean> data) {
     // 处理前三个模板的数据
     initFloor(data);
+    // 处理精华游记
+    initNotes(data.get(5).getList());
+  }
+
+  /*
+   更多的游记  http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&sid=&page_num=2&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=9146e33eaae27dbd6e4c0dbbb3ee4fc2&T=1492527946&locEnabled=YES&locType=GPS
+
+
+   加载更多   page_num=2  递增
+   */
+
+  private void initNotes(List<DiscoverResponse.DataBean.ModListBean.ListBean> list) {
+    mAdapter.addAll(list.subList(0, list.size() - 1));
   }
 }

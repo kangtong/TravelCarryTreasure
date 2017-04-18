@@ -319,7 +319,7 @@ public class DiscoverResponse implements Serializable {
 
         // 第二部分 放弃 不需要
 
-        // 第三部分 本机热门
+        // 第三部分 本季热门
         private String sname;
         private String abs_desc;
 
@@ -441,9 +441,20 @@ public class DiscoverResponse implements Serializable {
           private UserInfoBean user_info;
 
           // 第六部分
+          private String title;
           private String start_time;
+          private int view_count;
+          private String pic_url;
           private int recommend_num;
           private int remark_num;
+
+          public String getTitle() {
+            return title;
+          }
+
+          public void setTitle(String title) {
+            this.title = title;
+          }
 
           public String getCard_id() {
             return card_id;
@@ -483,6 +494,22 @@ public class DiscoverResponse implements Serializable {
 
           public void setStart_time(String start_time) {
             this.start_time = start_time;
+          }
+
+          public int getView_count() {
+            return view_count;
+          }
+
+          public void setView_count(int view_count) {
+            this.view_count = view_count;
+          }
+
+          public String getPic_url() {
+            return pic_url;
+          }
+
+          public void setPic_url(String pic_url) {
+            this.pic_url = pic_url;
           }
 
           public int getRecommend_num() {

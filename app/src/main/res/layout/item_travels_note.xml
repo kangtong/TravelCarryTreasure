@@ -11,8 +11,10 @@
 
     <TextView
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="精华游记" android:textSize="10sp"
-        android:textColor="@color/white" android:background="@android:color/holo_orange_dark"/>
+        android:paddingTop="3dp" android:paddingBottom="3dp"
+        android:paddingLeft="2dp" android:paddingRight="2dp"
+        android:text="精华游记" android:textSize="12sp"
+        android:textColor="@color/white" android:background="#dc5a00"/>
   </FrameLayout>
 
   <TextView android:id="@+id/tv_title"
