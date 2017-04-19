@@ -9,10 +9,10 @@ import okhttp3.Response;
  * Created by DQDana on 2017/4/15
  */
 public abstract class DiscoverCallBack extends Callback<DiscoverResponse> {
-  @Override
-  public DiscoverResponse parseNetworkResponse(Response response, int id) throws IOException {
+
+  @Override public DiscoverResponse parseNetworkResponse(Response response, int id)
+      throws IOException {
     String string = response.body().string();
-    DiscoverResponse discover = new Gson().fromJson(string, DiscoverResponse.class);
-    return discover;
+    return new Gson().fromJson(string, DiscoverResponse.class);
   }
 }

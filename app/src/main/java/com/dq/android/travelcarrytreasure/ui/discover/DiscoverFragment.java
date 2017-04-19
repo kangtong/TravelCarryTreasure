@@ -66,8 +66,11 @@ public class DiscoverFragment extends BaseFragment {
     });
 
     // 初始化 adapter
-    mRecyclerTravels.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-    mAdapter = new EasyRecyclerAdapter(getContext(), DiscoverResponse.DataBean.ModListBean.ListBean.class, DiscoverViewHolder.class);
+    mRecyclerTravels.setLayoutManager(
+        new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+    mAdapter =
+        new EasyRecyclerAdapter(getContext(), DiscoverResponse.DataBean.ModListBean.ListBean.class,
+            DiscoverViewHolder.class);
     mAdapter.setOnClickListener(new EasyViewHolder.OnItemClickListener() {
       @Override public void onItemClick(int i, View view) {
         ToastUtils.toast("点击了第" + i + "个item~");
@@ -218,7 +221,6 @@ public class DiscoverFragment extends BaseFragment {
             } else {
               Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
             }
-            onShowData(response.getData().getMod_list());
           }
         });
   }
