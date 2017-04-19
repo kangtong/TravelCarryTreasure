@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.util.EasyPermissionsEx;
@@ -28,6 +29,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   private CustomSearchView mSearchView;
   private Button mBtnLocation;
+  private TextView mTvCity;
 
   public static LocalFragment newInstance() {
 
@@ -46,6 +48,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
     mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
     mBtnLocation = (Button) view.findViewById(R.id.btn_location);
+    mTvCity = (TextView) view.findViewById(R.id.tv_city);
 
     mSearchView.setHint("搜索当地景点、美食、攻略");
     mSearchView.setPriorityJump(new View.OnClickListener() {
@@ -64,18 +67,24 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     });
 
     mBtnLocation.setOnClickListener(this);
+    mTvCity.setOnClickListener(this);
   }
 
   @Override public void onClick(View v) {
 
-    if (v.getId() == R.id.btn_location) {
-      // 使用了 EasyPermissionsEx 类来管理动态权限配置
-      if (EasyPermissionsEx.hasPermissions(getContext(), mNeedPermissionsList)) {
-        initLocation();
-      } else {
-        EasyPermissionsEx.requestPermissions(getContext(), "需要定位权限来获取当地天气信息", 1,
-            mNeedPermissionsList);
-      }
+    switch (v.getId()) {
+      case R.id.btn_location:
+        // 使用了 EasyPermissionsEx 类来管理动态权限配置
+        if (EasyPermissionsEx.hasPermissions(getContext(), mNeedPermissionsList)) {
+          initLocation();
+        } else {
+          EasyPermissionsEx.requestPermissions(getContext(), "需要定位权限来获取当地天气信息", 1,
+              mNeedPermissionsList);
+        }
+        break;
+      case R.id.tv_city:
+        ChooseCityActivity.start(getContext());
+        break;
     }
   }
 

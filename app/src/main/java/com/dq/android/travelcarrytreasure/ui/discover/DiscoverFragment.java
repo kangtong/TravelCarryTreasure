@@ -189,6 +189,7 @@ public class DiscoverFragment extends BaseFragment {
       Gson gson = new Gson();
       DiscoverResponse response = gson.fromJson(json, DiscoverResponse.class);
       initFloor(response.getData().getMod_list());
+      initNotes(response.getData().getMod_list().get(5).getList());
       Log.d(TAG, "onLoadDataWithSP: " + "读取本地缓存数据成功~");
     } else {
       Log.d(TAG, "onLoadDataWithSP: " + "本地无缓存数据!!!");
@@ -198,7 +199,7 @@ public class DiscoverFragment extends BaseFragment {
   /* 加载网络数据 */
   private void onLoadData() {
     String url =
-        "http://lvyou.baidu.com/main/app/index?apiv=v4&sid=795ac511463263cf7ae3def3&y=40.001797&x=116.488096&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=4d95e25f12c37daa09394aa2848e906b&T=1492223512&locEnabled=YES&locType=GPS";
+        "http://lvyou.baidu.com/main/app/index?apiv=v4&sid=795ac511463263cf7ae3def3&y=40.039539&x=116.496693&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=e3f6b056fc516a5da66f9ea0d9ccdc51&T=1492614280&locEnabled=YES&locType=GPS";
     OkHttpUtils
         .get()
         .url(url)

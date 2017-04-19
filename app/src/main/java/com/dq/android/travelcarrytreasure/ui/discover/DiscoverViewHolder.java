@@ -24,7 +24,6 @@ public class DiscoverViewHolder extends EasyViewHolder<DiscoverResponse.DataBean
 
   public DiscoverViewHolder(Context context, ViewGroup parent) {
     super(context, parent, R.layout.item_travels_note);
-    ButterKnife.bind(this, itemView);
     mImg = (ImageView) itemView.findViewById(R.id.img);
     mTvTitle = (TextView) itemView.findViewById(R.id.tv_title);
     mTvLookNum = (TextView) itemView.findViewById(R.id.tv_look_num);

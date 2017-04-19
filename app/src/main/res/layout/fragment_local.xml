@@ -17,9 +17,10 @@
         android:orientation="vertical">
 
       <!-- 城市信息 -->
-      <FrameLayout
+      <RelativeLayout
           android:layout_width="match_parent" android:layout_height="300dp"
-          android:background="#00989e">
+          android:background="#00989e"
+          android:paddingLeft="@dimen/common_horizontal_margin" android:paddingRight="@dimen/common_horizontal_margin">
 
         <TextView android:layout_width="match_parent" android:layout_height="match_parent"
             android:text="这里是城市信息： 包含天气，定位，景点入口，没美食，酒店"
@@ -28,13 +29,25 @@
         <Button android:id="@+id/btn_location"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="获取经纬度"/>
-      </FrameLayout>
+
+        <TextView android:id="@+id/tv_city"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_below="@id/btn_location"
+            android:drawableRight="@drawable/ic_white_down" android:drawablePadding="10dp"
+            android:text="西安"
+            android:textSize="22sp" android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_below="@id/tv_city" android:layout_marginTop="5dp"
+            android:text="XIAN"
+            android:textSize="20sp" android:textColor="@color/white"/>
+
+      </RelativeLayout>
 
       <!-- 推荐行程 -->
       <FrameLayout
           android:layout_width="match_parent" android:layout_height="200dp"
           android:background="#b4d78d">
-
 
         <TextView
             android:layout_width="match_parent" android:layout_height="match_parent"

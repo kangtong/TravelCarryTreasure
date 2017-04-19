@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <declare-styleable name="SearchView">
-    <attr name="showAction" format="boolean" />
+    <attr name="showAction" format="boolean"/>
+  </declare-styleable>
+
+  <declare-styleable name="CustomToolBar">
+    <attr name="isShowLeft" format="boolean"/>
+    <attr name="isShowLeftImg" format="boolean"/>
+    <attr name="isShowRight" format="boolean"/>
+    <attr name="toolbarTitle" format="string|reference"/>
+    <attr name="leftTxt" format="string|reference"/>
+    <attr name="rightTxt" format="string|reference"/>
   </declare-styleable>
 </resources>
