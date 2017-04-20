@@ -8,14 +8,18 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
+import com.andview.refreshview.XRefreshView;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityResponse;
+import com.dq.android.travelcarrytreasure.ui.local.smileyloadingview.CustomerFooter;
+import com.dq.android.travelcarrytreasure.ui.local.smileyloadingview.SmileyHeaderView;
 import com.dq.android.travelcarrytreasure.widget.CustomToolBar;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
 import support.ui.adapters.EasyRecyclerAdapter;
+import support.ui.utilities.ToastUtils;
 
 /**
  * Created by DQDana on 2017/4/19
@@ -26,6 +30,7 @@ public class ChooseCityActivity extends BaseActivity {
   private static final String TAG = ChooseCityActivity.class.getSimpleName();
   private static final String KEY_HOT_CITY_RESPONSE = "key_hot_city_response";
   private CustomToolBar mToolbar;
+  private XRefreshView mXRefresh;
   private TextView mTvLocationCity;
   private RecyclerView mRecyclerView;
   private EasyRecyclerAdapter mAdapter;
@@ -48,6 +53,7 @@ public class ChooseCityActivity extends BaseActivity {
   private void initViews() {
     mToolbar = (CustomToolBar) findViewById(R.id.toolbar);
     mTvLocationCity = (TextView) findViewById(R.id.tv_location_city);
+    mXRefresh = (XRefreshView) findViewById(R.id.x_refresh);
     mRecyclerView = (RecyclerView) findViewById(R.id.recycle_hot_city);
   }
 
@@ -66,6 +72,38 @@ public class ChooseCityActivity extends BaseActivity {
     mAdapter = new EasyRecyclerAdapter(this, HotCityResponse.DataBean.ListBean.class,
         HotCityViewHolder.class);
     mRecyclerView.setAdapter(mAdapter);
+
+    // XRefreshView 相关设置
+    mXRefresh.setCustomHeaderView(new SmileyHeaderView(this));
+    mXRefresh.setCustomFooterView(new CustomerFooter(ChooseCityActivity.this));
+    // mXRefresh.setPullLoadEnable(true);
+    mXRefresh.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
+      @Override public void onRefresh(boolean isPullDown) {
+        super.onRefresh(isPullDown);
+        runOnUiThread(new Runnable() {
+          @Override public void run() {
+            ToastUtils.toast("下拉刷新");
+            onLoadData();
+          }
+        });
+      }
+
+      @Override public void onLoadMore(boolean isSilence) {
+        super.onLoadMore(isSilence);
+        runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            ToastUtils.toast("加载更多");
+            // 判断是否还有更多
+            if (true) {
+              mXRefresh.stopLoadMore(false);
+            } else { // 没有加载更多时
+              mXRefresh.setLoadComplete(true);
+            }
+          }
+        });
+      }
+    });
   }
 
   private void initData() {
@@ -75,7 +113,7 @@ public class ChooseCityActivity extends BaseActivity {
   /* 加载网络数据 */
   private void onLoadData() {
     String url =
-        "http://lvyou.baidu.com/destination/app/topscene?is_sug=0&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=782d48597778ed83d6a0d4639b712cd2&T=1492614420&locEnabled=YES&locType=GPS";
+        "http://lvyou.baidu.com/destination/app/topscene?is_sug=&format=&d=&w=&h=&u=&v=&i=&s=&q=&m=&netTpye=&LVCODE=1bff5da07616778314452c932b08f87d&T=1492700879&locEnabled=&locType=";
     OkHttpUtils
         .get()
         .url(url)
@@ -84,6 +122,8 @@ public class ChooseCityActivity extends BaseActivity {
 
           @Override public void onError(okhttp3.Call call, Exception e, int id) {
             Log.d(TAG, "onError: " + "网络错误");
+            Log.d(TAG, "onError: " + e.toString());
+            mXRefresh.stopRefresh();
           }
 
           @Override public void onResponse(HotCityResponse response, int id) {
@@ -99,6 +139,7 @@ public class ChooseCityActivity extends BaseActivity {
             } else {
               Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
             }
+            mXRefresh.stopRefresh();
           }
         });
   }

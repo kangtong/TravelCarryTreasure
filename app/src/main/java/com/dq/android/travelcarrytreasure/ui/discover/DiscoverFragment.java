@@ -2,10 +2,12 @@ package com.dq.android.travelcarrytreasure.ui.discover;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
@@ -15,11 +17,8 @@ import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
 import com.dq.android.travelcarrytreasure.util.TimeUtils;
 import com.dq.android.travelcarrytreasure.widget.CustomSearchView;
-import com.google.gson.Gson;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
-import java.util.Random;
 import support.ui.adapters.EasyRecyclerAdapter;
 import support.ui.adapters.EasyViewHolder;
 import support.ui.utilities.ToastUtils;
@@ -35,7 +34,7 @@ public class DiscoverFragment extends BaseFragment {
 
   private SwipeRefreshLayout mSwipeLayout;
   private CustomSearchView mSearchView;
-  private XRecyclerView mRecyclerTravels; // 精华游记
+  private RecyclerView mRecyclerTravels; // 精华游记
   private EasyRecyclerAdapter mAdapter;
   private View mFloor_1, mFloor_2, mFloor_3; // 本季热门 - 主题游 - 每日发现
 
@@ -54,7 +53,7 @@ public class DiscoverFragment extends BaseFragment {
     // 初始化
     mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
     mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
-    mRecyclerTravels = (XRecyclerView) view.findViewById(R.id.recycle_travels);
+    mRecyclerTravels = (RecyclerView) view.findViewById(R.id.recycle_travels);
     mFloor_1 = view.findViewById(R.id.floor_1);
     mFloor_2 = view.findViewById(R.id.floor_2);
     mFloor_3 = view.findViewById(R.id.floor_3);
@@ -71,13 +70,10 @@ public class DiscoverFragment extends BaseFragment {
     // 独立的下拉刷新
     mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh(SwipeRefreshLayout.Direction direction) {
+        onLoadData();
         ToastUtils.toast("下拉刷新");
-        mSwipeLayout.setRefreshing(false);
       }
     });
-
-    // 关于 XRecyclerView
-    // https://github.com/jianghejie/XRecyclerView
 
     // 初始化 adapter
     mRecyclerTravels.setLayoutManager(
@@ -91,19 +87,6 @@ public class DiscoverFragment extends BaseFragment {
       }
     });
     mRecyclerTravels.setAdapter(mAdapter);
-    mRecyclerTravels.setPullRefreshEnabled(false); // 关闭下拉刷新
-    mRecyclerTravels.setLoadingMoreEnabled(true); // 开启加载更多
-    int style = new Random().nextInt(28) - 1;
-    mRecyclerTravels.setLoadingMoreProgressStyle(style);
-    mRecyclerTravels.setLoadingListener(new XRecyclerView.LoadingListener() {
-      @Override public void onRefresh() {
-      }
-
-      @Override public void onLoadMore() {
-        ToastUtils.toast("加载更多");
-        mRecyclerTravels.loadMoreComplete();
-      }
-    });
 
     // 数据请求
     onLoadDataWithSP();
@@ -213,8 +196,7 @@ public class DiscoverFragment extends BaseFragment {
   private void onLoadDataWithSP() {
     String json = SPUtils.getString(getContext(), KEY_DISCOVER_RESPONSE);
     if (!json.isEmpty()) {
-      Gson gson = new Gson();
-      DiscoverResponse response = gson.fromJson(json, DiscoverResponse.class);
+      DiscoverResponse response = JSON.parseObject(json, DiscoverResponse.class);
       initFloor(response.getData().getMod_list());
       initNotes(response.getData().getMod_list().get(5).getList());
       Log.d(TAG, "onLoadDataWithSP: " + "读取本地缓存数据成功~");
@@ -226,14 +208,16 @@ public class DiscoverFragment extends BaseFragment {
   /* 加载网络数据 */
   private void onLoadData() {
     String url =
-        "http://lvyou.baidu.com/main/app/index?apiv=v4&sid=795ac511463263cf7ae3def3&y=40.039539&x=116.496693&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=e3f6b056fc516a5da66f9ea0d9ccdc51&T=1492614280&locEnabled=YES&locType=GPS";
+        "http://lvyou.baidu.com/main/app/index?apiv=v4&sid=&format=&d=android&w=&h=&u=&v=7.3.0&i=&s=&q=&m=&netTpye=&LVCODE=7d5035044bdcafb4ac91cba84a388f0b&T=1492696372&locEnabled=&locType=";
     OkHttpUtils
         .get()
         .url(url)
         .build()
         .execute(new DiscoverCallBack() {
           @Override public void onError(okhttp3.Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + e.toString());
             Log.d(TAG, "onError: " + "网络错误");
+            mSwipeLayout.setRefreshing(false);
           }
 
           @Override public void onResponse(DiscoverResponse response, int id) {
@@ -242,13 +226,13 @@ public class DiscoverFragment extends BaseFragment {
               // 展示数据
               onShowData(response.getData().getMod_list());
               // 保存至SP
-              Gson gson = new Gson();
-              String discover = gson.toJson(response);
+              String discover = JSON.toJSONString(response);
               SPUtils.setString(getContext(), KEY_DISCOVER_RESPONSE, discover);
               Log.d(TAG, "onResponse: " + "成功保存response至SP~");
             } else {
               Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
             }
+            mSwipeLayout.setRefreshing(false);
           }
         });
   }

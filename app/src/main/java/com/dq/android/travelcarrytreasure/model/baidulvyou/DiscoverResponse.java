@@ -67,7 +67,6 @@ public class DiscoverResponse implements Serializable {
      */
 
     private int is_local;
-    private SceneInfoBean scene_info;
     private ConfigBean config;
     private SigninActivityBean signin_activity;
     private SpringGiftBean spring_gift;
@@ -80,14 +79,6 @@ public class DiscoverResponse implements Serializable {
 
     public void setIs_local(int is_local) {
       this.is_local = is_local;
-    }
-
-    public SceneInfoBean getScene_info() {
-      return scene_info;
-    }
-
-    public void setScene_info(SceneInfoBean scene_info) {
-      this.scene_info = scene_info;
     }
 
     public ConfigBean getConfig() {
@@ -128,9 +119,6 @@ public class DiscoverResponse implements Serializable {
 
     public void setList(List<String> list) {
       this.list = list;
-    }
-
-    public static class SceneInfoBean {
     }
 
     public static class ConfigBean {

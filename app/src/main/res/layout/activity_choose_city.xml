@@ -8,28 +8,43 @@
       android:layout_width="match_parent" android:layout_height="wrap_content"
       dq:isShowLeftImg="true" dq:toolbarTitle="选择城市"/>
 
-  <TextView
-      android:layout_width="match_parent" android:layout_height="wrap_content"
-      android:text="定位城市" android:background="@color/page_bg"
-      android:layout_marginTop="5dp"
-      android:paddingTop="5dp" android:paddingBottom="5dp"
-      android:paddingLeft="8dp"/>
+  <com.andview.refreshview.XRefreshView android:id="@+id/x_refresh"
+      android:layout_width="match_parent" android:layout_height="match_parent"
+      android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-  <TextView android:id="@+id/tv_location_city"
-      android:layout_width="wrap_content" android:layout_height="wrap_content"
-      android:text="西安" android:textSize="18sp" android:textColor="@android:color/black"
-      android:layout_marginLeft="8dp" android:layout_marginTop="10dp"
-      android:layout_marginBottom="10dp"/>
+      <TextView
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:text="定位城市" android:background="@color/page_bg"
+          android:layout_marginTop="5dp"
+          android:paddingTop="5dp" android:paddingBottom="5dp"
+          android:paddingLeft="8dp"/>
 
-  <TextView
-      android:layout_width="match_parent" android:layout_height="wrap_content"
-      android:text="热门城市" android:background="@color/page_bg"
-      android:paddingTop="5dp" android:paddingBottom="5dp"
-      android:paddingLeft="8dp"/>
+      <TextView android:id="@+id/tv_location_city"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="西安" android:textSize="18sp" android:textColor="@android:color/black"
+          android:layout_marginLeft="8dp" android:layout_marginTop="10dp"
+          android:layout_marginBottom="10dp"/>
 
-  <android.support.v7.widget.RecyclerView android:id="@+id/recycle_hot_city"
-      android:layout_width="match_parent" android:layout_height="wrap_content"
-      android:paddingLeft="8dp" android:paddingRight="8dp"
-      android:paddingTop="5dp" android:paddingBottom="5dp"/>
+      <TextView
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:text="热门城市" android:background="@color/page_bg"
+          android:paddingTop="5dp" android:paddingBottom="5dp"
+          android:paddingLeft="8dp"/>
+
+      <android.support.v7.widget.RecyclerView android:id="@+id/recycle_hot_city"
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:paddingLeft="8dp" android:paddingRight="8dp"
+          android:paddingTop="5dp" android:paddingBottom="5dp"/>
+
+      <android.support.v7.widget.RecyclerView android:id="@+id/recycle_all_city"
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:paddingLeft="8dp" android:paddingRight="8dp"
+          android:paddingTop="5dp" android:paddingBottom="5dp"/>
+
+    </LinearLayout>
+  </com.andview.refreshview.XRefreshView>
 
 </LinearLayout>
