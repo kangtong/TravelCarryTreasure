@@ -2,7 +2,6 @@ package com.dq.android.travelcarrytreasure.ui.discover;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,11 +16,14 @@ import com.dq.android.travelcarrytreasure.util.SPUtils;
 import com.dq.android.travelcarrytreasure.util.TimeUtils;
 import com.dq.android.travelcarrytreasure.widget.CustomSearchView;
 import com.google.gson.Gson;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
+import java.util.Random;
 import support.ui.adapters.EasyRecyclerAdapter;
 import support.ui.adapters.EasyViewHolder;
 import support.ui.utilities.ToastUtils;
+import support.ui.widget.SwipeRefreshLayout;
 
 /**
  * Created by DQDana on 2017/4/5
@@ -31,8 +33,9 @@ public class DiscoverFragment extends BaseFragment {
   private static final String TAG = DiscoverFragment.class.getSimpleName();
   private static final String KEY_DISCOVER_RESPONSE = "key_discover_response";
 
+  private SwipeRefreshLayout mSwipeLayout;
   private CustomSearchView mSearchView;
-  private RecyclerView mRecyclerTravels; // 精华游记
+  private XRecyclerView mRecyclerTravels; // 精华游记
   private EasyRecyclerAdapter mAdapter;
   private View mFloor_1, mFloor_2, mFloor_3; // 本季热门 - 主题游 - 每日发现
 
@@ -49,8 +52,9 @@ public class DiscoverFragment extends BaseFragment {
 
   @Override protected void initView(View view, Bundle savedInstanceState) {
     // 初始化
+    mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
     mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
-    mRecyclerTravels = (RecyclerView) view.findViewById(R.id.recycle_travels);
+    mRecyclerTravels = (XRecyclerView) view.findViewById(R.id.recycle_travels);
     mFloor_1 = view.findViewById(R.id.floor_1);
     mFloor_2 = view.findViewById(R.id.floor_2);
     mFloor_3 = view.findViewById(R.id.floor_3);
@@ -64,6 +68,17 @@ public class DiscoverFragment extends BaseFragment {
       }
     });
 
+    // 独立的下拉刷新
+    mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override public void onRefresh(SwipeRefreshLayout.Direction direction) {
+        ToastUtils.toast("下拉刷新");
+        mSwipeLayout.setRefreshing(false);
+      }
+    });
+
+    // 关于 XRecyclerView
+    // https://github.com/jianghejie/XRecyclerView
+
     // 初始化 adapter
     mRecyclerTravels.setLayoutManager(
         new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -76,6 +91,19 @@ public class DiscoverFragment extends BaseFragment {
       }
     });
     mRecyclerTravels.setAdapter(mAdapter);
+    mRecyclerTravels.setPullRefreshEnabled(false); // 关闭下拉刷新
+    mRecyclerTravels.setLoadingMoreEnabled(true); // 开启加载更多
+    int style = new Random().nextInt(28) - 1;
+    mRecyclerTravels.setLoadingMoreProgressStyle(style);
+    mRecyclerTravels.setLoadingListener(new XRecyclerView.LoadingListener() {
+      @Override public void onRefresh() {
+      }
+
+      @Override public void onLoadMore() {
+        ToastUtils.toast("加载更多");
+        mRecyclerTravels.loadMoreComplete();
+      }
+    });
 
     // 数据请求
     onLoadDataWithSP();

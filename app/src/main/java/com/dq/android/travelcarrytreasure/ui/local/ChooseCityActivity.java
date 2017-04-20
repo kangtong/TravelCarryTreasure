@@ -58,12 +58,13 @@ public class ChooseCityActivity extends BaseActivity {
       }
 
       @Override public void onActionListener() {
-
       }
     });
+
     mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
     mRecyclerView.setHasFixedSize(true);
-    mAdapter = new EasyRecyclerAdapter(this, HotCityResponse.DataBean.ListBean.class, HotCityViewHolder.class);
+    mAdapter = new EasyRecyclerAdapter(this, HotCityResponse.DataBean.ListBean.class,
+        HotCityViewHolder.class);
     mRecyclerView.setAdapter(mAdapter);
   }
 
