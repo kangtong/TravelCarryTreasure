@@ -30,7 +30,6 @@ public class ChooseCityActivity extends BaseActivity {
   private static final String TAG = ChooseCityActivity.class.getSimpleName();
   private static final String KEY_HOT_CITY_RESPONSE = "key_hot_city_response";
   private CustomToolBar mToolbar;
-  private XRefreshView mXRefresh;
   private TextView mTvLocationCity;
   private RecyclerView mRecyclerView;
   private EasyRecyclerAdapter mAdapter;
@@ -53,7 +52,6 @@ public class ChooseCityActivity extends BaseActivity {
   private void initViews() {
     mToolbar = (CustomToolBar) findViewById(R.id.toolbar);
     mTvLocationCity = (TextView) findViewById(R.id.tv_location_city);
-    mXRefresh = (XRefreshView) findViewById(R.id.x_refresh);
     mRecyclerView = (RecyclerView) findViewById(R.id.recycle_hot_city);
   }
 
@@ -72,38 +70,6 @@ public class ChooseCityActivity extends BaseActivity {
     mAdapter = new EasyRecyclerAdapter(this, HotCityResponse.DataBean.ListBean.class,
         HotCityViewHolder.class);
     mRecyclerView.setAdapter(mAdapter);
-
-    // XRefreshView 相关设置
-    mXRefresh.setCustomHeaderView(new SmileyHeaderView(this));
-    mXRefresh.setCustomFooterView(new CustomerFooter(ChooseCityActivity.this));
-    // mXRefresh.setPullLoadEnable(true);
-    mXRefresh.setXRefreshViewListener(new XRefreshView.SimpleXRefreshListener() {
-      @Override public void onRefresh(boolean isPullDown) {
-        super.onRefresh(isPullDown);
-        runOnUiThread(new Runnable() {
-          @Override public void run() {
-            ToastUtils.toast("下拉刷新");
-            onLoadData();
-          }
-        });
-      }
-
-      @Override public void onLoadMore(boolean isSilence) {
-        super.onLoadMore(isSilence);
-        runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            ToastUtils.toast("加载更多");
-            // 判断是否还有更多
-            if (true) {
-              mXRefresh.stopLoadMore(false);
-            } else { // 没有加载更多时
-              mXRefresh.setLoadComplete(true);
-            }
-          }
-        });
-      }
-    });
   }
 
   private void initData() {
@@ -123,7 +89,6 @@ public class ChooseCityActivity extends BaseActivity {
           @Override public void onError(okhttp3.Call call, Exception e, int id) {
             Log.d(TAG, "onError: " + "网络错误");
             Log.d(TAG, "onError: " + e.toString());
-            mXRefresh.stopRefresh();
           }
 
           @Override public void onResponse(HotCityResponse response, int id) {
@@ -139,7 +104,6 @@ public class ChooseCityActivity extends BaseActivity {
             } else {
               Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
             }
-            mXRefresh.stopRefresh();
           }
         });
   }
