@@ -1,6 +1,9 @@
 package com.dq.android.travelcarrytreasure.ui.discover;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,12 +16,15 @@ import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverResponse;
+import com.dq.android.travelcarrytreasure.model.baidulvyou.TravellerNoteCallBack;
+import com.dq.android.travelcarrytreasure.model.baidulvyou.TravellerNoteResponse;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
 import com.dq.android.travelcarrytreasure.util.TimeUtils;
 import com.dq.android.travelcarrytreasure.widget.CustomSearchView;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
+import java.util.Random;
 import support.ui.adapters.EasyRecyclerAdapter;
 import support.ui.adapters.EasyViewHolder;
 import support.ui.utilities.ToastUtils;
@@ -27,12 +33,13 @@ import support.ui.widget.SwipeRefreshLayout;
 /**
  * Created by DQDana on 2017/4/5
  */
-public class DiscoverFragment extends BaseFragment {
+public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
   private static final String TAG = DiscoverFragment.class.getSimpleName();
   private static final String KEY_DISCOVER_RESPONSE = "key_discover_response";
+  private static final String KEY_TRAVELLER_NOTE = "key_traveller_note";
 
-  private SwipeRefreshLayout mSwipeLayout;
+  private SwipeRefreshLayout mRefreshLayout;
   private CustomSearchView mSearchView;
   private RecyclerView mRecyclerTravels; // 精华游记
   private EasyRecyclerAdapter mAdapter;
@@ -49,9 +56,10 @@ public class DiscoverFragment extends BaseFragment {
     return R.layout.fragment_discover;
   }
 
-  @Override protected void initView(View view, Bundle savedInstanceState) {
+  @TargetApi(Build.VERSION_CODES.M) @Override
+  protected void initView(View view, Bundle savedInstanceState) {
     // 初始化
-    mSwipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+    mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
     mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
     mRecyclerTravels = (RecyclerView) view.findViewById(R.id.recycle_travels);
     mFloor_1 = view.findViewById(R.id.floor_1);
@@ -67,19 +75,20 @@ public class DiscoverFragment extends BaseFragment {
       }
     });
 
-    // 独立的下拉刷新
-    mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override public void onRefresh(SwipeRefreshLayout.Direction direction) {
-        onLoadData();
-        ToastUtils.toast("下拉刷新");
-      }
-    });
+    // mRefreshLayout 相关设置
+    mRefreshLayout.setOnRefreshListener(this);
 
     // 初始化 adapter
-    mRecyclerTravels.setLayoutManager(
-        new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+    final LinearLayoutManager mLayoutManager =
+        new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+    mLayoutManager.setSmoothScrollbarEnabled(true);
+    mLayoutManager.setAutoMeasureEnabled(true);
+    mRecyclerTravels.setLayoutManager(mLayoutManager);
+    mRecyclerTravels.setHasFixedSize(true);
+    mRecyclerTravels.setNestedScrollingEnabled(false);
+    mRecyclerTravels.setItemAnimator(new DefaultItemAnimator());
     mAdapter =
-        new EasyRecyclerAdapter(getContext(), DiscoverResponse.DataBean.ModListBean.ListBean.class,
+        new EasyRecyclerAdapter(getContext(), TravellerNoteResponse.DataBean.ListBean.class,
             DiscoverViewHolder.class);
     mAdapter.setOnClickListener(new EasyViewHolder.OnItemClickListener() {
       @Override public void onItemClick(int i, View view) {
@@ -91,12 +100,112 @@ public class DiscoverFragment extends BaseFragment {
     // 数据请求
     onLoadDataWithSP();
     if (NetworkUtil.isNetworkAvailable()) {
-      onLoadData();
+      onLoadData(); // 请求楼层
+      onLoadTravellerNote(false); // 请求精品游记
     } else {
       ToastUtils.toast("本地网络检查错误!!!");
     }
   }
 
+  /* 加载上次的缓存, 已存储在本地的sp */
+  private void onLoadDataWithSP() {
+    String json = SPUtils.getString(getContext(), KEY_DISCOVER_RESPONSE);
+    if (!json.isEmpty()) {
+      DiscoverResponse response = JSON.parseObject(json, DiscoverResponse.class);
+      onShowData(response.getData().getMod_list());
+    }
+
+    String json_note = SPUtils.getString(getContext(), KEY_TRAVELLER_NOTE);
+    if (!json_note.isEmpty()) {
+      TravellerNoteResponse response = JSON.parseObject(json_note, TravellerNoteResponse.class);
+      onShowTravellerNote(response.getData().getList(), true);
+    }
+  }
+
+  /* 加载网络数据 */
+  private void onLoadData() {
+    String url_1 = // 3个楼层的东西
+        "http://lvyou.baidu.com/main/app/index?apiv=v4&sid=&format=&d=android&w=&h=&u=&v=7.3.0&i=&s=&q=&m=&netTpye=&LVCODE=7d5035044bdcafb4ac91cba84a388f0b&T=1492696372&locEnabled=&locType=";
+    OkHttpUtils
+        .get()
+        .url(url_1)
+        .build()
+        .execute(new DiscoverCallBack() {
+          @Override public void onError(okhttp3.Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "发现界面请求,楼层数据,发生网络错误");
+          }
+
+          @Override public void onResponse(DiscoverResponse response, int id) {
+            if (response.getErrno() == 0) { // 成功
+              Log.d(TAG, "onResponse: " + "发现界面请求,楼层数据,api返回数据成功~");
+              // 展示数据
+              onShowData(response.getData().getMod_list());
+              // 保存至SP
+              String discover = JSON.toJSONString(response);
+              SPUtils.setString(getContext(), KEY_DISCOVER_RESPONSE, discover);
+            } else {
+              Log.d(TAG, "onResponse: " + "发现界面请求,楼层数据,api返回数据失败!!!");
+            }
+          }
+        });
+  }
+
+  /* 加载网络数据: 精品游记 */
+  private void onLoadTravellerNote(final boolean isLoadMore) {
+    int random = new Random().nextInt(100); // 随机咯~
+    String url_2 = // 精品游记的东西
+        "http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&page_num="
+            + random
+            + "&format=app&d=android";
+    OkHttpUtils
+        .get()
+        .url(url_2)
+        .build()
+        .execute(new TravellerNoteCallBack() {
+          @Override public void onError(okhttp3.Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "发现界面请求,精品游记数据,发生网络错误");
+            mRefreshLayout.setRefreshing(false);
+          }
+
+          @Override public void onResponse(TravellerNoteResponse response, int id) {
+            if (response.getErrno() == 0) { // 成功
+              Log.d(TAG, "onError: " + "发现界面请求,精品游记数据,api返回数据成功~");
+              // 展示数据
+              onShowTravellerNote(response.getData().getList(), isLoadMore);
+              // 保存至SP
+              String note = JSON.toJSONString(response);
+              SPUtils.setString(getContext(), KEY_TRAVELLER_NOTE, note);
+            } else {
+              Log.d(TAG, "onResponse: " + "发现界面请求,精品游记数据,api返回数据失败!!!");
+            }
+            mRefreshLayout.setRefreshing(false);
+            if (!isLoadMore) {
+              // 额外多请求一次
+              onLoadTravellerNote(true);
+            } else {
+              // TODO: 2017/4/21 dengqi: 底部显示, 更多按钮, 跳转至另一界面
+            }
+          }
+        });
+  }
+
+  /* 对返回的数据 进行 处理 + 显示 */
+  private void onShowData(List<DiscoverResponse.DataBean.ModListBean> data) {
+    // 处理前三个模板的数据
+    initFloor(data);
+  }
+
+  /* 对返回的数据: 精品游记 进行 处理 + 显示 */
+  private void onShowTravellerNote(List<TravellerNoteResponse.DataBean.ListBean> data,
+      boolean isLoadMore) {
+    if (!isLoadMore) {
+      initNotes(data);
+    } else {
+      loadMoreNotes(data);
+    }
+  }
+
+  /* 楼层数据 更新 */
   private void initFloor(List<DiscoverResponse.DataBean.ModListBean> data) {
     // 2,本季热门 3,主题游 4,每日发现 5, 精华游记
 
@@ -190,69 +299,18 @@ public class DiscoverFragment extends BaseFragment {
         .into(img3_2);
   }
 
-  /**
-   * 加载上次的缓存, 已存储在本地的sp
-   */
-  private void onLoadDataWithSP() {
-    String json = SPUtils.getString(getContext(), KEY_DISCOVER_RESPONSE);
-    if (!json.isEmpty()) {
-      DiscoverResponse response = JSON.parseObject(json, DiscoverResponse.class);
-      initFloor(response.getData().getMod_list());
-      initNotes(response.getData().getMod_list().get(5).getList());
-      Log.d(TAG, "onLoadDataWithSP: " + "读取本地缓存数据成功~");
-    } else {
-      Log.d(TAG, "onLoadDataWithSP: " + "本地无缓存数据!!!");
-    }
+  /* Recycle View 更新数据 */
+  private void initNotes(List<TravellerNoteResponse.DataBean.ListBean> list) {
+    mAdapter.addAll(list);
   }
 
-  /* 加载网络数据 */
-  private void onLoadData() {
-    String url =
-        "http://lvyou.baidu.com/main/app/index?apiv=v4&sid=&format=&d=android&w=&h=&u=&v=7.3.0&i=&s=&q=&m=&netTpye=&LVCODE=7d5035044bdcafb4ac91cba84a388f0b&T=1492696372&locEnabled=&locType=";
-    OkHttpUtils
-        .get()
-        .url(url)
-        .build()
-        .execute(new DiscoverCallBack() {
-          @Override public void onError(okhttp3.Call call, Exception e, int id) {
-            Log.d(TAG, "onError: " + e.toString());
-            Log.d(TAG, "onError: " + "网络错误");
-            mSwipeLayout.setRefreshing(false);
-          }
-
-          @Override public void onResponse(DiscoverResponse response, int id) {
-            if (response.getErrno() == 0) { // 成功
-              Log.d(TAG, "onResponse: " + "api返回数据成功~");
-              // 展示数据
-              onShowData(response.getData().getMod_list());
-              // 保存至SP
-              String discover = JSON.toJSONString(response);
-              SPUtils.setString(getContext(), KEY_DISCOVER_RESPONSE, discover);
-              Log.d(TAG, "onResponse: " + "成功保存response至SP~");
-            } else {
-              Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
-            }
-            mSwipeLayout.setRefreshing(false);
-          }
-        });
+  /* Recycle View 加载更多 */
+  private void loadMoreNotes(List<TravellerNoteResponse.DataBean.ListBean> list) {
+    mAdapter.appendAll(list);
   }
 
-  /* 对返回的数据 进行 处理 + 显示 */
-  private void onShowData(List<DiscoverResponse.DataBean.ModListBean> data) {
-    // 处理前三个模板的数据
-    initFloor(data);
-    // 处理精华游记
-    initNotes(data.get(5).getList());
-  }
-
-  /*
-   更多的游记  http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&sid=&page_num=2&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=9146e33eaae27dbd6e4c0dbbb3ee4fc2&T=1492527946&locEnabled=YES&locType=GPS
-
-
-   加载更多   page_num=2  递增
-   */
-
-  private void initNotes(List<DiscoverResponse.DataBean.ModListBean.ListBean> list) {
-    mAdapter.addAll(list.subList(0, list.size() - 1));
+  @Override public void onRefresh(SwipeRefreshLayout.Direction direction) {
+    onLoadData();
+    onLoadTravellerNote(false);
   }
 }

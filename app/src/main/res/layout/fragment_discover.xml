@@ -13,7 +13,6 @@
 
   <support.ui.widget.SwipeRefreshLayout android:id="@+id/swipe_refresh_layout"
       android:layout_width="match_parent" android:layout_height="wrap_content">
-
     <ScrollView
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:fillViewport="true">
@@ -29,6 +28,7 @@
         <!-- 每日发现 -->
         <include android:id="@+id/floor_3" layout="@layout/item_floor_template_3"/>
 
+        <!-- 分割线 -->
         <View android:layout_width="match_parent" android:layout_height="7dp"
             android:background="@color/page_bg"/>
 
@@ -64,6 +64,7 @@
               android:layout_alignParentRight="true" android:layout_centerVertical="true"
           />
         </RelativeLayout>
+
         <!-- RecyclerView 内容 -->
         <android.support.v7.widget.RecyclerView android:id="@+id/recycle_travels"
             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -71,7 +72,6 @@
 
       </LinearLayout>
     </ScrollView>
-
   </support.ui.widget.SwipeRefreshLayout>
 
 </LinearLayout>

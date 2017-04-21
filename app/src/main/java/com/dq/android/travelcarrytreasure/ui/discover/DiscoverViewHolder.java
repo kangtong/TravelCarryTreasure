@@ -36,7 +36,12 @@ public class DiscoverViewHolder extends EasyViewHolder<TravellerNoteResponse.Dat
         .into(mImg);
     mTvTitle.setText(values.getExt().getTitle());
     mTvLookNum.setText(String.valueOf(values.getExt().getView_count()));
-    mTvTime.setText(
-        TimeUtils.getDateFromTime(Long.parseLong(values.getExt().getStart_time()), "yyyy-MM-dd"));
+    String date = values.getExt().getStart_time();
+    if (!date.equals("false")) {
+      mTvTime.setText(
+          TimeUtils.getDateFromTime(Long.parseLong(values.getExt().getStart_time()), "yyyy-MM-dd"));
+    } else {
+      mTvTime.setText("2017-01-01");
+    }
   }
 }
