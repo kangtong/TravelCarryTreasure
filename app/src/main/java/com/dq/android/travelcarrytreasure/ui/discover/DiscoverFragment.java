@@ -77,6 +77,8 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
 
     // mRefreshLayout 相关设置
     mRefreshLayout.setOnRefreshListener(this);
+    mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+        android.R.color.holo_orange_light, android.R.color.holo_green_light);
 
     // 初始化 adapter
     final LinearLayoutManager mLayoutManager =
