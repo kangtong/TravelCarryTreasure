@@ -318,6 +318,7 @@ public class DiscoverResponse implements Serializable {
         private String desc; // 描述
         private String channel_name; // 新鲜事
         private long create_time; // 时间
+        private String card_id; // ce3d51b55264c32e32cacecc
 
         public String getType() {
           return type;
@@ -413,6 +414,14 @@ public class DiscoverResponse implements Serializable {
 
         public void setCreate_time(long create_time) {
           this.create_time = create_time;
+        }
+
+        public String getCard_id() {
+          return card_id;
+        }
+
+        public void setCard_id(String card_id) {
+          this.card_id = card_id;
         }
 
         public static class ExtBean {

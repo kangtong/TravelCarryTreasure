@@ -49,7 +49,7 @@
 
     <!-- 这里是: 挑战刺激旅游胜地 -->
     <!-- https://lvyou.baidu.com/main/webapp/explore/card/detail?&card_id=6e0f323b51b55264c32ec9cc&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=gps&LVCODE=1d08f8ffbde58870f1ef36dc6106adff&T=1491985207&locEnabled=YES&locType=GPS -->
-    <RelativeLayout
+    <RelativeLayout android:id="@+id/item_1"
         android:layout_width="match_parent" android:layout_height="wrap_content">
 
       <ImageView android:id="@+id/img_content_1"
@@ -90,7 +90,7 @@
           android:textColor="#999999"/>
     </RelativeLayout>
 
-    <RelativeLayout
+    <RelativeLayout android:id="@+id/item_2"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_marginTop="20dp" android:layout_marginBottom="20dp">
 

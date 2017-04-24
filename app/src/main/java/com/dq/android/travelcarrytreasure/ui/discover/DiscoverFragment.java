@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverResponse;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.TravellerNoteCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.TravellerNoteResponse;
+import com.dq.android.travelcarrytreasure.ui.web.WebActivity;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
 import com.dq.android.travelcarrytreasure.util.TimeUtils;
@@ -56,8 +58,8 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     return R.layout.fragment_discover;
   }
 
-  @TargetApi(Build.VERSION_CODES.M) @Override
-  protected void initView(View view, Bundle savedInstanceState) {
+  @TargetApi(Build.VERSION_CODES.M)
+  @Override protected void initView(View view, Bundle savedInstanceState) {
     // 初始化
     mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
     mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
@@ -77,7 +79,8 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
 
     // mRefreshLayout 相关设置
     mRefreshLayout.setOnRefreshListener(this);
-    mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+    mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
+        android.R.color.holo_red_light,
         android.R.color.holo_orange_light, android.R.color.holo_green_light);
 
     // 初始化 adapter
@@ -208,7 +211,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   }
 
   /* 楼层数据 更新 */
-  private void initFloor(List<DiscoverResponse.DataBean.ModListBean> data) {
+  private void initFloor(final List<DiscoverResponse.DataBean.ModListBean> data) {
     // 2,本季热门 3,主题游 4,每日发现 5, 精华游记
 
     // 本季热门 2
@@ -283,6 +286,15 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
         .load(data.get(4).getList().get(0).getPic_url())
         .thumbnail(0.1f)
         .into(img3_1);
+    RelativeLayout layout_1 = (RelativeLayout) mFloor_3.findViewById(R.id.item_1);
+    layout_1.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        String url = "http://lvyou.baidu.com/main/webapp/explore/card/detail?&card_id="
+            + data.get(4).getList().get(0).getCard_id()
+            + "&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=62d1116296d06745f08841d1055973ee&T=1493034686&locEnabled=YES&locType=GPS";
+        WebActivity.start(getContext(), url);
+      }
+    });
 
     ((TextView) mFloor_3.findViewById(R.id.tv_label_2)).setText(
         data.get(4).getList().get(1).getChannel_name());
@@ -299,6 +311,15 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
         .load(data.get(4).getList().get(1).getPic_url())
         .thumbnail(0.1f)
         .into(img3_2);
+    RelativeLayout layout_2 = (RelativeLayout) mFloor_3.findViewById(R.id.item_2);
+    layout_2.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        String url = "http://lvyou.baidu.com/main/webapp/explore/card/detail?&card_id="
+            + data.get(4).getList().get(1).getCard_id()
+            + "&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=62d1116296d06745f08841d1055973ee&T=1493034686&locEnabled=YES&locType=GPS";
+        WebActivity.start(getContext(), url);
+      }
+    });
   }
 
   /* Recycle View 更新数据 */
