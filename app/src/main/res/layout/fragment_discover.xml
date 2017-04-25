@@ -6,10 +6,10 @@
     android:orientation="vertical" android:background="@color/white">
 
   <!-- 搜索框 -->
-  <com.dq.android.travelcarrytreasure.widget.CustomSearchView
-      android:id="@+id/search_view"
+  <com.dq.android.travelcarrytreasure.widget.CustomToolBar
+      android:id="@+id/tool_bar"
       android:layout_width="match_parent" android:layout_height="wrap_content"
-      app:showAction="true"/>
+      app:isShowLeftImg="false" app:toolbarTitle="@string/app_name"/>
 
   <support.ui.widget.SwipeRefreshLayout android:id="@+id/swipe_refresh_layout"
       android:layout_width="match_parent" android:layout_height="wrap_content">

@@ -1,6 +1,8 @@
 package com.dq.android.travelcarrytreasure.ui.main;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.ui.discover.DiscoverFragment;
@@ -51,7 +55,7 @@ public class MainActivity extends BaseActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    setDarkStatusIcon(true);
     setContentView(R.layout.activity_main);
     initViews();
     initListener();
@@ -115,5 +119,22 @@ public class MainActivity extends BaseActivity {
    */
   @Override protected void onSaveInstanceState(Bundle outState) {
 
+  }
+
+  public void setDarkStatusIcon(boolean bDark) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      View decorView = getWindow().getDecorView();
+      if (decorView != null) {
+        int vis = decorView.getSystemUiVisibility();
+        if (bDark) {
+          vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else {
+          vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        }
+        decorView.setSystemUiVisibility(vis);
+      }
+      getWindow().setStatusBarColor(Color.TRANSPARENT);
+    }
   }
 }

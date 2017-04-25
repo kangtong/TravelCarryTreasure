@@ -23,7 +23,7 @@ import com.dq.android.travelcarrytreasure.ui.web.WebActivity;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
 import com.dq.android.travelcarrytreasure.util.TimeUtils;
-import com.dq.android.travelcarrytreasure.widget.CustomSearchView;
+import com.dq.android.travelcarrytreasure.widget.CustomToolBar;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
 import java.util.Random;
@@ -42,7 +42,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   private static final String KEY_TRAVELLER_NOTE = "key_traveller_note";
 
   private SwipeRefreshLayout mRefreshLayout;
-  private CustomSearchView mSearchView;
+  private CustomToolBar mToolBar;
   private RecyclerView mRecyclerTravels; // 精华游记
   private EasyRecyclerAdapter mAdapter;
   private View mFloor_1, mFloor_2, mFloor_3; // 本季热门 - 主题游 - 每日发现
@@ -62,18 +62,19 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   @Override protected void initView(View view, Bundle savedInstanceState) {
     // 初始化
     mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-    mSearchView = (CustomSearchView) view.findViewById(R.id.search_view);
+    mToolBar = (CustomToolBar) view.findViewById(R.id.tool_bar);
     mRecyclerTravels = (RecyclerView) view.findViewById(R.id.recycle_travels);
     mFloor_1 = view.findViewById(R.id.floor_1);
     mFloor_2 = view.findViewById(R.id.floor_2);
     mFloor_3 = view.findViewById(R.id.floor_3);
 
     // 监听事件
-    mSearchView.setSearchListener(new CustomSearchView.SearchListener() {
-      @Override public void search(String keyWords) {
+    mToolBar.setOnToolBarListener(new CustomToolBar.onToolBarListener() {
+      @Override public void onBackListener() {
+
       }
 
-      @Override public void cancel() {
+      @Override public void onActionListener() {
       }
     });
 
