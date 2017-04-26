@@ -27,12 +27,17 @@
           android:drawableRight="@drawable/ic_white_down" android:drawablePadding="10dp"
           tools:text="西安"
           android:textSize="22sp" android:textColor="@color/white"/>
+
       <TextView android:id="@+id/tv_city_pinyin"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_below="@id/tv_city" android:layout_marginTop="5dp"
           tools:text="XIAN"
-          android:textSize="20sp" android:textColor="@color/white"/>
+          android:textSize="18sp" android:textColor="@color/white"/>
 
+      <TextView android:id="@+id/tv_weather"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_below="@id/tv_city_pinyin" android:layout_marginTop="5dp"
+          tools:text=" 晴 18℃ 北风 9级;" android:textColor="@color/white"/>
     </RelativeLayout>
 
     <!-- 推荐行程 -->

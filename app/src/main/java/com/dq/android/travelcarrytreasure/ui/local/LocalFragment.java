@@ -12,7 +12,9 @@ import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.Constant;
 import com.dq.android.travelcarrytreasure.model.common.City;
 import com.dq.android.travelcarrytreasure.model.common.FuzzyAddress;
+import com.dq.android.travelcarrytreasure.model.common.Weather;
 import com.dq.android.travelcarrytreasure.service.FuzzyAddressCallBack;
+import com.dq.android.travelcarrytreasure.service.WeatherCallBack;
 import com.dq.android.travelcarrytreasure.widget.ScrollableLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -35,9 +37,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private FrameLayout mLayoutSearch;
   private TextView mTvCity;
   private TextView mTvCityPinyin;
+  private TextView mTvWeather;
 
   private String ip;
-  private String city;
+  private String cityCode;
 
   public static LocalFragment newInstance() {
 
@@ -59,6 +62,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mLayoutSearch = (FrameLayout) view.findViewById(R.id.layout_search);
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
+    mTvWeather = (TextView) view.findViewById(R.id.tv_weather);
 
     mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
       @Override public void onScroll() {
@@ -155,7 +159,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
               Log.d(TAG, "onResponse: " + "api返回数据成功~");
               // 展示数据
               mTvCity.setText(response.getCity());
-              city = response.getCity();
+              cityCode = response.getAdcode();
               // 城市名拼音
               List<City> list = Constant.getInstance().getCityList();
               for (int i = 0; i < list.size(); i++) {
@@ -163,6 +167,38 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
                   mTvCityPinyin.setText(list.get(i).getSurl().toUpperCase());
                   break;
                 }
+              }
+              getWeather(cityCode);
+            } else {
+              Log.d(TAG, "onResponse: " + response.getInfo());
+              Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
+            }
+          }
+        });
+  }
+
+  private void getWeather(String cityCode) {
+    String url = "http://restapi.amap.com/v3/weather/weatherInfo?city=" + cityCode + "&key=" + Constant.getInstance().getGaodewebkey();
+    Log.d(TAG, "getWeather: " + url);
+    OkHttpUtils
+        .get()
+        .url(url)
+        .build()
+        .execute(new WeatherCallBack() {
+          @Override public void onError(Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "通过指定城市天气时，发生网络错误！！！");
+            Log.d(TAG, "onError: " + e.toString());
+          }
+
+          @Override public void onResponse(Weather response, int id) {
+            if (response.getStatus().equals("1")) { // 成功
+              Log.d(TAG, "onResponse: " + "api返回数据成功~");
+              // 展示数据
+              if (!response.getLives().isEmpty()) {
+                mTvWeather.setText(response.getLives().get(0).getDescribe());
+                Log.d(TAG, "onResponse: " + response.getLives().get(0).getDescribe());
+              } else {
+                Log.d(TAG, "onResponse: " + "api返回数据为空！！！");
               }
             } else {
               Log.d(TAG, "onResponse: " + response.getInfo());
