@@ -78,4 +78,8 @@ public class Constant {
     cityList.add(new City("珠海", "zhuhai", "Z"));
     cityList.add(new City("张家界", "zhangjiajie"));
   }
+
+  public List<City> getCityList() {
+    return cityList;
+  }
 }

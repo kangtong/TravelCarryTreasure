@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 import support.ui.utilities.ToastUtils;
@@ -150,7 +151,8 @@ public class LocationUtils {
     if (addList != null && addList.size() > 0) {
       for (int i = 0; i < addList.size(); i++) {
         Address add = addList.get(i);
-        mcityName += add.toString();
+        mcityName += add.getLocality();
+        Log.d("dengqi", "updateWithNewLocation: " + add.toString());
       }
     }
     return mcityName;
