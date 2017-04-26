@@ -1,11 +1,6 @@
 package com.dq.android.travelcarrytreasure.ui.local;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.GpsStatus;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -18,9 +13,6 @@ import com.dq.android.travelcarrytreasure.model.Constant;
 import com.dq.android.travelcarrytreasure.model.common.City;
 import com.dq.android.travelcarrytreasure.model.common.FuzzyAddress;
 import com.dq.android.travelcarrytreasure.service.FuzzyAddressCallBack;
-import com.dq.android.travelcarrytreasure.util.EasyPermissionsEx;
-import com.dq.android.travelcarrytreasure.util.LocationHelper;
-import com.dq.android.travelcarrytreasure.util.LocationUtils;
 import com.dq.android.travelcarrytreasure.widget.ScrollableLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -37,10 +29,6 @@ import support.ui.utilities.ToastUtils;
 public class LocalFragment extends BaseFragment implements View.OnClickListener {
 
   private static final String TAG = LocalFragment.class.getSimpleName();
-
-  private String[] mNeedPermissionsList =
-      new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
-          Manifest.permission.ACCESS_COARSE_LOCATION};
 
   private ScrollableLayout mLayoutScroll;
   private RelativeLayout mLayoutCityDetails;
@@ -101,86 +89,11 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     }
   }
 
-  @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    switch (requestCode) {
-      case 1: {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          Log.d(TAG, "已获取权限!");
-          initLocation();
-        } else {
-          if (EasyPermissionsEx.somePermissionPermanentlyDenied(this, mNeedPermissionsList)) {
-            EasyPermissionsEx.goSettings2Permissions(this, "需要定位权限来获取当地天气信息,但是该权限被禁止,你可以到设置中更改"
-                , "去设置", 1);
-          }
-        }
-      }
-      break;
-    }
-  }
-
   private void onLoadData() {
     // 1.通过高德获取城市名 + 天气
-    // 使用了 EasyPermissionsEx 类来管理动态权限配置
-    //if (EasyPermissionsEx.hasPermissions(getContext(), mNeedPermissionsList)) {
-    //  initLocation();
-    //} else {
-    //  EasyPermissionsEx.requestPermissions(getContext(), "需要定位权限来获取当地天气信息", 1,
-    //      mNeedPermissionsList);
-    //}
-
-    // 先获取ip地址
     getIP();
-
     // 2.glide加载大图
     // 3,其他数据加载
-  }
-
-  /* 定位操作 */
-  private void initLocation() {
-    final LocationUtils local = LocationUtils.getInstance(getContext());
-
-    local.initLocation(new LocationHelper() {
-      @Override
-      public void UpdateLocation(Location location) {
-        // 城市名简体汉字
-        String cityName = local.updateWithNewLocation(location);
-        mTvCity.setText(cityName);
-        // 城市名拼音
-        List<City> list = Constant.getInstance().getCityList();
-        for (int i = 0; i < list.size(); i++) {
-          if (cityName.contains(list.get(i).getSname())) {
-            mTvCityPinyin.setText(list.get(i).getSurl().toUpperCase());
-            break;
-          }
-        }
-      }
-
-      @Override
-      public void UpdateStatus(String provider, int status, Bundle extras) {
-      }
-
-      @Override
-      public void UpdateGPSStatus(GpsStatus pGpsStatus) {
-
-      }
-
-      @Override
-      public void UpdateLastLocation(Location location) {
-        // 城市名简体汉字
-        String cityName = local.updateWithNewLocation(location);
-        mTvCity.setText(cityName);
-        // 城市名拼音
-        List<City> list = Constant.getInstance().getCityList();
-        for (int i = 0; i < list.size(); i++) {
-          if (list.get(i).getSname().equals(cityName)) {
-            mTvCityPinyin.setText(list.get(i).getSurl().toUpperCase());
-            break;
-          }
-        }
-      }
-    });
   }
 
   /* 改变透明度的操作 */
@@ -198,14 +111,6 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     } else {
       mLayoutSearch.getBackground().mutate().setAlpha(255);
     }
-  }
-
-  /* 销毁视图时, 断开定位 */
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    // 在页面销毁时取消定位监听
-    LocationUtils.getInstance(getContext()).removeLocationUpdatesListener();
-    super.onDestroy();
   }
 
   public void getIP() {
