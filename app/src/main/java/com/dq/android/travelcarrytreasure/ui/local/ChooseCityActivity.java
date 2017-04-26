@@ -8,18 +8,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
-import com.andview.refreshview.XRefreshView;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
-import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityCallBack;
+import com.dq.android.travelcarrytreasure.service.HotCityCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityResponse;
-import com.dq.android.travelcarrytreasure.ui.local.smileyloadingview.CustomerFooter;
-import com.dq.android.travelcarrytreasure.ui.local.smileyloadingview.SmileyHeaderView;
 import com.dq.android.travelcarrytreasure.widget.CustomToolBar;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
 import support.ui.adapters.EasyRecyclerAdapter;
-import support.ui.utilities.ToastUtils;
 
 /**
  * Created by DQDana on 2017/4/19

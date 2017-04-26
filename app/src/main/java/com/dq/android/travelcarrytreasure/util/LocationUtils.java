@@ -17,6 +17,8 @@ import support.ui.utilities.ToastUtils;
 
 public class LocationUtils {
 
+  private static final String TAG = LocationUtils.class.getSimpleName();
+
   private volatile static LocationUtils uniqueInstance;
 
   private LocationHelper mLocationHelper;
@@ -152,7 +154,7 @@ public class LocationUtils {
       for (int i = 0; i < addList.size(); i++) {
         Address add = addList.get(i);
         mcityName += add.getLocality();
-        Log.d("dengqi", "updateWithNewLocation: " + add.toString());
+        Log.d(TAG, "updateWithNewLocation: " + add.toString());
       }
     }
     return mcityName;

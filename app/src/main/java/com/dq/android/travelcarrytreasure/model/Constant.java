@@ -11,6 +11,7 @@ import java.util.List;
 public class Constant {
 
   private List<City> cityList = new ArrayList<>();
+  private String gaodewebkey = "2a38b88634373039be63970073305145";
 
   private static final Constant ourInstance = new Constant();
 
@@ -81,5 +82,9 @@ public class Constant {
 
   public List<City> getCityList() {
     return cityList;
+  }
+
+  public String getGaodewebkey() {
+    return gaodewebkey;
   }
 }

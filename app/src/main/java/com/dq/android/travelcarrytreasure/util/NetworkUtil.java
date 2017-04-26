@@ -10,15 +10,15 @@ import java.io.InputStreamReader;
 
 public class NetworkUtil {
 
-  public static final boolean ping() {
+  public static boolean ping() {
     try {
       String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
       Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址3次
       // 读取ping的内容，可以不加
       InputStream input = p.getInputStream();
       BufferedReader in = new BufferedReader(new InputStreamReader(input));
-      StringBuffer stringBuffer = new StringBuffer();
-      String content = "";
+      StringBuilder stringBuffer = new StringBuilder();
+      String content;
       while ((content = in.readLine()) != null) {
         stringBuffer.append(content);
       }
@@ -27,13 +27,9 @@ public class NetworkUtil {
       int status = p.waitFor();
       if (status == 0) {
         return true;
-      } else {
       }
-    } catch (IOException e) {
+    } catch (IOException | InterruptedException ignored) {
 
-    } catch (InterruptedException e) {
-
-    } finally {
     }
     return false;
   }
@@ -43,10 +39,6 @@ public class NetworkUtil {
     ConnectivityManager manager = (ConnectivityManager) TravelApp.getInstance().getSystemService(
         Context.CONNECTIVITY_SERVICE);
     // 去进行判断网络是否连接
-    if (manager.getActiveNetworkInfo() != null) {
-      return manager.getActiveNetworkInfo().isAvailable();
-    }
-    return false;
+    return manager.getActiveNetworkInfo() != null && manager.getActiveNetworkInfo().isAvailable();
   }
-
 }

@@ -1,6 +1,7 @@
-package com.dq.android.travelcarrytreasure.model.baidulvyou;
+package com.dq.android.travelcarrytreasure.service;
 
 import com.alibaba.fastjson.JSON;
+import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityResponse;
 import com.zhy.http.okhttp.callback.Callback;
 import okhttp3.Response;
 

@@ -18,6 +18,7 @@ import support.ui.utilities.ToastUtils;
 
 public class WebActivity extends BaseActivity {
 
+  private static final String TAG = WebActivity.class.getSimpleName();
   private static final String KEY_URL = "url";
 
   private WebView mWebH5;
@@ -55,7 +56,7 @@ public class WebActivity extends BaseActivity {
 
   private void onLoadData() {
     String url = getIntent().getStringExtra(KEY_URL);
-    Log.d("dengqi", "onLoadData: " + url);
+    Log.d(TAG, "onLoadData: " + url);
     if (url != null) {
       mWebH5.loadUrl(url);
     }
