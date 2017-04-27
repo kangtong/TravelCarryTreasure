@@ -4,13 +4,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
 
-  <!-- banner -->
-  <ImageView android:id="@+id/iv_city_banner"
-      android:layout_width="match_parent" android:layout_height="450dp"
-      android:src="@drawable/temp_city_banner"
-      android:scaleType="fitXY"/>
-
-
   <!-- 主体内容 -->
   <com.dq.android.travelcarrytreasure.widget.ScrollableLayout
       android:id="@+id/layout_scroll"
@@ -19,33 +12,41 @@
 
     <!-- 城市信息 -->
     <RelativeLayout android:id="@+id/layout_city_details"
-        android:layout_width="match_parent" android:layout_height="450dp"
-        android:paddingLeft="@dimen/common_horizontal_margin"
-        android:paddingRight="@dimen/common_horizontal_margin">
-
+        android:layout_width="match_parent" android:layout_height="450dp">
+      <!-- banner -->
+      <ImageView android:id="@+id/iv_city_banner"
+          android:layout_width="match_parent" android:layout_height="match_parent"
+          android:src="@drawable/temp_city_banner"
+          android:scaleType="fitXY"/>
+      <!-- 城市名 -->
       <TextView android:id="@+id/tv_city"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_marginTop="70dp"
           android:drawableRight="@drawable/ic_white_down" android:drawablePadding="10dp"
+          android:layout_marginLeft="@dimen/common_horizontal_margin"
           tools:text="西安"
           android:textSize="22sp" android:textColor="@color/white"/>
-
+      <!-- 拼音 -->
       <TextView android:id="@+id/tv_city_pinyin"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_below="@id/tv_city" android:layout_marginTop="5dp"
+          android:layout_marginLeft="@dimen/common_horizontal_margin"
           tools:text="XIAN"
           android:textSize="18sp" android:textColor="@color/white"/>
-
+      <!-- 天气 -->
       <TextView android:id="@+id/tv_weather"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_below="@id/tv_city_pinyin" android:layout_marginTop="5dp"
+          android:layout_marginLeft="@dimen/common_horizontal_margin"
           tools:text=" 晴 18℃ 北风 9级;" android:textColor="@color/white"/>
     </RelativeLayout>
 
     <!-- 推荐行程 -->
     <FrameLayout
         android:layout_width="match_parent" android:layout_height="200dp"
-        android:background="#b4d78d">
+        android:background="#b4d78d"
+        android:paddingLeft="@dimen/common_horizontal_margin"
+        android:paddingRight="@dimen/common_horizontal_margin">
 
       <TextView
           android:layout_width="match_parent" android:layout_height="match_parent"
@@ -57,7 +58,9 @@
     <!-- 精品游记 -->
     <FrameLayout
         android:layout_width="match_parent" android:layout_height="1000dp"
-        android:background="#ffe67a">
+        android:background="#ffe67a"
+        android:paddingLeft="@dimen/common_horizontal_margin"
+        android:paddingRight="@dimen/common_horizontal_margin">
 
       <!-- 固定10个 精品游记 : 应该自定义一个 Banner -->
       <android.support.v7.widget.RecyclerView

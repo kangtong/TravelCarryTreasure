@@ -1,4 +1,4 @@
-package com.dq.android.travelcarrytreasure.service;
+package com.dq.android.travelcarrytreasure.service.baidulvyou;
 
 import com.alibaba.fastjson.JSON;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityResponse;

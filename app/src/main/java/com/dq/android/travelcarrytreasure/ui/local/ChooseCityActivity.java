@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.TextView;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
-import com.dq.android.travelcarrytreasure.service.HotCityCallBack;
+import com.dq.android.travelcarrytreasure.service.baidulvyou.HotCityCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityResponse;
 import com.dq.android.travelcarrytreasure.widget.CustomToolBar;
 import com.zhy.http.okhttp.OkHttpUtils;

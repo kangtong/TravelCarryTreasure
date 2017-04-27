@@ -1,9 +1,7 @@
 package com.dq.android.travelcarrytreasure.ui.local;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,17 +9,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.Constant;
 import com.dq.android.travelcarrytreasure.model.common.City;
 import com.dq.android.travelcarrytreasure.model.common.FuzzyAddress;
 import com.dq.android.travelcarrytreasure.model.common.Weather;
-import com.dq.android.travelcarrytreasure.service.FuzzyAddressCallBack;
-import com.dq.android.travelcarrytreasure.service.WeatherCallBack;
+import com.dq.android.travelcarrytreasure.service.common.FuzzyAddressCallBack;
+import com.dq.android.travelcarrytreasure.service.common.WeatherCallBack;
 import com.dq.android.travelcarrytreasure.widget.ScrollableLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -41,6 +36,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   private ScrollableLayout mLayoutScroll;
   private RelativeLayout mLayoutCityDetails;
+  private ImageView mIvCityBanner;
   private FrameLayout mLayoutSearch;
   private ImageView mIvSearch;
   private TextView mTvCover;
@@ -68,6 +64,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
     mLayoutScroll = (ScrollableLayout) view.findViewById(R.id.layout_scroll);
     mLayoutCityDetails = (RelativeLayout) view.findViewById(R.id.layout_city_details);
+    mIvCityBanner = (ImageView) view.findViewById(R.id.iv_city_banner);
     mLayoutSearch = (FrameLayout) view.findViewById(R.id.layout_search);
     mIvSearch = (ImageView) view.findViewById(R.id.iv_search);
     mTvCover = (TextView) view.findViewById(R.id.tv_cover);
@@ -108,9 +105,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 1.通过高德获取城市名 + 天气
     getIP();
     // 2.glide加载大图
-    getBanner();
+    // getBanner();
     // 3,其他数据加载
     // http://lvyou.baidu.com/destination/app/local?apiv=v2&sid=795ac511463263cf7ae3def3&y=40.001743&around=0&x=116.488043&format=app&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=5615def83ce898ef7bf0f1ddf4e8d731&T=1493274804
+
   }
 
   /* 改变透明度的操作 */
@@ -238,12 +236,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   }
 
   public void getBanner() {
-    Glide.with(this).load("").into(new SimpleTarget<GlideDrawable>() {
-      @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-      @Override public void onResourceReady(GlideDrawable resource,
-          GlideAnimation<? super GlideDrawable> glideAnimation) {
-        mLayoutCityDetails.setBackground(resource);
-      }
-    });
+    String url = "";
+    Glide.with(this).load(url).into(mIvCityBanner);
   }
 }
