@@ -1,12 +1,19 @@
 package com.dq.android.travelcarrytreasure.ui.local;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.Constant;
@@ -35,6 +42,8 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private ScrollableLayout mLayoutScroll;
   private RelativeLayout mLayoutCityDetails;
   private FrameLayout mLayoutSearch;
+  private ImageView mIvSearch;
+  private TextView mTvCover;
   private TextView mTvCity;
   private TextView mTvCityPinyin;
   private TextView mTvWeather;
@@ -60,6 +69,8 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mLayoutScroll = (ScrollableLayout) view.findViewById(R.id.layout_scroll);
     mLayoutCityDetails = (RelativeLayout) view.findViewById(R.id.layout_city_details);
     mLayoutSearch = (FrameLayout) view.findViewById(R.id.layout_search);
+    mIvSearch = (ImageView) view.findViewById(R.id.iv_search);
+    mTvCover = (TextView) view.findViewById(R.id.tv_cover);
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
     mTvWeather = (TextView) view.findViewById(R.id.tv_weather);
@@ -97,7 +108,9 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 1.通过高德获取城市名 + 天气
     getIP();
     // 2.glide加载大图
+    getBanner();
     // 3,其他数据加载
+    // http://lvyou.baidu.com/destination/app/local?apiv=v2&sid=795ac511463263cf7ae3def3&y=40.001743&around=0&x=116.488043&format=app&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=5615def83ce898ef7bf0f1ddf4e8d731&T=1493274804
   }
 
   /* 改变透明度的操作 */
@@ -109,6 +122,14 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     int absY = Math.abs(y);
     int height = mLayoutSearch.getHeight();
 
+    if (absY >= height * 0.6) {
+      mIvSearch.setImageResource(R.drawable.common_search_black);
+      mTvCover.setTextColor(getResources().getColor(R.color.divider));
+    } else {
+      mIvSearch.setImageResource(R.drawable.common_search_white);
+      mTvCover.setTextColor(getResources().getColor(R.color.white));
+    }
+
     if (absY <= height) {
       mLayoutSearch.getBackground().mutate().setAlpha(
           (int) ((absY + 0.0) / height * 255));
@@ -117,6 +138,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     }
   }
 
+  /* 获取公网 ip */
   public void getIP() {
     String url = "http://pv.sohu.com/cityjson?ie=utf-8";
     OkHttpUtils
@@ -131,7 +153,8 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
           @Override public void onResponse(String response, int id) {
             Pattern pattern = Pattern
-                .compile("((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))");
+                .compile(
+                    "((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))");
             Matcher matcher = pattern.matcher(response);
             if (matcher.find()) {
               ip = matcher.group();
@@ -141,8 +164,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
         });
   }
 
+  /* 获取城市名 */
   private void getCityByIp(String ip) {
-    String url = "http://restapi.amap.com/v3/ip?ip=" + ip + "&key=" + Constant.getInstance().getGaodewebkey();
+    String url = "http://restapi.amap.com/v3/ip?ip=" + ip + "&key=" + Constant.getInstance()
+        .getGaodewebkey();
     Log.d(TAG, "getCityByIp: " + url);
     OkHttpUtils
         .get()
@@ -177,8 +202,12 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
         });
   }
 
+  /* 获取天气 */
   private void getWeather(String cityCode) {
-    String url = "http://restapi.amap.com/v3/weather/weatherInfo?city=" + cityCode + "&key=" + Constant.getInstance().getGaodewebkey();
+    String url = "http://restapi.amap.com/v3/weather/weatherInfo?city="
+        + cityCode
+        + "&key="
+        + Constant.getInstance().getGaodewebkey();
     Log.d(TAG, "getWeather: " + url);
     OkHttpUtils
         .get()
@@ -206,5 +235,15 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             }
           }
         });
+  }
+
+  public void getBanner() {
+    Glide.with(this).load("").into(new SimpleTarget<GlideDrawable>() {
+      @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+      @Override public void onResourceReady(GlideDrawable resource,
+          GlideAnimation<? super GlideDrawable> glideAnimation) {
+        mLayoutCityDetails.setBackground(resource);
+      }
+    });
   }
 }
