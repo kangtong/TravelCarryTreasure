@@ -82,4 +82,13 @@ public class FuzzyAddress implements Serializable {
   public void setRectangle(String rectangle) {
     this.rectangle = rectangle;
   }
+
+  public Double[] getCenterPoint() {
+    String[] arr = this.rectangle.split(";");
+    String[] first = arr[0].split(",");
+    String[] last = arr[1].split(",");
+    double x = (Double.parseDouble(first[0]) + Double.parseDouble(last[0])) / 2;
+    double y = (Double.parseDouble(first[1]) + Double.parseDouble(last[1])) / 2;
+    return new Double[] {x, y};
+  }
 }

@@ -8,15 +8,20 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.Constant;
+import com.dq.android.travelcarrytreasure.model.baidulvyou.LocationResponse;
 import com.dq.android.travelcarrytreasure.model.common.City;
 import com.dq.android.travelcarrytreasure.model.common.FuzzyAddress;
 import com.dq.android.travelcarrytreasure.model.common.Weather;
+import com.dq.android.travelcarrytreasure.service.baidulvyou.LocationCallBack;
 import com.dq.android.travelcarrytreasure.service.common.FuzzyAddressCallBack;
 import com.dq.android.travelcarrytreasure.service.common.WeatherCallBack;
+import com.dq.android.travelcarrytreasure.util.NetworkUtil;
+import com.dq.android.travelcarrytreasure.util.SPUtils;
 import com.dq.android.travelcarrytreasure.widget.ScrollableLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -34,6 +39,12 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   private static final String TAG = LocalFragment.class.getSimpleName();
 
+  private static final String KEY_LOCATION_RESPONSE = "key_location_response";
+  private static final String KEY_LATITUDE = "key_latitude"; // 维度
+  private static final String KEY_LONGITUDE = "key_longitude"; // 经度
+  private static final String KEY_CITY = "key_city"; // 城市名
+  private static final String KEY_CITY_PINYIN = "key_city_pinyin"; // 城市拼音
+
   private ScrollableLayout mLayoutScroll;
   private RelativeLayout mLayoutCityDetails;
   private ImageView mIvCityBanner;
@@ -46,11 +57,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   private String ip;
   private String cityCode;
+  private Double[] LatitudeAndLongitude = new Double[] {0.0, 0.0};
 
   public static LocalFragment newInstance() {
-
     Bundle args = new Bundle();
-
     LocalFragment fragment = new LocalFragment();
     fragment.setArguments(args);
     return fragment;
@@ -71,26 +81,60 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
     mTvWeather = (TextView) view.findViewById(R.id.tv_weather);
-
+    // 滑动监听, 改变透明度
     mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
       @Override public void onScroll() {
         changeSearchViewAlpha();
       }
     });
-
+    // 搜索栏处理
     mLayoutSearch.getBackground().mutate().setAlpha(0);
     mLayoutSearch.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         ToastUtils.toast("跳转至搜索界面");
       }
     });
-
+    // 城市选择页跳转
     mTvCity.setOnClickListener(this);
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    onLoadData();
+    // 1, 先加载本地
+    onLoadDataWithSP();
+    if (NetworkUtil.isNetworkAvailable()) {
+      onLoadData(); // 2,网络请求
+    } else {
+      ToastUtils.toast("本地网络检查错误!!!");
+    }
+  }
+
+  private void onLoadDataWithSP() {
+    // 大头数据
+    String json = SPUtils.getString(getContext(), KEY_LOCATION_RESPONSE);
+    if (!json.isEmpty()) {
+      LocationResponse response = JSON.parseObject(json, LocationResponse.class);
+      onShowData(response.getData());
+    }
+    // 城市名天气
+    String json_city = SPUtils.getString(getContext(), KEY_CITY);
+    if (!json_city.isEmpty()) {
+      mTvCity.setText(json_city);
+    }
+    String json_city_pinyin = SPUtils.getString(getContext(), KEY_CITY_PINYIN);
+    if (!json_city_pinyin.isEmpty()) {
+      mTvCityPinyin.setText(json_city_pinyin);
+    }
+    // 经度
+    String json_longitude = SPUtils.getString(getContext(), KEY_LONGITUDE);
+    if (!json_longitude.isEmpty()) {
+      LatitudeAndLongitude[0] = Double.valueOf(json_longitude);
+    }
+    // 纬度
+    String json_latitude = SPUtils.getString(getContext(), KEY_LATITUDE);
+    if (!json_latitude.isEmpty()) {
+      LatitudeAndLongitude[1] = Double.valueOf(json_latitude);
+    }
   }
 
   @Override public void onClick(View v) {
@@ -107,8 +151,16 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 2.glide加载大图
     // getBanner();
     // 3,其他数据加载
-    // http://lvyou.baidu.com/destination/app/local?apiv=v2&sid=795ac511463263cf7ae3def3&y=40.001743&around=0&x=116.488043&format=app&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=5615def83ce898ef7bf0f1ddf4e8d731&T=1493274804
+    // getOtherData();
+  }
 
+  /* 展示数据 */
+  private void onShowData(LocationResponse.DataBean data) {
+    // 先把天气给填进去
+    mTvWeather.setText(data.getScene_info().getInfo().getWeather().getDescribe());
+    // 加载 Banner
+    Glide.with(this).load(data.getScene_info().getInfo().getPic_url()).thumbnail(0.1f)
+        .into(mIvCityBanner);
   }
 
   /* 改变透明度的操作 */
@@ -183,6 +235,13 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
               // 展示数据
               mTvCity.setText(response.getCity());
               cityCode = response.getAdcode();
+              LatitudeAndLongitude = response.getCenterPoint();
+              Log.d(TAG, "onResponse: "
+                  + "经纬度为: "
+                  + LatitudeAndLongitude[0]
+                  + ":"
+                  + LatitudeAndLongitude[1]);
+
               // 城市名拼音
               List<City> list = Constant.getInstance().getCityList();
               for (int i = 0; i < list.size(); i++) {
@@ -191,7 +250,13 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
                   break;
                 }
               }
-              getWeather(cityCode);
+              // 保存至SP : 经纬度 + 城市名
+              SPUtils.setString(getContext(), KEY_LATITUDE, LatitudeAndLongitude[1] + "");
+              SPUtils.setString(getContext(), KEY_LONGITUDE, LatitudeAndLongitude[0] + "");
+              SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString());
+              SPUtils.setString(getContext(), KEY_CITY_PINYIN, mTvCityPinyin.getText().toString());
+              // getWeather(cityCode); // 获取天气
+              getOtherData(); // 获取其他数据
             } else {
               Log.d(TAG, "onResponse: " + response.getInfo());
               Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
@@ -202,6 +267,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   /* 获取天气 */
   private void getWeather(String cityCode) {
+    // TODO: 2017/4/27 dengqi: 这个天气不准,将来换成高德地图的
     String url = "http://restapi.amap.com/v3/weather/weatherInfo?city="
         + cityCode
         + "&key="
@@ -235,8 +301,38 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
         });
   }
 
-  public void getBanner() {
-    String url = "";
-    Glide.with(this).load(url).into(mIvCityBanner);
+  /* 获取其他数据: 这个数据很多, 小心处理, fastjson 经常报错 */
+  public void getOtherData() {
+    String url = // 很多东西, 慢慢分析, 拆解
+        "http://lvyou.baidu.com/destination/app/local?apiv=v2&sid=795ac511463263cf7ae3def3&around=0"
+            + "&y=" + LatitudeAndLongitude[1]
+            + "40.001743" // 维度
+            + "&x=" + LatitudeAndLongitude[0]
+            + "116.488043" // 经度
+            + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=5615def83ce898ef7bf0f1ddf4e8d731&T=1493274804";
+    Log.d("dengqi", "getOtherData: " + url);
+    OkHttpUtils
+        .get()
+        .url(url)
+        .build()
+        .execute(new LocationCallBack() {
+          @Override public void onError(okhttp3.Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "当地界面api请求,发生网络错误");
+            Log.d(TAG, "onError: " + e.toString());
+          }
+
+          @Override public void onResponse(LocationResponse response, int id) {
+            if (response.getErrno() == 0) { // 成功
+              Log.d(TAG, "onResponse: " + "当地界面网络请求,api返回数据成功~");
+              // 展示数据
+              onShowData(response.getData());
+              // 保存至SP
+              String discover = JSON.toJSONString(response);
+              SPUtils.setString(getContext(), KEY_LOCATION_RESPONSE, discover);
+            } else {
+              Log.d(TAG, "onResponse: " + "当地界面网络请求,api返回数据失败!!!");
+            }
+          }
+        });
   }
 }
