@@ -159,7 +159,9 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 先把天气给填进去
     mTvWeather.setText(data.getScene_info().getInfo().getWeather().getDescribe());
     // 加载 Banner
-    Glide.with(this).load(data.getScene_info().getInfo().getPic_url()).thumbnail(0.1f)
+    Glide.with(this)
+        .load(data.getScene_info().getInfo().getPic_url())
+        .thumbnail(0.1f)
         .into(mIvCityBanner);
   }
 

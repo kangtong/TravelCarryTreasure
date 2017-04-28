@@ -223,6 +223,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img1_1 = (ImageView) mFloor_1.findViewById(R.id.img_content_1);
     Glide.with(DiscoverFragment.this)
         .load(data.get(2).getList().get(0).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img1_1);
 
@@ -233,6 +234,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img1_2 = (ImageView) mFloor_1.findViewById(R.id.img_content_2);
     Glide.with(DiscoverFragment.this)
         .load(data.get(2).getList().get(1).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img1_2);
 
@@ -243,6 +245,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img1_3 = (ImageView) mFloor_1.findViewById(R.id.img_content_3);
     Glide.with(DiscoverFragment.this)
         .load(data.get(2).getList().get(2).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img1_3);
 
@@ -252,6 +255,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img2_1 = (ImageView) mFloor_2.findViewById(R.id.img_content_1);
     Glide.with(DiscoverFragment.this)
         .load(data.get(3).getList().get(0).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img2_1);
 
@@ -260,6 +264,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img2_2 = (ImageView) mFloor_2.findViewById(R.id.img_content_2);
     Glide.with(DiscoverFragment.this)
         .load(data.get(3).getList().get(1).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img2_2);
 
@@ -268,6 +273,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img2_3 = (ImageView) mFloor_2.findViewById(R.id.img_content_3);
     Glide.with(DiscoverFragment.this)
         .load(data.get(3).getList().get(2).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img2_3);
 
@@ -285,6 +291,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img3_1 = (ImageView) mFloor_3.findViewById(R.id.img_content_1);
     Glide.with(DiscoverFragment.this)
         .load(data.get(4).getList().get(0).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img3_1);
     RelativeLayout layout_1 = (RelativeLayout) mFloor_3.findViewById(R.id.item_1);
@@ -310,6 +317,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     ImageView img3_2 = (ImageView) mFloor_3.findViewById(R.id.img_content_2);
     Glide.with(DiscoverFragment.this)
         .load(data.get(4).getList().get(1).getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(img3_2);
     RelativeLayout layout_2 = (RelativeLayout) mFloor_3.findViewById(R.id.item_2);

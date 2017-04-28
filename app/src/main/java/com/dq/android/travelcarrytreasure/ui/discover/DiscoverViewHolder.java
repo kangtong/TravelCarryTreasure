@@ -32,6 +32,7 @@ public class DiscoverViewHolder extends EasyViewHolder<TravellerNoteResponse.Dat
   @Override public void bindTo(int position, TravellerNoteResponse.DataBean.ListBean values) {
     Glide.with(itemView.getContext())
         .load(values.getExt().getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(mImg);
     mTvTitle.setText(values.getExt().getTitle());
