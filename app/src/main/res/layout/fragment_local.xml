@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" android:background="@color/page_bg">
 
   <!-- 主体内容 -->
   <com.dq.android.travelcarrytreasure.widget.ScrollableLayout
       android:id="@+id/layout_scroll"
       android:layout_width="match_parent" android:layout_height="match_parent"
-      android:orientation="vertical">
+      android:orientation="vertical" android:layout_alignParentTop="true"
+      android:layout_alignParentLeft="true" android:layout_alignParentStart="true">
 
     <!-- 城市信息 -->
     <RelativeLayout android:id="@+id/layout_city_details"
@@ -39,21 +40,211 @@
           android:layout_below="@id/tv_city_pinyin" android:layout_marginTop="5dp"
           android:layout_marginLeft="@dimen/common_horizontal_margin"
           tools:text=" 晴 18℃ 北风 9级;" android:textColor="@color/white"/>
+
+      <!-- 最底下一行 -->
+      <LinearLayout android:id="@+id/ll_last_one"
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical"
+            android:gravity="center">
+          <ImageView
+              android:layout_width="50dp" android:layout_height="50dp"
+              android:src="@drawable/selector_local_shopping"
+              android:clickable="true"/>
+          <TextView
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+              android:text="购物" android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical"
+            android:gravity="center">
+          <ImageView
+              android:layout_width="50dp" android:layout_height="50dp"
+              android:src="@drawable/selector_local_playing"
+              android:clickable="true"/>
+          <TextView
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+              android:text="玩法" android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical"
+            android:gravity="center">
+          <ImageView
+              android:layout_width="50dp" android:layout_height="50dp"
+              android:src="@drawable/selector_local_more"
+              android:clickable="true"/>
+          <TextView
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+              android:text="更多" android:textColor="@color/white"/>
+        </LinearLayout>
+
+      </LinearLayout>
+
+      <!-- 倒数第二行 -->
+      <LinearLayout android:id="@+id/ll_second_last"
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:layout_above="@id/ll_last_one">
+
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical"
+            android:gravity="center">
+          <ImageView
+              android:layout_width="50dp" android:layout_height="50dp"
+              android:src="@drawable/selector_local_scene"
+              android:clickable="true"/>
+          <TextView
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+              android:text="景点" android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical"
+            android:gravity="center">
+          <ImageView
+              android:layout_width="50dp" android:layout_height="50dp"
+              android:src="@drawable/selector_local_cater"
+              android:clickable="true"/>
+          <TextView
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+              android:text="美食" android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical"
+            android:gravity="center">
+          <ImageView
+              android:layout_width="50dp" android:layout_height="50dp"
+              android:src="@drawable/selector_local_hotel"
+              android:clickable="true"/>
+          <TextView
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+              android:text="酒店" android:textColor="@color/white"/>
+        </LinearLayout>
+
+      </LinearLayout>
     </RelativeLayout>
 
     <!-- 推荐行程 -->
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent" android:layout_height="200dp"
-        android:background="#b4d78d"
+        android:layout_marginTop="10dp" android:orientation="vertical"
         android:paddingLeft="@dimen/common_horizontal_margin"
-        android:paddingRight="@dimen/common_horizontal_margin">
+        android:paddingRight="@dimen/common_horizontal_margin"
+        android:background="@color/white">
 
-      <TextView
-          android:layout_width="match_parent" android:layout_height="match_parent"
-          android:gravity="center"
-          android:text="推荐行程" android:id="@+id/textView"/>
+      <!-- 头像 + title + 行程 -->
+      <RelativeLayout
+          android:layout_width="match_parent" android:layout_height="75dp">
+        <com.wx.ovalimageview.RoundImageView android:id="@+id/img_user"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/discover_title_season"/>
 
-    </FrameLayout>
+        <TextView android:id="@+id/tv_title"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="17dp" android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/img_user"
+            android:text="推荐行程" android:textColor="@android:color/black"
+            android:textSize="16sp"/>
+
+        <TextView android:id="@+id/tv_title_sub"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/img_user" android:layout_below="@id/tv_title"
+            android:layout_alignLeft="@id/tv_title"
+            android:text="Amanda小黎的北京5日经典行程" android:textSize="12sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:src="@drawable/local_arrow_right"
+            android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+      </RelativeLayout>
+
+      <!-- 推荐行程的贝塞尔曲线 -->
+      <RelativeLayout
+          android:layout_width="match_parent" android:layout_height="wrap_content">
+        <!-- 显示五张图 -->
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+          <ImageView android:id="@+id/img_stroke_1"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/bg_beisaier_up"/>
+          <ImageView android:id="@+id/img_stroke_2"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/bg_beisaier_down"/>
+          <ImageView android:id="@+id/img_stroke_3"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/bg_beisaier_up"/>
+          <ImageView android:id="@+id/img_stroke_4"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/bg_beisaier_down"/>
+          <ImageView android:id="@+id/img_stroke_5"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:src="@drawable/bg_beisaier_up"/>
+        </LinearLayout>
+        <!-- 对应的景点名称: 上三 -->
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+          <TextView android:id="@+id/tv_stroke_1"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:text="天安门广场" android:textColor="@android:color/black"
+              android:textSize="12sp"/>
+          <TextView android:id="@+id/tv_stroke_3"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="2" android:gravity="center"
+              android:paddingLeft="8dp"
+              android:text="天安门" android:textColor="@android:color/black"
+              android:textSize="12sp"/>
+          <TextView android:id="@+id/tv_stroke_5"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="2" android:gravity="center"
+              android:paddingLeft="8dp"
+              android:text="景山公园" android:textColor="@android:color/black"
+              android:textSize="12sp"/>
+        </LinearLayout>
+        <!-- 对应的景点名称: 下二 -->
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="50dp">
+          <TextView android:id="@+id/tv_stroke_2"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="2" android:gravity="center"
+              android:paddingLeft="8dp"
+              android:text="人民英雄纪念碑" android:textColor="@android:color/black"
+              android:textSize="12sp"/>
+
+          <TextView android:id="@+id/tv_stroke_4"
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="2" android:gravity="center"
+              android:paddingLeft="8dp"
+              android:text="故宫" android:textColor="@android:color/black"
+              android:textSize="12sp"/>
+          <TextView
+              android:layout_width="0dp" android:layout_height="wrap_content"
+              android:layout_weight="1"/>
+        </LinearLayout>
+
+      </RelativeLayout>
+
+    </LinearLayout>
 
     <!-- 精品游记 -->
     <FrameLayout

@@ -55,6 +55,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private TextView mTvCityPinyin;
   private TextView mTvWeather;
 
+  /* 行程 */
+  private ImageView mImgStroke_1, mImgStroke_2, mImgStroke_3, mImgStroke_4, mImgStroke_5;
+  private TextView mTvStroke_1, mTvStroke_2, mTvStroke_3, mTvStroke_4, mTvStroke_5;
+
   private String ip;
   private String cityCode;
   private Double[] LatitudeAndLongitude = new Double[] {0.0, 0.0};
@@ -81,6 +85,18 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
     mTvWeather = (TextView) view.findViewById(R.id.tv_weather);
+    /* 行程的5个点位置 */
+    mImgStroke_1 = (ImageView) view.findViewById(R.id.img_stroke_1);
+    mImgStroke_2 = (ImageView) view.findViewById(R.id.img_stroke_2);
+    mImgStroke_3 = (ImageView) view.findViewById(R.id.img_stroke_3);
+    mImgStroke_4 = (ImageView) view.findViewById(R.id.img_stroke_4);
+    mImgStroke_5 = (ImageView) view.findViewById(R.id.img_stroke_5);
+    mTvStroke_1 = (TextView) view.findViewById(R.id.tv_stroke_1);
+    mTvStroke_2 = (TextView) view.findViewById(R.id.tv_stroke_2);
+    mTvStroke_3 = (TextView) view.findViewById(R.id.tv_stroke_3);
+    mTvStroke_4 = (TextView) view.findViewById(R.id.tv_stroke_4);
+    mTvStroke_5 = (TextView) view.findViewById(R.id.tv_stroke_5);
+
     // 滑动监听, 改变透明度
     mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
       @Override public void onScroll() {
