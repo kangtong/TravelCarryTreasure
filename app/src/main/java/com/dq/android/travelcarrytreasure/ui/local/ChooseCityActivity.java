@@ -10,8 +10,8 @@ import android.util.Log;
 import android.widget.TextView;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
-import com.dq.android.travelcarrytreasure.service.baidulvyou.HotCityCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.HotCityResponse;
+import com.dq.android.travelcarrytreasure.service.baidulvyou.HotCityCallBack;
 import com.dq.android.travelcarrytreasure.widget.CustomToolBar;
 import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.List;
@@ -25,13 +25,16 @@ public class ChooseCityActivity extends BaseActivity {
 
   private static final String TAG = ChooseCityActivity.class.getSimpleName();
   private static final String KEY_HOT_CITY_RESPONSE = "key_hot_city_response";
+  private static final String KEY_LOCATION_CITY = "key_location_city";
+
   private CustomToolBar mToolbar;
   private TextView mTvLocationCity;
   private RecyclerView mRecyclerView;
   private EasyRecyclerAdapter mAdapter;
 
-  public static void start(Context context) {
+  public static void start(Context context, String city) {
     Intent starter = new Intent(context, ChooseCityActivity.class);
+    starter.putExtra(KEY_LOCATION_CITY, city);
     context.startActivity(starter);
   }
 
@@ -69,6 +72,7 @@ public class ChooseCityActivity extends BaseActivity {
   }
 
   private void initData() {
+    mTvLocationCity.setText(getIntent().getStringExtra(KEY_LOCATION_CITY));
     onLoadData();
   }
 

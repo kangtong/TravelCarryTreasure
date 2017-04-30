@@ -50,6 +50,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private ImageView mIvCityBanner;
   private FrameLayout mLayoutSearch;
   private ImageView mIvSearch;
+  private View mViewDivider;
   private TextView mTvCover;
   private TextView mTvCity;
   private TextView mTvCityPinyin;
@@ -81,6 +82,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mIvCityBanner = (ImageView) view.findViewById(R.id.iv_city_banner);
     mLayoutSearch = (FrameLayout) view.findViewById(R.id.layout_search);
     mIvSearch = (ImageView) view.findViewById(R.id.iv_search);
+    mViewDivider = view.findViewById(R.id.view_divider);
     mTvCover = (TextView) view.findViewById(R.id.tv_cover);
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
@@ -104,6 +106,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
       }
     });
     // 搜索栏处理
+    mViewDivider.getBackground().mutate().setAlpha(0);
     mLayoutSearch.getBackground().mutate().setAlpha(0);
     mLayoutSearch.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -156,7 +159,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.tv_city:
-        ChooseCityActivity.start(getContext());
+        ChooseCityActivity.start(getContext(), mTvCity.getText().toString());
         break;
     }
   }
@@ -201,8 +204,11 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     if (absY <= height) {
       mLayoutSearch.getBackground().mutate().setAlpha(
           (int) ((absY + 0.0) / height * 255));
+      mViewDivider.getBackground().mutate().setAlpha(
+          (int) ((absY + 0.0) / height * 255));
     } else {
       mLayoutSearch.getBackground().mutate().setAlpha(255);
+      mViewDivider.getBackground().mutate().setAlpha(255);
     }
   }
 
