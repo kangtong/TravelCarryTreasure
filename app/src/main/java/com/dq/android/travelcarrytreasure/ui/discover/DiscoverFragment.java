@@ -131,7 +131,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   /* 加载网络数据 */
   private void onLoadData() {
     String url_1 = // 3个楼层的东西
-        "http://lvyou.baidu.com/main/app/index?apiv=v4&d=android&v=7.3.0&LVCODE=c1ea31a01427b72c1a9c812df378e3a7&T=1492943831";
+        "http://lvyou.baidu.com/main/app/index?apiv=v4&d=android&v=7.3.0&LVCODE=af716b554a072b9b6a03411a6012f540&T=1493625495";
     OkHttpUtils
         .get()
         .url(url_1)
@@ -162,7 +162,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
     String url_2 = // 精品游记的东西
         "http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&page_num="
             + random
-            + "&format=app&d=android&LVCODE=fe7a5bd28a46a002f519638e049a30b0&T=1492944018";
+            + "&format=app&d=android&LVCODE=efb91307f155ae838f8c6dfb7cd944bc&T=1493625481";
     OkHttpUtils
         .get()
         .url(url_2)
@@ -299,7 +299,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
       @Override public void onClick(View v) {
         String url = "http://lvyou.baidu.com/main/webapp/explore/card/detail?&card_id="
             + data.get(4).getList().get(0).getCard_id()
-            + "&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=62d1116296d06745f08841d1055973ee&T=1493034686&locEnabled=YES&locType=GPS";
+            + "&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=9498aeec1cad277e603f8755887f2b30&T=1493625719&locEnabled=YES&locType=GPS";
         WebActivity.start(getContext(), url);
       }
     });
@@ -325,7 +325,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
       @Override public void onClick(View v) {
         String url = "http://lvyou.baidu.com/main/webapp/explore/card/detail?&card_id="
             + data.get(4).getList().get(1).getCard_id()
-            + "&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=62d1116296d06745f08841d1055973ee&T=1493034686&locEnabled=YES&locType=GPS";
+            + "&webview=1&hybrid_os=android&format=app&d=android&w=1080&h=1830&u=HUAWEI+NXT-AL10&v=7.3.0&i=860482033314237&s=7.0&q=1028&m=8e66d8f81fdea5a65e83102dd354f290&netTpye=wifi&LVCODE=c1afd5292e734fe97da0bad08df1b07a&T=1493625796&locEnabled=YES&locType=GPS";
         WebActivity.start(getContext(), url);
       }
     });

@@ -333,7 +333,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             + "40.001743" // 维度
             + "&x=" + LatitudeAndLongitude[0]
             + "116.488043" // 经度
-            + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=5615def83ce898ef7bf0f1ddf4e8d731&T=1493274804";
+            + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=e4e2bdf74859f25d5a8aef68a45ea881&T=1493625849";
     Log.d("dengqi", "getOtherData: " + url);
     OkHttpUtils
         .get()
