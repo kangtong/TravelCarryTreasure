@@ -29,8 +29,6 @@ android {
   }
 }
 
-
-
 repositories {
   maven { url "https://clojars.org/repo/" }
 }

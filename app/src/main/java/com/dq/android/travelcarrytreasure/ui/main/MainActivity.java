@@ -121,7 +121,7 @@ public class MainActivity extends BaseActivity {
 
   }
 
-  public void setDarkStatusIcon(boolean bDark) {
+  private void setDarkStatusIcon(boolean bDark) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       View decorView = getWindow().getDecorView();
