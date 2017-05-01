@@ -9,6 +9,7 @@
 
   <!-- common color -->
   <color name="white">#FFFFFF</color>
+  <color name="black">#000000</color>
   <color name="divider">#b6b5b5</color>
   <color name="page_bg">#f0f0f0</color>
 

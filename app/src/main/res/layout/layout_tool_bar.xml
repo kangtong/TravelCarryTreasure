@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dq="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical">
 
-  <RelativeLayout
+  <RelativeLayout android:id="@+id/rl_container"
       android:layout_width="match_parent" android:layout_height="@dimen/toolbar_height"
-      android:paddingLeft="@dimen/common_horizontal_margin" android:paddingRight="@dimen/common_horizontal_margin">
+      android:paddingLeft="@dimen/common_horizontal_margin" android:paddingRight="@dimen/common_horizontal_margin"
+      android:background="@drawable/shape_common_white">
 
     <ImageView android:id="@+id/img_back"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -37,7 +37,8 @@
   </RelativeLayout>
 
   <!-- 底部一个分割线 -->
-  <View android:layout_width="match_parent" android:layout_height="0.5dp"
-      android:background="@color/divider" android:layout_alignParentBottom="true"/>
+  <View android:id="@+id/view_divider"
+      android:layout_width="match_parent" android:layout_height="0.5dp"
+      android:background="@color/divider"/>
 
 </LinearLayout>

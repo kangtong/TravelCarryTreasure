@@ -11,6 +11,8 @@
     <attr name="toolbarTitle" format="string|reference"/>
     <attr name="leftTxt" format="string|reference"/>
     <attr name="rightTxt" format="string|reference"/>
+    <attr name="titleColor" format="color|reference"/>
+    <attr name="isTransparent" format="boolean"/>
   </declare-styleable>
 
   <declare-styleable name="SmileyLoadingView">

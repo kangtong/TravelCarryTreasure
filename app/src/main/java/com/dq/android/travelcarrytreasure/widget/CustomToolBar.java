@@ -18,11 +18,14 @@ public class CustomToolBar extends RelativeLayout implements View.OnClickListene
 
   private boolean mIsShowLeft, mIsShowLeftImg, mIsShowRight;
   private String mTitle, mLeftTxt, mRightTxt;
+  private int mTitleResColor;
+  private boolean mIsTransparent;
 
   private Context mContext;
   private ImageView mImgBack;
   private TextView mTvTitle, mTvBack, mTvAction;
-
+  private RelativeLayout mLayoutContainer;
+  private View mViewDivider;
   private onToolBarListener mListener;
 
   public CustomToolBar(Context context) {
@@ -39,6 +42,8 @@ public class CustomToolBar extends RelativeLayout implements View.OnClickListene
     mIsShowLeft = array.getBoolean(R.styleable.CustomToolBar_isShowLeft, true); // 默认显示
     mIsShowLeftImg = array.getBoolean(R.styleable.CustomToolBar_isShowLeftImg, false); // 默认不显示
     mIsShowRight = array.getBoolean(R.styleable.CustomToolBar_isShowRight, false); // 默认不显示
+    mTitleResColor = array.getColor(R.styleable.CustomToolBar_titleColor, getResources().getColor(R.color.black));
+    mIsTransparent = array.getBoolean(R.styleable.CustomToolBar_isTransparent, false);
     array.recycle();
     initView(context);
   }
@@ -56,12 +61,19 @@ public class CustomToolBar extends RelativeLayout implements View.OnClickListene
     mTvBack = (TextView) findViewById(R.id.tv_back);
     mImgBack = (ImageView) findViewById(R.id.img_back);
     mTvAction = (TextView) findViewById(R.id.tv_action);
+    mLayoutContainer = (RelativeLayout) findViewById(R.id.rl_container);
+    mViewDivider = findViewById(R.id.view_divider);
 
     mTvBack.setOnClickListener(this);
     mImgBack.setOnClickListener(this);
     mTvAction.setOnClickListener(this);
 
+    if (mIsTransparent) {
+      mLayoutContainer.getBackground().mutate().setAlpha(0);
+      mViewDivider.getBackground().mutate().setAlpha(0);
+    }
     mTvTitle.setText(mTitle);
+    mTvTitle.setTextColor(mTitleResColor);
     mTvBack.setVisibility(mIsShowLeft ? VISIBLE : INVISIBLE);
     mImgBack.setVisibility(mIsShowLeftImg ? VISIBLE : INVISIBLE);
     mTvAction.setVisibility(mIsShowRight ? VISIBLE : INVISIBLE);
