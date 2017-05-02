@@ -2,10 +2,14 @@ package com.dq.android.travelcarrytreasure.ui.local;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
@@ -30,6 +34,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import okhttp3.Call;
+import support.ui.adapters.EasyRecyclerAdapter;
+import support.ui.adapters.EasyViewHolder;
 import support.ui.utilities.ToastUtils;
 
 /**
@@ -68,6 +74,12 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private TextView mTvStroke_1, mTvStroke_2, mTvStroke_3, mTvStroke_4, mTvStroke_5;
   private TextView[] mTvSteps;
   private ImageView[] mImgSteps;
+
+  /* 附近推荐 */
+  private LinearLayout mLayoutNearby;
+  private TextView mTvTitleSubNearby;
+  private RecyclerView mRecycleNearby;
+  private EasyRecyclerAdapter mAdapterNearby;
 
   private String ip;
   private String cityCode;
@@ -114,6 +126,11 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvStroke_4 = (TextView) view.findViewById(R.id.tv_stroke_4);
     mTvStroke_5 = (TextView) view.findViewById(R.id.tv_stroke_5);
     mTvSteps = new TextView[] {mTvStroke_1, mTvStroke_2, mTvStroke_3, mTvStroke_4, mTvStroke_5};
+    /* 附近推荐 */
+    mLayoutNearby = (LinearLayout) view.findViewById(R.id.ll_nearby);
+    mTvTitleSubNearby = (TextView) view.findViewById(R.id.tv_title_sub_2);
+    mRecycleNearby = (RecyclerView) view.findViewById(R.id.recycle_nearby);
+
     // 滑动监听, 改变透明度
     mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
       @Override public void onScroll() {
@@ -130,6 +147,25 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     });
     // 城市选择页跳转
     mTvCity.setOnClickListener(this);
+
+    // 附近推荐相关
+    // 初始化 adapter
+    final LinearLayoutManager mLayoutManager =
+        new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+    mLayoutManager.setSmoothScrollbarEnabled(true);
+    mLayoutManager.setAutoMeasureEnabled(true);
+    mRecycleNearby.setLayoutManager(mLayoutManager);
+    mRecycleNearby.setHasFixedSize(true);
+    mRecycleNearby.setNestedScrollingEnabled(false);
+    mRecycleNearby.setItemAnimator(new DefaultItemAnimator());
+    mAdapterNearby =
+        new EasyRecyclerAdapter(getContext(), LocationResponse.DataBean.ModListBean.ListBean.class, LocalViewHolder.class);
+    mAdapterNearby.setOnClickListener(new EasyViewHolder.OnItemClickListener() {
+      @Override public void onItemClick(int i, View view) {
+        ToastUtils.toast("点击了第" + i + "个item~");
+      }
+    });
+    mRecycleNearby.setAdapter(mAdapterNearby);
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -208,12 +244,14 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     updateTravelStep(data.getMod_list().get(0).getList()); // 更新5个步骤
     // 附近推荐 /* 这里有可能是空的，比如北京就没有 */
     if (data.getMod_list().size() == 1) { // 只有推荐行程， 没有附近推荐
+      mLayoutNearby.setVisibility(View.GONE);
       return;
     }
-
-
+    mTvTitleSubNearby.setText(data.getMod_list().get(1).getSubtitle());
+    mAdapterNearby.addAll(data.getMod_list().get(1).getList());
   }
 
+  /* 更新推荐行程 */
   private void updateTravelStep(List<LocationResponse.DataBean.ModListBean.ListBean> list) {
     // 1，先判断一共，有几个景点
     int sum = list.size();
@@ -376,7 +414,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             + "&x=" + LatitudeAndLongitude[0]
             // + "116.488043" // 经度
             + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
-            + "LVCODE=e6607590f956caba448f69298d91e475&T=1493720240";
+            + "LVCODE=96a15e4ed2a9f905a61dd925bceae5d9&T=1493739952";
     OkHttpUtils
         .get()
         .url(url)

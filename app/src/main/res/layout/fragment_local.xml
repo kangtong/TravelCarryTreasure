@@ -259,7 +259,7 @@
     </LinearLayout>
 
     <!-- 附近推荐 -->
-    <LinearLayout
+    <LinearLayout android:id="@+id/ll_nearby"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_marginTop="10dp" android:orientation="vertical"
         android:paddingLeft="@dimen/common_horizontal_margin"
@@ -291,7 +291,8 @@
             android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
       </RelativeLayout>
       <!-- 横向 RecycleView -->
-      <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+      <android.support.v7.widget.RecyclerView android:id="@+id/recycle_nearby"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"/>
     </LinearLayout>
 
   </com.dq.android.travelcarrytreasure.widget.ScrollableLayout>

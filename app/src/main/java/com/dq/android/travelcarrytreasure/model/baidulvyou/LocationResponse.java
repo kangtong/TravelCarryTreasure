@@ -880,214 +880,196 @@ public class LocationResponse implements Serializable {
         }
 
         /*第二部分：附近推荐*/
-        private List<Attractions> datas;
+        private int type;
+        private PoiBean poi;
 
-        public List<Attractions> getDatas() {
-          return datas;
+        public int getType() {
+          return type;
         }
 
-        public void setDatas(List<Attractions> datas) {
-          this.datas = datas;
+        public void setType(int type) {
+          this.type = type;
         }
 
-        public static class Attractions {
+        public PoiBean getPoi() {
+          return poi;
+        }
 
+        public void setPoi(PoiBean poi) {
+          this.poi = poi;
+        }
+
+        public static class PoiBean {
           /**
-           * poi : {"place_uid":"1987a2bb6e3dc0d549fc8daf","name":"清真福润一间楼牛羊肉泡馍馆（太白南路店）","pic_url":"http://e.hiphotos.baidu.com/bainuo/crop%3D0%2C0%2C690%2C459%3Bw%3D470%3Bq%3D89%3Bc%3Dnuomi%2C95%2C95/sign=502947d81c4c510fba8bb85a5d69091d/d4628535e5dde7114782dae6a1efce1b9d16614a.jpg","overall_rating":"4.6","distance":241,"map_remark_count":17,"is_rec":0,"aoi":"","reason":"门店介绍：","point":{"x":108.91555914205,"y":34.219459523297},"price":27,"recommendation":["冰峰（玻璃瓶装）","普通牛肉泡馍"]}
-           * type : 1
+           * place_uid : 1987a2bb6e3dc0d549fc8daf
+           * name : 清真福润一间楼牛羊肉泡馍馆（太白南路店）
+           * pic_url : http://e.hiphotos.baidu.com/bainuo/crop%3D0%2C0%2C690%2C459%3Bw%3D470%3Bq%3D89%3Bc%3Dnuomi%2C95%2C95/sign=502947d81c4c510fba8bb85a5d69091d/d4628535e5dde7114782dae6a1efce1b9d16614a.jpg
+           * overall_rating : 4.6
+           * distance : 241
+           * map_remark_count : 17
+           * is_rec : 0
+           * aoi :
+           * reason : 门店介绍：
+           * point : {"x":108.91555914205,"y":34.219459523297}
+           * price : 27
+           * recommendation : ["冰峰（玻璃瓶装）","普通牛肉泡馍"]
            */
 
-          private PoiBean poi;
-          private int type;
+            /* type=1 */
+          private String place_uid;
+          private String name; // 景点名字
+          private String pic_url; // 背景图
+          private String overall_rating; // 评分等级
+          private int map_remark_count;
+          private int is_rec;
+          private String aoi;
+          private String reason;
+          private PointBean point;
+          private List<String> recommendation; // 招牌菜： 冰峰，牛肉泡
 
-          public PoiBean getPoi() {
-            return poi;
+          // 两者公用
+          private int price; // 人均消费 :0-免费开放
+          private int distance; // 距离：  1031m
+
+          /* type=2 */
+          private String sname; // 景点名字
+          private String avg_remark_score; // 评分等级
+
+          public String getSname() {
+            return sname;
           }
 
-          public void setPoi(PoiBean poi) {
-            this.poi = poi;
+          public void setSname(String sname) {
+            this.sname = sname;
           }
 
-          public int getType() {
-            return type;
+          public String getAvg_remark_score() {
+            return avg_remark_score;
           }
 
-          public void setType(int type) {
-            this.type = type;
+          public void setAvg_remark_score(String avg_remark_score) {
+            this.avg_remark_score = avg_remark_score;
           }
 
-          public static class PoiBean {
+          public String getPlace_uid() {
+            return place_uid;
+          }
+
+          public void setPlace_uid(String place_uid) {
+            this.place_uid = place_uid;
+          }
+
+          public String getName() {
+            return name;
+          }
+
+          public void setName(String name) {
+            this.name = name;
+          }
+
+          public String getPic_url() {
+            return pic_url;
+          }
+
+          public void setPic_url(String pic_url) {
+            this.pic_url = pic_url;
+          }
+
+          public String getOverall_rating() {
+            return overall_rating;
+          }
+
+          public void setOverall_rating(String overall_rating) {
+            this.overall_rating = overall_rating;
+          }
+
+          public int getDistance() {
+            return distance;
+          }
+
+          public void setDistance(int distance) {
+            this.distance = distance;
+          }
+
+          public int getMap_remark_count() {
+            return map_remark_count;
+          }
+
+          public void setMap_remark_count(int map_remark_count) {
+            this.map_remark_count = map_remark_count;
+          }
+
+          public int getIs_rec() {
+            return is_rec;
+          }
+
+          public void setIs_rec(int is_rec) {
+            this.is_rec = is_rec;
+          }
+
+          public String getAoi() {
+            return aoi;
+          }
+
+          public void setAoi(String aoi) {
+            this.aoi = aoi;
+          }
+
+          public String getReason() {
+            return reason;
+          }
+
+          public void setReason(String reason) {
+            this.reason = reason;
+          }
+
+          public PointBean getPoint() {
+            return point;
+          }
+
+          public void setPoint(PointBean point) {
+            this.point = point;
+          }
+
+          public int getPrice() {
+            return price;
+          }
+
+          public void setPrice(int price) {
+            this.price = price;
+          }
+
+          public List<String> getRecommendation() {
+            return recommendation;
+          }
+
+          public void setRecommendation(List<String> recommendation) {
+            this.recommendation = recommendation;
+          }
+
+          public static class PointBean {
             /**
-             * place_uid : 1987a2bb6e3dc0d549fc8daf
-             * name : 清真福润一间楼牛羊肉泡馍馆（太白南路店）
-             * pic_url : http://e.hiphotos.baidu.com/bainuo/crop%3D0%2C0%2C690%2C459%3Bw%3D470%3Bq%3D89%3Bc%3Dnuomi%2C95%2C95/sign=502947d81c4c510fba8bb85a5d69091d/d4628535e5dde7114782dae6a1efce1b9d16614a.jpg
-             * overall_rating : 4.6
-             * distance : 241
-             * map_remark_count : 17
-             * is_rec : 0
-             * aoi :
-             * reason : 门店介绍：
-             * point : {"x":108.91555914205,"y":34.219459523297}
-             * price : 27
-             * recommendation : ["冰峰（玻璃瓶装）","普通牛肉泡馍"]
+             * x : 108.91555914205
+             * y : 34.219459523297
              */
 
-            /* type=1 */
-            private String place_uid;
-            private String name; // 景点名字
-            private String pic_url; // 背景图
-            private String overall_rating; // 评分等级
-            private int map_remark_count;
-            private int is_rec;
-            private String aoi;
-            private String reason;
-            private PointBean point;
-            private List<String> recommendation; // 招牌菜： 冰峰，牛肉泡
+            private double x;
+            private double y;
 
-            // 两者公用
-            private int price; // 人均消费 :0-免费开放
-            private int distance; // 距离：  1031m
-
-            /* type=2 */
-            private String sname; // 景点名字
-            private String avg_remark_score; // 评分等级
-
-            public String getSname() {
-              return sname;
+            public double getX() {
+              return x;
             }
 
-            public void setSname(String sname) {
-              this.sname = sname;
+            public void setX(double x) {
+              this.x = x;
             }
 
-            public String getAvg_remark_score() {
-              return avg_remark_score;
+            public double getY() {
+              return y;
             }
 
-            public void setAvg_remark_score(String avg_remark_score) {
-              this.avg_remark_score = avg_remark_score;
-            }
-
-            public String getPlace_uid() {
-              return place_uid;
-            }
-
-            public void setPlace_uid(String place_uid) {
-              this.place_uid = place_uid;
-            }
-
-            public String getName() {
-              return name;
-            }
-
-            public void setName(String name) {
-              this.name = name;
-            }
-
-            public String getPic_url() {
-              return pic_url;
-            }
-
-            public void setPic_url(String pic_url) {
-              this.pic_url = pic_url;
-            }
-
-            public String getOverall_rating() {
-              return overall_rating;
-            }
-
-            public void setOverall_rating(String overall_rating) {
-              this.overall_rating = overall_rating;
-            }
-
-            public int getDistance() {
-              return distance;
-            }
-
-            public void setDistance(int distance) {
-              this.distance = distance;
-            }
-
-            public int getMap_remark_count() {
-              return map_remark_count;
-            }
-
-            public void setMap_remark_count(int map_remark_count) {
-              this.map_remark_count = map_remark_count;
-            }
-
-            public int getIs_rec() {
-              return is_rec;
-            }
-
-            public void setIs_rec(int is_rec) {
-              this.is_rec = is_rec;
-            }
-
-            public String getAoi() {
-              return aoi;
-            }
-
-            public void setAoi(String aoi) {
-              this.aoi = aoi;
-            }
-
-            public String getReason() {
-              return reason;
-            }
-
-            public void setReason(String reason) {
-              this.reason = reason;
-            }
-
-            public PointBean getPoint() {
-              return point;
-            }
-
-            public void setPoint(PointBean point) {
-              this.point = point;
-            }
-
-            public int getPrice() {
-              return price;
-            }
-
-            public void setPrice(int price) {
-              this.price = price;
-            }
-
-            public List<String> getRecommendation() {
-              return recommendation;
-            }
-
-            public void setRecommendation(List<String> recommendation) {
-              this.recommendation = recommendation;
-            }
-
-            public static class PointBean {
-              /**
-               * x : 108.91555914205
-               * y : 34.219459523297
-               */
-
-              private double x;
-              private double y;
-
-              public double getX() {
-                return x;
-              }
-
-              public void setX(double x) {
-                this.x = x;
-              }
-
-              public double getY() {
-                return y;
-              }
-
-              public void setY(double y) {
-                this.y = y;
-              }
+            public void setY(double y) {
+              this.y = y;
             }
           }
         }

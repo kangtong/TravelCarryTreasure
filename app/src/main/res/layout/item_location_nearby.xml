@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="wrap_content" android:layout_height="match_parent">
 
   <RelativeLayout
       android:layout_width="275dp" android:layout_height="100dp"
@@ -22,7 +22,8 @@
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_toRightOf="@id/img_nearby"
         android:layout_marginLeft="10dp" android:layout_marginTop="10dp"
-        android:text="陕西钱币博物馆" android:textColor="@color/black"/>
+        android:text="陕西钱币博物馆" android:textColor="@color/black"
+        android:textSize="16sp"/>
 
     <RatingBar android:id="@+id/rate_nearby"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -36,13 +37,15 @@
     <TextView android:id="@+id/tv_price"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv_nearby_title" android:layout_alignParentBottom="true"
-        android:text="免费开放" android:textSize="12sp" android:layout_marginBottom="10dp"/>
+        android:text="免费开放" android:layout_marginBottom="10dp"
+        android:textSize="12sp"/>
 
     <TextView android:id="@+id/tv_distance"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="3km"
         android:layout_alignParentRight="true" android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp" android:layout_marginRight="10dp"/>
+        android:layout_marginBottom="10dp" android:layout_marginRight="10dp"
+        android:textSize="12sp"/>
 
   </RelativeLayout>
 
