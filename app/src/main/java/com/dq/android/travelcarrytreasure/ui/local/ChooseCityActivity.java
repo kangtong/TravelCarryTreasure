@@ -79,7 +79,8 @@ public class ChooseCityActivity extends BaseActivity {
   /* 加载网络数据 */
   private void onLoadData() {
     String url =
-        "http://lvyou.baidu.com/destination/app/topscene?is_sug=&format=&d=&w=&h=&u=&v=&i=&s=&q=&m=&netTpye=&LVCODE=c6a885b8b30aa591bd253a2decf76660&T=1493625940&locEnabled=&locType=";
+        "http://lvyou.baidu.com/destination/app/topscene?"
+            + "LVCODE=e292d26c5c27ead0d29ac244c83ae477&T=1493712540"; // 万恶的key值啊
     OkHttpUtils
         .get()
         .url(url)

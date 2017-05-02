@@ -120,7 +120,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     // 1, 先加载本地
-    onLoadDataWithSP();
+    // onLoadDataWithSP();
     if (NetworkUtil.isNetworkAvailable()) {
       onLoadData(); // 2,网络请求
     } else {
@@ -178,6 +178,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 先把天气给填进去
     mTvWeather.setText(data.getScene_info().getInfo().getWeather().getDescribe());
     // 加载 Banner
+    Log.d(TAG, "加载Banner的url: " + data.getScene_info().getInfo().getPic_url());
     Glide.with(this)
         .load(data.getScene_info().getInfo().getPic_url())
         .thumbnail(0.1f)
@@ -328,13 +329,14 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   /* 获取其他数据: 这个数据很多, 小心处理, fastjson 经常报错 */
   public void getOtherData() {
     String url = // 很多东西, 慢慢分析, 拆解
-        "http://lvyou.baidu.com/destination/app/local?apiv=v2&sid=795ac511463263cf7ae3def3&around=0"
+        "http://lvyou.baidu.com/destination/app/local?apiv=v2&around=0"
+            + "&sid=9bb8ee381df41344144463f5" // 城市的id 不知道是怎么拿到的，现在这个写死是西安的
             + "&y=" + LatitudeAndLongitude[1]
-            + "40.001743" // 维度
+            // + "40.001743" // 维度
             + "&x=" + LatitudeAndLongitude[0]
-            + "116.488043" // 经度
-            + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&LVCODE=e4e2bdf74859f25d5a8aef68a45ea881&T=1493625849";
-    Log.d("dengqi", "getOtherData: " + url);
+            // + "116.488043" // 经度
+            + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
+            + "LVCODE=2fcd1d9a42232173e68b149f7fce4d23&T=1493710452";
     OkHttpUtils
         .get()
         .url(url)
