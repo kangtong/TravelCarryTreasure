@@ -120,7 +120,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     // 1, 先加载本地
-    // onLoadDataWithSP();
+    onLoadDataWithSP();
     if (NetworkUtil.isNetworkAvailable()) {
       onLoadData(); // 2,网络请求
     } else {
@@ -181,6 +181,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     Log.d(TAG, "加载Banner的url: " + data.getScene_info().getInfo().getPic_url());
     Glide.with(this)
         .load(data.getScene_info().getInfo().getPic_url())
+        .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(mIvCityBanner);
   }

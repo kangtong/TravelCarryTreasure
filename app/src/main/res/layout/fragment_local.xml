@@ -17,7 +17,7 @@
       <!-- banner -->
       <ImageView android:id="@+id/iv_city_banner"
           android:layout_width="match_parent" android:layout_height="match_parent"
-          android:src="@drawable/temp_city_banner"
+          tools:src="@drawable/temp_city_banner"
           android:scaleType="fitXY"/>
       <!-- 城市名 -->
       <TextView android:id="@+id/tv_city"
