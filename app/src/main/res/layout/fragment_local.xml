@@ -147,8 +147,9 @@
       <!-- 头像 + title + 行程 -->
       <RelativeLayout
           android:layout_width="match_parent" android:layout_height="75dp">
-        <com.wx.ovalimageview.RoundImageView android:id="@+id/img_user"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
+
+        <ImageView android:id="@+id/img_user"
+            android:layout_width="40dp" android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:src="@drawable/discover_title_season"/>
 
@@ -164,7 +165,7 @@
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/img_user" android:layout_below="@id/tv_title"
             android:layout_alignLeft="@id/tv_title"
-            android:text="Amanda小黎的北京5日经典行程" android:textSize="12sp"/>
+            tools:text="Amanda小黎的北京5日经典行程" android:textSize="12sp"/>
 
         <ImageView
             android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -205,7 +206,7 @@
           <TextView android:id="@+id/tv_stroke_1"
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="1"
-              android:text="天安门广场" android:textColor="@android:color/black"
+              tools:text="天安门广场" android:textColor="@android:color/black"
               android:textSize="12sp"
               android:singleLine="true" android:maxLines="1"
               android:ellipsize="marquee"/>
@@ -213,7 +214,7 @@
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="2" android:gravity="center"
               android:paddingLeft="8dp"
-              android:text="天安门" android:textColor="@android:color/black"
+              tools:text="天安门" android:textColor="@android:color/black"
               android:textSize="12sp"
               android:singleLine="true" android:maxLines="1"
               android:ellipsize="marquee"/>
@@ -221,7 +222,7 @@
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="2" android:gravity="center"
               android:paddingLeft="8dp"
-              android:text="景山公园" android:textColor="@android:color/black"
+              tools:text="景山公园" android:textColor="@android:color/black"
               android:textSize="12sp"
               android:singleLine="true" android:maxLines="1"
               android:ellipsize="marquee"/>
@@ -234,7 +235,7 @@
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="2" android:gravity="center"
               android:paddingLeft="8dp"
-              android:text="人民英雄纪念碑" android:textColor="@android:color/black"
+              tools:text="人民英雄纪念碑" android:textColor="@android:color/black"
               android:textSize="12sp"
               android:singleLine="true" android:maxLines="1"
               android:ellipsize="marquee"/>
@@ -243,7 +244,7 @@
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="2" android:gravity="center"
               android:paddingLeft="8dp"
-              android:text="故宫" android:textColor="@android:color/black"
+              tools:text="故宫" android:textColor="@android:color/black"
               android:textSize="12sp"
               android:singleLine="true" android:maxLines="1"
               android:ellipsize="marquee"/>

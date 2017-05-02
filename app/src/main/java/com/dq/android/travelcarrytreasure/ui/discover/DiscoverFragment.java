@@ -15,10 +15,10 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
-import com.dq.android.travelcarrytreasure.service.baidulvyou.DiscoverCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverResponse;
-import com.dq.android.travelcarrytreasure.service.baidulvyou.TravellerNoteCallBack;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.TravellerNoteResponse;
+import com.dq.android.travelcarrytreasure.service.baidulvyou.DiscoverCallBack;
+import com.dq.android.travelcarrytreasure.service.baidulvyou.TravellerNoteCallBack;
 import com.dq.android.travelcarrytreasure.ui.web.WebActivity;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
@@ -132,14 +132,14 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   private void onLoadData() {
     String url_1 = // 3个楼层的东西
         "http://lvyou.baidu.com/main/app/index?apiv=v4&d=android&v=7.3.0&"
-            + "LVCODE=b7d719f2faaeec824ade4c27d6af48f0&T=1493710176";
+            + "LVCODE=8be7e7f32494c3043993b9b7e3d7ac9d&T=1493719962";
     OkHttpUtils
         .get()
         .url(url_1)
         .build()
         .execute(new DiscoverCallBack() {
           @Override public void onError(okhttp3.Call call, Exception e, int id) {
-            Log.d(TAG, "onError: " + "发现界面请求,楼层数据,发生网络错误");
+            Log.d(TAG, "onError: " + "发现界面请求,楼层数据,发生网络错误" + e.toString());
           }
 
           @Override public void onResponse(DiscoverResponse response, int id) {
@@ -164,14 +164,14 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
         "http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&page_num="
             + random
             + "&format=app&d=android&"
-            + "LVCODE=a5f34730ce907266754e8b1a8b3042cd&T=1493710335";
+            + "LVCODE=7b99d98bd034a810fa301a058bb65396&T=1493720196";
     OkHttpUtils
         .get()
         .url(url_2)
         .build()
         .execute(new TravellerNoteCallBack() {
           @Override public void onError(okhttp3.Call call, Exception e, int id) {
-            Log.d(TAG, "onError: " + "发现界面请求,精品游记数据,发生网络错误");
+            Log.d(TAG, "onError: " + "发现界面请求,精品游记数据,发生网络错误" + e.toString());
             mRefreshLayout.setRefreshing(false);
           }
 

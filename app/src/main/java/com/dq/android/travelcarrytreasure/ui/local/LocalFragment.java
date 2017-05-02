@@ -28,6 +28,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import okhttp3.Call;
 import support.ui.utilities.ToastUtils;
 
@@ -46,19 +47,27 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private static final String KEY_CITY_PINYIN = "key_city_pinyin"; // 城市拼音
 
   private ScrollableLayout mLayoutScroll;
+
+  /* toolbar */
   private RelativeLayout mLayoutCityDetails;
   private ImageView mIvCityBanner;
   private FrameLayout mLayoutSearch;
   private ImageView mIvSearch;
   private View mViewDivider;
   private TextView mTvCover;
+
+  /* 定位+天气 */
   private TextView mTvCity;
   private TextView mTvCityPinyin;
   private TextView mTvWeather;
 
-  /* 行程 */
+  /* 推荐行程 */
+  private ImageView mImgUser;
+  private TextView mTvTitleSub;
   private ImageView mImgStroke_1, mImgStroke_2, mImgStroke_3, mImgStroke_4, mImgStroke_5;
   private TextView mTvStroke_1, mTvStroke_2, mTvStroke_3, mTvStroke_4, mTvStroke_5;
+  private TextView[] mTvSteps;
+  private ImageView[] mImgSteps;
 
   private String ip;
   private String cityCode;
@@ -78,27 +87,33 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override protected void initView(View view, Bundle savedInstanceState) {
 
     mLayoutScroll = (ScrollableLayout) view.findViewById(R.id.layout_scroll);
+    /* toolbar */
     mLayoutCityDetails = (RelativeLayout) view.findViewById(R.id.layout_city_details);
     mIvCityBanner = (ImageView) view.findViewById(R.id.iv_city_banner);
     mLayoutSearch = (FrameLayout) view.findViewById(R.id.layout_search);
     mIvSearch = (ImageView) view.findViewById(R.id.iv_search);
     mViewDivider = view.findViewById(R.id.view_divider);
     mTvCover = (TextView) view.findViewById(R.id.tv_cover);
+    /* 定位 + 天气 */
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
     mTvWeather = (TextView) view.findViewById(R.id.tv_weather);
+    /* 推荐行程 */
+    mImgUser = (ImageView) view.findViewById(R.id.img_user);
+    mTvTitleSub = (TextView) view.findViewById(R.id.tv_title_sub);
     /* 行程的5个点位置 */
     mImgStroke_1 = (ImageView) view.findViewById(R.id.img_stroke_1);
     mImgStroke_2 = (ImageView) view.findViewById(R.id.img_stroke_2);
     mImgStroke_3 = (ImageView) view.findViewById(R.id.img_stroke_3);
     mImgStroke_4 = (ImageView) view.findViewById(R.id.img_stroke_4);
     mImgStroke_5 = (ImageView) view.findViewById(R.id.img_stroke_5);
+    mImgSteps = new ImageView[] {mImgStroke_1, mImgStroke_2, mImgStroke_3, mImgStroke_4, mImgStroke_5};
     mTvStroke_1 = (TextView) view.findViewById(R.id.tv_stroke_1);
     mTvStroke_2 = (TextView) view.findViewById(R.id.tv_stroke_2);
     mTvStroke_3 = (TextView) view.findViewById(R.id.tv_stroke_3);
     mTvStroke_4 = (TextView) view.findViewById(R.id.tv_stroke_4);
     mTvStroke_5 = (TextView) view.findViewById(R.id.tv_stroke_5);
-
+    mTvSteps = new TextView[] {mTvStroke_1, mTvStroke_2, mTvStroke_3, mTvStroke_4, mTvStroke_5};
     // 滑动监听, 改变透明度
     mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
       @Override public void onScroll() {
@@ -179,11 +194,31 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvWeather.setText(data.getScene_info().getInfo().getWeather().getDescribe());
     // 加载 Banner
     Log.d(TAG, "加载Banner的url: " + data.getScene_info().getInfo().getPic_url());
-    Glide.with(this)
+    Glide.with(LocalFragment.this)
         .load(data.getScene_info().getInfo().getPic_url())
         .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
         .into(mIvCityBanner);
+    // 更新推荐行程
+    Glide.with(LocalFragment.this) // 头像
+        .load(data.getMod_list().get(0).getAvatar())
+        .bitmapTransform(new CropCircleTransformation(getContext()))
+        .into(mImgUser);
+    mTvTitleSub.setText(data.getMod_list().get(0).getSubtitle()); // 副标题
+    updateTravelStep(data.getMod_list().get(0).getList()); // 更新5个步骤
+    // 附近推荐 /* 这里有可能是空的，比如北京就没有 */
+
+  }
+
+  private void updateTravelStep(List<LocationResponse.DataBean.ModListBean.ListBean> list) {
+    // 1，先判断一共，有几个景点
+    int sum = list.size();
+    for (int i = 0; i < list.size(); i++) {
+      mTvSteps[i].setText(list.get(i).getName());
+    }
+    for (int i = 4; i > sum - 1; i--) { // 没有的设置透明度
+      mImgSteps[i].setImageAlpha(125);
+    }
   }
 
   /* 改变透明度的操作 */
@@ -337,7 +372,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             + "&x=" + LatitudeAndLongitude[0]
             // + "116.488043" // 经度
             + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
-            + "LVCODE=2fcd1d9a42232173e68b149f7fce4d23&T=1493710452";
+            + "LVCODE=e6607590f956caba448f69298d91e475&T=1493720240";
     OkHttpUtils
         .get()
         .url(url)

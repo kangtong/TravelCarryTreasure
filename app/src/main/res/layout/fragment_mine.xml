@@ -25,7 +25,7 @@
         android:layout_alignBottom="@id/img_mine_banner" android:layout_marginLeft="30dp"
         android:layout_marginBottom="10dp">
       <ImageView android:id="@+id/iv_avatar"
-          android:layout_width="70dp" android:layout_height="70dp"
+          android:layout_width="60dp" android:layout_height="60dp"
           android:src="@drawable/temp_avatar"/>
       <TextView android:id="@+id/tv_user_level"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -39,21 +39,21 @@
     <!-- 昵称 + 常居地 -->
     <RelativeLayout
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_alignTop="@id/rl_avatar" android:layout_alignBottom="@id/rl_avatar"
-        android:layout_toRightOf="@id/rl_avatar"
-        android:layout_marginLeft="30dp" android:gravity="center">
+        android:layout_alignTop="@id/rl_avatar" android:layout_toRightOf="@id/rl_avatar"
+        android:layout_marginLeft="30dp" android:gravity="center_horizontal|top"
+        android:paddingTop="10dp">
       <TextView android:id="@+id/tv_nick_name"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:text="暗影飞客" android:textColor="@color/white"
           android:textSize="16sp"/>
       <TextView android:id="@+id/tv_residence"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:layout_below="@id/tv_nick_name" android:layout_marginTop="10dp"
+          android:layout_below="@id/tv_nick_name" android:layout_marginTop="15dp"
           android:text="居住地：西安" android:textColor="@color/white"/>
       <TextView android:id="@+id/tv_modify"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:layout_below="@id/tv_nick_name" android:layout_toRightOf="@id/tv_residence"
-          android:layout_marginTop="10dp" android:layout_marginLeft="10dp"
+          android:layout_marginTop="15dp" android:layout_marginLeft="10dp"
           android:text="修改" android:textColor="@color/white"
           android:gravity="center"
           android:drawableLeft="@drawable/ic_location_modify" android:drawablePadding="5dp"/>
