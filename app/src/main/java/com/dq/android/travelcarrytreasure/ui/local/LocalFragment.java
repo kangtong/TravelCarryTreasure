@@ -207,6 +207,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvTitleSub.setText(data.getMod_list().get(0).getSubtitle()); // 副标题
     updateTravelStep(data.getMod_list().get(0).getList()); // 更新5个步骤
     // 附近推荐 /* 这里有可能是空的，比如北京就没有 */
+    if (data.getMod_list().size() == 1) { // 只有推荐行程， 没有附近推荐
+      return;
+    }
+
 
   }
 
