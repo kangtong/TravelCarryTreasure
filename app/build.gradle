@@ -11,6 +11,17 @@ android {
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
+
+    // java 8 ： AS 2.4 后需要删除
+    jackOptions {
+      enabled true
+    }
+  }
+
+  // java 8
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
 
   packagingOptions {
