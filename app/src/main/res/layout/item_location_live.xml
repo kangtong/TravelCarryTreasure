@@ -3,17 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="wrap_content">
   <LinearLayout
-      android:layout_width="match_parent" android:layout_height="200dp"
+      android:layout_width="match_parent" android:layout_height="250dp"
       android:layout_marginLeft="5dp" android:layout_marginRight="5dp"
+      android:layout_marginTop="5dp" android:layout_marginBottom="5dp"
       android:background="@drawable/shape_stroke_gray" android:orientation="vertical">
 
     <ImageView android:id="@+id/img_banner"
-        android:layout_width="match_parent" android:layout_height="100dp"
+        android:layout_width="match_parent" android:layout_height="150dp"
         tools:src="@drawable/temp_live_banner"
         android:scaleType="centerCrop"/>
 
     <ImageView android:id="@+id/img_avatar"
-        android:layout_width="50dp" android:layout_height="50dp"
+        android:layout_width="60dp" android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-25dp"
         tools:src="@drawable/temp_avatar"/>
@@ -22,14 +23,13 @@
         android:layout_width="wrap_content" android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="15dp" android:layout_marginLeft="15dp"
-        tools:text="只发图，不说话~" android:textSize="18sp"
-        android:textColor="@color/black"/>
+        tools:text="只发图，不说话~" android:textColor="@color/black"/>
 
     <TextView android:id="@+id/tv_place"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginLeft="15dp"
-        tools:text="回民街"
+        tools:text="回民街" android:textSize="12sp"
         android:drawableLeft="@drawable/temp_live_place" android:drawablePadding="5dp"
         android:layout_marginBottom="10dp"/>
 

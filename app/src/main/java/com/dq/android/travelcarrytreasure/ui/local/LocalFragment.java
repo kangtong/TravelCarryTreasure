@@ -1,5 +1,6 @@
 package com.dq.android.travelcarrytreasure.ui.local;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -29,7 +31,6 @@ import com.dq.android.travelcarrytreasure.service.common.FuzzyAddressCallBack;
 import com.dq.android.travelcarrytreasure.service.common.WeatherCallBack;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
-import com.dq.android.travelcarrytreasure.widget.ScrollableLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.List;
@@ -56,7 +57,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private static final String KEY_CITY = "key_city"; // 城市名
   private static final String KEY_CITY_PINYIN = "key_city_pinyin"; // 城市拼音
 
-  private ScrollableLayout mLayoutScroll;
+  private ScrollView mLayoutScroll;
 
   /* toolbar */
   private RelativeLayout mLayoutCityDetails;
@@ -109,7 +110,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   @Override protected void initView(View view, Bundle savedInstanceState) {
 
-    mLayoutScroll = (ScrollableLayout) view.findViewById(R.id.layout_scroll);
+    mLayoutScroll = (ScrollView) view.findViewById(R.id.layout_scroll);
     /* toolbar */
     mLayoutCityDetails = (RelativeLayout) view.findViewById(R.id.layout_city_details);
     mIvCityBanner = (ImageView) view.findViewById(R.id.iv_city_banner);
@@ -148,11 +149,13 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mRecycleLive = (RecyclerView) view.findViewById(R.id.recycle_location_now);
 
     // 滑动监听, 改变透明度
-    mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
-      @Override public void onScroll() {
-        changeSearchViewAlpha();
-      }
-    });
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      mLayoutScroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+        @Override public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+          changeSearchViewAlpha();
+        }
+      });
+    }
 
     // 搜索栏处理
     mViewDivider.getBackground().mutate().setAlpha(0);
