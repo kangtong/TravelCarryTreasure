@@ -10,7 +10,7 @@ import okhttp3.Response;
  * 邮箱：dqdanavera@gmail.com
  * 描述：
  */
-public abstract class LocationNowCallBack extends Callback {
+public abstract class LocationNowCallBack extends Callback<LocationNowResponse> {
 
   @Override public LocationNowResponse parseNetworkResponse(Response response, int id) throws Exception {
     String string = response.body().string();

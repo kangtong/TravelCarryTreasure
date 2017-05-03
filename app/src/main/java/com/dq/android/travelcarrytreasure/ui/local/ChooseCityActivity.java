@@ -80,7 +80,7 @@ public class ChooseCityActivity extends BaseActivity {
   private void onLoadData() {
     String url =
         "http://lvyou.baidu.com/destination/app/topscene?"
-            + "LVCODE=e292d26c5c27ead0d29ac244c83ae477&T=1493712540"; // 万恶的key值啊
+            + "LVCODE=0c6c81b436b6515408703e4d3a2d08ed&T=1493791054"; // 万恶的key值啊
     OkHttpUtils
         .get()
         .url(url)

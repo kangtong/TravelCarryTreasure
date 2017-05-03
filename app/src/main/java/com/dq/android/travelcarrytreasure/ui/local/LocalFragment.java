@@ -3,6 +3,7 @@ package com.dq.android.travelcarrytreasure.ui.local;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,11 +18,13 @@ import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.Constant;
+import com.dq.android.travelcarrytreasure.model.baidulvyou.LocationNowResponse;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.LocationResponse;
 import com.dq.android.travelcarrytreasure.model.common.City;
 import com.dq.android.travelcarrytreasure.model.common.FuzzyAddress;
 import com.dq.android.travelcarrytreasure.model.common.Weather;
 import com.dq.android.travelcarrytreasure.service.baidulvyou.LocationCallBack;
+import com.dq.android.travelcarrytreasure.service.baidulvyou.LocationNowCallBack;
 import com.dq.android.travelcarrytreasure.service.common.FuzzyAddressCallBack;
 import com.dq.android.travelcarrytreasure.service.common.WeatherCallBack;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
@@ -47,6 +50,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private static final String TAG = LocalFragment.class.getSimpleName();
 
   private static final String KEY_LOCATION_RESPONSE = "key_location_response";
+  private static final String KEY_LOCATION_LIVE_RESPONSE = "key_location_live_response";
   private static final String KEY_LATITUDE = "key_latitude"; // 维度
   private static final String KEY_LONGITUDE = "key_longitude"; // 经度
   private static final String KEY_CITY = "key_city"; // 城市名
@@ -80,6 +84,13 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private TextView mTvTitleSubNearby;
   private RecyclerView mRecycleNearby;
   private EasyRecyclerAdapter mAdapterNearby;
+
+  /* 当地此刻 */
+  private LinearLayout mLayoutLive;
+  private TextView mTvTitleLive;
+  private TextView mTvTitleSubLive;
+  private RecyclerView mRecycleLive;
+  private EasyRecyclerAdapter mAdapterLive;
 
   private String ip;
   private String cityCode;
@@ -130,6 +141,11 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mLayoutNearby = (LinearLayout) view.findViewById(R.id.ll_nearby);
     mTvTitleSubNearby = (TextView) view.findViewById(R.id.tv_title_sub_2);
     mRecycleNearby = (RecyclerView) view.findViewById(R.id.recycle_nearby);
+    /* 当地此刻 */
+    mLayoutLive = (LinearLayout) view.findViewById(R.id.ll_location_now);
+    mTvTitleLive = (TextView) view.findViewById(R.id.tv_title_3);
+    mTvTitleSubLive = (TextView) view.findViewById(R.id.tv_title_sub_3);
+    mRecycleLive = (RecyclerView) view.findViewById(R.id.recycle_location_now);
 
     // 滑动监听, 改变透明度
     mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
@@ -137,6 +153,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
         changeSearchViewAlpha();
       }
     });
+
     // 搜索栏处理
     mViewDivider.getBackground().mutate().setAlpha(0);
     mLayoutSearch.getBackground().mutate().setAlpha(0);
@@ -149,7 +166,6 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvCity.setOnClickListener(this);
 
     // 附近推荐相关
-    // 初始化 adapter
     final LinearLayoutManager mLayoutManager =
         new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
     mLayoutManager.setSmoothScrollbarEnabled(true);
@@ -166,6 +182,23 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
       }
     });
     mRecycleNearby.setAdapter(mAdapterNearby);
+
+    // 当地此刻相关
+    final GridLayoutManager mLayoutManager_2 = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+    mLayoutManager_2.setSmoothScrollbarEnabled(true);
+    mLayoutManager_2.setAutoMeasureEnabled(true);
+    mRecycleLive.setLayoutManager(mLayoutManager_2);
+    mRecycleLive.setHasFixedSize(true);
+    mRecycleLive.setNestedScrollingEnabled(false);
+    mRecycleLive.setItemAnimator(new DefaultItemAnimator());
+    mAdapterLive =
+        new EasyRecyclerAdapter(getContext(), LocationNowResponse.DataBean.ListBean.class, LocalLiveViewHolder.class);
+    mAdapterLive.setOnClickListener(new EasyViewHolder.OnItemClickListener() {
+      @Override public void onItemClick(int i, View view) {
+        ToastUtils.toast("点击了第" + i + "个item~");
+      }
+    });
+    mRecycleLive.setAdapter(mAdapterLive);
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -205,6 +238,12 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     if (!json_latitude.isEmpty()) {
       LatitudeAndLongitude[1] = Double.valueOf(json_latitude);
     }
+    // 当地此刻 Live 的数据展示
+    String json_live = SPUtils.getString(getContext(), KEY_LOCATION_LIVE_RESPONSE);
+    if (!json_live.isEmpty()) {
+      LocationNowResponse response = JSON.parseObject(json_live, LocationNowResponse.class);
+      onShowLive(response.getData());
+    }
   }
 
   @Override public void onClick(View v) {
@@ -216,10 +255,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   }
 
   private void onLoadData() {
-    // 1.通过高德获取城市名 + 天气
+    // 1.通过高德获取城市名 + 天气, 之后的东西，因为相互关联，所以依次调用
     getIP();
-    // 2.glide加载大图
-    // getBanner();
+    // 2.当地此刻的数据，加载显示
+    getLocationLive();
     // 3,其他数据加载
     // getOtherData();
   }
@@ -229,7 +268,6 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 先把天气给填进去
     mTvWeather.setText(data.getScene_info().getInfo().getWeather().getDescribe());
     // 加载 Banner
-    Log.d(TAG, "加载Banner的url: " + data.getScene_info().getInfo().getPic_url());
     Glide.with(LocalFragment.this)
         .load(data.getScene_info().getInfo().getPic_url())
         .placeholder(R.drawable.bg_default_place_holder)
@@ -414,7 +452,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             + "&x=" + LatitudeAndLongitude[0]
             // + "116.488043" // 经度
             + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
-            + "LVCODE=96a15e4ed2a9f905a61dd925bceae5d9&T=1493739952";
+            + "LVCODE=f20eef1e2cea722466750ccbc7805bd9&T=1493791026";
     OkHttpUtils
         .get()
         .url(url)
@@ -438,5 +476,41 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             }
           }
         });
+  }
+
+  public void getLocationLive() {
+    String url = // 这个返回的东西，相对清晰简单
+        "http://lvyou.baidu.com/destination/app/event/live?picture=1&apiv=v2&sid=9bb8ee381df41344144463f5&rn=20&d=android&"
+            + "LVCODE=a78f0759c22fb28befb41f9a4485fe50&T=1493791130";
+    OkHttpUtils
+        .get()
+        .url(url)
+        .build()
+        .execute(new LocationNowCallBack() {
+          @Override public void onError(Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "当地界面 Live 请求,发生网络错误");
+            Log.d(TAG, "onError: " + e.toString());
+          }
+
+          @Override public void onResponse(LocationNowResponse response, int id) {
+            if (response.getErrno() == 0) { // 成功
+              Log.d(TAG, "onResponse: " + "当地界面 Live 请求,api返回数据成功~");
+              // 展示数据
+              onShowLive(response.getData());
+              // 保存至SP
+              String discover = JSON.toJSONString(response);
+              SPUtils.setString(getContext(), KEY_LOCATION_LIVE_RESPONSE, discover);
+            } else {
+              Log.d(TAG, "onResponse: " + "当地界面 Live 请求,api返回数据失败!!!");
+            }
+          }
+        });
+  }
+
+  /* 展示 当地此刻  */
+  private void onShowLive(LocationNowResponse.DataBean data) {
+    mAdapterLive.addAll(data.getList());
+    mTvTitleLive.setText(data.getSname() + "·" + "此刻");
+    mTvTitleSubLive.setText(data.getCount() + "人来过");
   }
 }

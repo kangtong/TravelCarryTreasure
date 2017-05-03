@@ -132,7 +132,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   private void onLoadData() {
     String url_1 = // 3个楼层的东西
         "http://lvyou.baidu.com/main/app/index?apiv=v4&d=android&v=7.3.0&"
-            + "LVCODE=8be7e7f32494c3043993b9b7e3d7ac9d&T=1493719962";
+            + "LVCODE=ab50440f4d31bff7a0849d304052ea68&T=1493791663";
     OkHttpUtils
         .get()
         .url(url_1)
@@ -164,7 +164,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
         "http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&page_num="
             + random
             + "&format=app&d=android&"
-            + "LVCODE=7b99d98bd034a810fa301a058bb65396&T=1493720196";
+            + "LVCODE=097c329df2c9e56795b2738861ddab7b&T=1493790927";
     OkHttpUtils
         .get()
         .url(url_2)
