@@ -12,8 +12,7 @@ import okhttp3.Response;
 
 public abstract class LocationCallBack extends Callback<LocationResponse> {
 
-  @Override public LocationResponse parseNetworkResponse(Response response, int id)
-      throws IOException {
+  @Override public LocationResponse parseNetworkResponse(Response response, int id) throws IOException {
     String string = response.body().string();
     return JSON.parseObject(string, LocationResponse.class);
   }
