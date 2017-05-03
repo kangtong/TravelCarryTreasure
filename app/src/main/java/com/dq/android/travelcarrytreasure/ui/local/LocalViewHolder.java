@@ -41,7 +41,7 @@ public class LocalViewHolder extends EasyViewHolder<LocationResponse.DataBean.Mo
     mTvTitle.setText(name);
     String rate = (values.getType() == 1) ? values.getPoi().getOverall_rating() : values.getPoi().getAvg_remark_score();
     mRate.setRating(Float.parseFloat(rate));
-    String price = String.valueOf((values.getPoi().getPrice() == 0) ? "免费开放" : "人均消费：¥" + values.getPoi().getPrice());
+    String price = String.valueOf((values.getPoi().getPrice().equals("0")) ? "免费开放" : "人均消费：¥" + values.getPoi().getPrice());
     mTvPrice.setText(price);
     String distance =
         (values.getPoi().getDistance() > 1000) ? (values.getPoi().getDistance() / 1000) + "km" : values.getPoi().getDistance() + "m";

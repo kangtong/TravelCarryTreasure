@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
+import com.dq.android.travelcarrytreasure.model.Constant;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverResponse;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.TravellerNoteResponse;
 import com.dq.android.travelcarrytreasure.service.baidulvyou.DiscoverCallBack;
@@ -132,7 +133,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   private void onLoadData() {
     String url_1 = // 3个楼层的东西
         "http://lvyou.baidu.com/main/app/index?apiv=v4&d=android&v=7.3.0&"
-            + "LVCODE=ab50440f4d31bff7a0849d304052ea68&T=1493791663";
+            + Constant.getInstance().getBaidulvyoukey();
     OkHttpUtils
         .get()
         .url(url_1)
@@ -164,7 +165,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
         "http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&page_num="
             + random
             + "&format=app&d=android&"
-            + "LVCODE=097c329df2c9e56795b2738861ddab7b&T=1493790927";
+            + Constant.getInstance().getBaidulvyoukey();
     OkHttpUtils
         .get()
         .url(url_2)

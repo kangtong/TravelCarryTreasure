@@ -1,5 +1,7 @@
 package com.dq.android.travelcarrytreasure.ui.local;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
+import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.Constant;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.LocationNowResponse;
@@ -252,7 +255,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.tv_city:
-        ChooseCityActivity.start(getContext(), mTvCity.getText().toString());
+        ChooseCityActivity.start((BaseActivity) getContext(), mTvCity.getText().toString(), 1006);
         break;
     }
   }
@@ -297,6 +300,9 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 1，先判断一共，有几个景点
     int sum = list.size();
     for (int i = 0; i < list.size(); i++) {
+      if (i >= 5) {
+        break;
+      }
       mTvSteps[i].setText(list.get(i).getName());
     }
     for (int i = 4; i > sum - 1; i--) { // 没有的设置透明度
@@ -400,7 +406,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
               SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString());
               SPUtils.setString(getContext(), KEY_CITY_PINYIN, mTvCityPinyin.getText().toString());
               // getWeather(cityCode); // 获取天气
-              getOtherData(); // 获取其他数据
+              getOtherData(null); // 获取其他数据
             } else {
               Log.d(TAG, "onResponse: " + response.getInfo());
               Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
@@ -446,16 +452,18 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   }
 
   /* 获取其他数据: 这个数据很多, 小心处理, fastjson 经常报错 */
-  public void getOtherData() {
-    String url = // 很多东西, 慢慢分析, 拆解
-        "http://lvyou.baidu.com/destination/app/local?apiv=v2&around=0"
-            + "&sid=9bb8ee381df41344144463f5" // 城市的id 不知道是怎么拿到的，现在这个写死是西安的
-            + "&y=" + LatitudeAndLongitude[1]
-            // + "40.001743" // 维度
-            + "&x=" + LatitudeAndLongitude[0]
-            // + "116.488043" // 经度
-            + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
-            + "LVCODE=f20eef1e2cea722466750ccbc7805bd9&T=1493791026";
+  public void getOtherData(String url) {
+    if (url == null) {
+      url = // 很多东西, 慢慢分析, 拆解
+          "http://lvyou.baidu.com/destination/app/local?apiv=v2&around=0"
+              + "&sid=9bb8ee381df41344144463f5" // 城市的id 不知道是怎么拿到的，现在这个写死是西安的
+              + "&y=" + LatitudeAndLongitude[1]
+              // + "40.001743" // 维度
+              + "&x=" + LatitudeAndLongitude[0]
+              // + "116.488043" // 经度
+              + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
+              + Constant.getInstance().getBaidulvyoukey();
+    }
     OkHttpUtils
         .get()
         .url(url)
@@ -484,7 +492,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   public void getLocationLive() {
     String url = // 这个返回的东西，相对清晰简单
         "http://lvyou.baidu.com/destination/app/event/live?picture=1&apiv=v2&sid=9bb8ee381df41344144463f5&rn=20&d=android&"
-            + "LVCODE=a78f0759c22fb28befb41f9a4485fe50&T=1493791130";
+            + Constant.getInstance().getBaidulvyoukey();
     OkHttpUtils
         .get()
         .url(url)
@@ -515,5 +523,44 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mAdapterLive.addAll(data.getList());
     mTvTitleLive.setText(data.getSname() + "·" + "此刻");
     mTvTitleSubLive.setText(data.getCount() + "人来过");
+  }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == 1006 && resultCode == Activity.RESULT_OK) {
+      String city = data.getStringExtra("city");
+      String sid = data.getStringExtra("cityCode");
+      double x = data.getDoubleExtra("x", 0.0);
+      double y = data.getDoubleExtra("y", 0.0);
+      Log.d(TAG, "onActivityResult: " + city + "|" + sid + "|" + x + "|" + y);
+      // 显示
+      mTvCity.setText(city);
+      LatitudeAndLongitude[1] = x;
+      LatitudeAndLongitude[0] = y;
+      List<City> list = Constant.getInstance().getCityList();
+      for (int i = 0; i < list.size(); i++) {
+        if (city.contains(list.get(i).getSname())) {
+          mTvCityPinyin.setText(list.get(i).getSurl().toUpperCase());
+          break;
+        }
+      }
+      // 存储
+      SPUtils.setString(getContext(), KEY_LATITUDE, LatitudeAndLongitude[1] + "");
+      SPUtils.setString(getContext(), KEY_LONGITUDE, LatitudeAndLongitude[0] + "");
+      SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString());
+      SPUtils.setString(getContext(), KEY_CITY_PINYIN, mTvCityPinyin.getText().toString());
+      // 网络加载
+      String url = // 很多东西, 慢慢分析, 拆解
+          "http://lvyou.baidu.com/destination/app/local?apiv=v2&around=0"
+              + "&sid=" // 城市的id 不知道是怎么拿到的，现在这个写死是西安的
+              + sid
+              + "&y=" + LatitudeAndLongitude[1]
+              // + "40.001743" // 维度
+              + "&x=" + LatitudeAndLongitude[0]
+              // + "116.488043" // 经度
+              + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
+              + Constant.getInstance().getBaidulvyoukey();
+      getOtherData(url);
+    }
   }
 }

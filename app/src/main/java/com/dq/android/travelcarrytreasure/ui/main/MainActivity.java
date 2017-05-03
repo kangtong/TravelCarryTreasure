@@ -137,4 +137,9 @@ public class MainActivity extends BaseActivity {
       getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
   }
+
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    getSupportFragmentManager().findFragmentByTag(mCurrentFragment).onActivityResult(requestCode, resultCode, data);
+  }
 }
