@@ -48,40 +48,40 @@
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
 
-          <LinearLayout
+          <!-- 购物 -->
+          <LinearLayout android:id="@+id/ll_features_4"
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="1" android:orientation="vertical"
               android:gravity="center">
             <ImageView
                 android:layout_width="50dp" android:layout_height="50dp"
-                android:src="@drawable/selector_local_shopping"
-                android:clickable="true"/>
+                android:src="@drawable/selector_local_shopping"/>
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
                 android:text="购物" android:textColor="@color/white"/>
           </LinearLayout>
-          <LinearLayout
+          <!-- 玩法 -->
+          <LinearLayout android:id="@+id/ll_features_5"
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="1" android:orientation="vertical"
               android:gravity="center">
             <ImageView
                 android:layout_width="50dp" android:layout_height="50dp"
-                android:src="@drawable/selector_local_playing"
-                android:clickable="true"/>
+                android:src="@drawable/selector_local_playing"/>
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
                 android:text="玩法" android:textColor="@color/white"/>
           </LinearLayout>
-          <LinearLayout
+          <!-- 更多 -->
+          <LinearLayout android:id="@+id/ll_features_6"
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="1" android:orientation="vertical"
               android:gravity="center">
             <ImageView
                 android:layout_width="50dp" android:layout_height="50dp"
-                android:src="@drawable/selector_local_more"
-                android:clickable="true"/>
+                android:src="@drawable/selector_local_more"/>
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
@@ -95,40 +95,40 @@
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:layout_above="@id/ll_last_one">
 
-          <LinearLayout
+          <!-- 景点 -->
+          <LinearLayout android:id="@+id/ll_features_1"
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="1" android:orientation="vertical"
               android:gravity="center">
             <ImageView
                 android:layout_width="50dp" android:layout_height="50dp"
-                android:src="@drawable/selector_local_scene"
-                android:clickable="true"/>
+                android:src="@drawable/selector_local_scene"/>
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
                 android:text="景点" android:textColor="@color/white"/>
           </LinearLayout>
-          <LinearLayout
+          <!-- 美食 -->
+          <LinearLayout android:id="@+id/ll_features_2"
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="1" android:orientation="vertical"
               android:gravity="center">
             <ImageView
                 android:layout_width="50dp" android:layout_height="50dp"
-                android:src="@drawable/selector_local_cater"
-                android:clickable="true"/>
+                android:src="@drawable/selector_local_cater"/>
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
                 android:text="美食" android:textColor="@color/white"/>
           </LinearLayout>
-          <LinearLayout
+          <!-- 酒店 -->
+          <LinearLayout android:id="@+id/ll_features_3"
               android:layout_width="0dp" android:layout_height="wrap_content"
               android:layout_weight="1" android:orientation="vertical"
               android:gravity="center">
             <ImageView
                 android:layout_width="50dp" android:layout_height="50dp"
-                android:src="@drawable/selector_local_hotel"
-                android:clickable="true"/>
+                android:src="@drawable/selector_local_hotel"/>
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" android:layout_marginBottom="10dp"

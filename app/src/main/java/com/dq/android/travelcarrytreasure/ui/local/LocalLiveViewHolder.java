@@ -42,8 +42,6 @@ public class LocalLiveViewHolder extends EasyViewHolder<LocationNowResponse.Data
     Glide.with(itemView.getContext())
         .load(values.getUser().getAvatar_pic())
         .bitmapTransform(new CropCircleTransformation(itemView.getContext()))
-        .placeholder(R.drawable.bg_default_place_holder)
-        .thumbnail(0.1f)
         .into(mImgAvatar);
   }
 }

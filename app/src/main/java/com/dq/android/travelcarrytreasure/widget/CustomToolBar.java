@@ -74,6 +74,8 @@ public class CustomToolBar extends RelativeLayout implements View.OnClickListene
     }
     mTvTitle.setText(mTitle);
     mTvTitle.setTextColor(mTitleResColor);
+    mTvBack.setText(mLeftTxt);
+    mTvAction.setText(mRightTxt);
     mTvBack.setVisibility(mIsShowLeft ? VISIBLE : INVISIBLE);
     mImgBack.setVisibility(mIsShowLeftImg ? VISIBLE : INVISIBLE);
     mTvAction.setVisibility(mIsShowRight ? VISIBLE : INVISIBLE);
@@ -83,10 +85,14 @@ public class CustomToolBar extends RelativeLayout implements View.OnClickListene
     switch (v.getId()) {
       case R.id.tv_back:
       case R.id.img_back:
-        mListener.onBackListener();
+        if (mListener != null) {
+          mListener.onBackListener();
+        }
         break;
       case R.id.tv_action:
-        mListener.onActionListener();
+        if (mListener != null) {
+          mListener.onActionListener();
+        }
         break;
     }
   }

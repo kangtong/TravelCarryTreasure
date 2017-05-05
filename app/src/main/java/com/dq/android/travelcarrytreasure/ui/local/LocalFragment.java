@@ -32,6 +32,7 @@ import com.dq.android.travelcarrytreasure.service.baidulvyou.LocationCallBack;
 import com.dq.android.travelcarrytreasure.service.baidulvyou.LocationNowCallBack;
 import com.dq.android.travelcarrytreasure.service.common.FuzzyAddressCallBack;
 import com.dq.android.travelcarrytreasure.service.common.WeatherCallBack;
+import com.dq.android.travelcarrytreasure.ui.feature.SceneListActivity;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -71,6 +72,9 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private View mViewDivider;
   private TextView mTvCover;
 
+  /* 功能项 */
+  private LinearLayout mLayoutFeatures_1, mLayoutFeatures_2, mLayoutFeatures_3, mLayoutFeatures_4, mLayoutFeatures_5, mLayoutFeatures_6;
+
   /* 定位+天气 */
   private TextView mTvCity;
   private TextView mTvCityPinyin;
@@ -97,8 +101,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private RecyclerView mRecycleLive;
   private EasyRecyclerAdapter mAdapterLive;
 
+  /* 部分需要记录的东西 */
   private String ip;
   private String city; // 定位城市
+  private String sid; // 百度旅游城市的sid
   private String cityCode;
   private Double[] LatitudeAndLongitude = new Double[] {0.0, 0.0};
 
@@ -123,6 +129,13 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mIvSearch = (ImageView) view.findViewById(R.id.iv_search);
     mViewDivider = view.findViewById(R.id.view_divider);
     mTvCover = (TextView) view.findViewById(R.id.tv_cover);
+    /* 功能栏 */
+    mLayoutFeatures_1 = (LinearLayout) view.findViewById(R.id.ll_features_1);
+    mLayoutFeatures_2 = (LinearLayout) view.findViewById(R.id.ll_features_2);
+    mLayoutFeatures_3 = (LinearLayout) view.findViewById(R.id.ll_features_3);
+    mLayoutFeatures_4 = (LinearLayout) view.findViewById(R.id.ll_features_4);
+    mLayoutFeatures_5 = (LinearLayout) view.findViewById(R.id.ll_features_5);
+    mLayoutFeatures_6 = (LinearLayout) view.findViewById(R.id.ll_features_6);
     /* 定位 + 天气 */
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
@@ -172,6 +185,14 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     });
     // 城市选择页跳转
     mTvCity.setOnClickListener(this);
+
+    // 功能栏相关
+    mLayoutFeatures_1.setOnClickListener(this);
+    mLayoutFeatures_2.setOnClickListener(this);
+    mLayoutFeatures_3.setOnClickListener(this);
+    mLayoutFeatures_4.setOnClickListener(this);
+    mLayoutFeatures_5.setOnClickListener(this);
+    mLayoutFeatures_6.setOnClickListener(this);
 
     // 附近推荐相关
     final LinearLayoutManager mLayoutManager =
@@ -230,6 +251,8 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
       LocationResponse response = JSON.parseObject(json, LocationResponse.class);
       onShowData(response.getData());
       result = true;
+      // 获取对应的sid
+      sid = response.getData().getScene_info().getInfo().getSid();
     }
     // 上次选择城市名天气
     String json_city = SPUtils.getString(getContext(), KEY_CITY);
@@ -276,6 +299,16 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     switch (v.getId()) {
       case R.id.tv_city:
         ChooseCityActivity.start((BaseActivity) getContext(), city, 1006);
+        break;
+      case R.id.ll_features_1:
+        SceneListActivity.start(getContext(), sid);
+        break;
+      case R.id.ll_features_2:
+      case R.id.ll_features_3:
+      case R.id.ll_features_4:
+      case R.id.ll_features_5:
+      case R.id.ll_features_6:
+        ToastUtils.toast("此功能正在开发，敬请期待~");
         break;
     }
   }
@@ -501,6 +534,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
           @Override public void onResponse(LocationResponse response, int id) {
             if (response.getErrno() == 0) { // 成功
               Log.d(TAG, "onResponse: " + "当地界面网络请求,api返回数据成功~");
+              sid = response.getData().getScene_info().getInfo().getSid();
               // 展示数据
               onShowData(response.getData());
               // 保存至SP
