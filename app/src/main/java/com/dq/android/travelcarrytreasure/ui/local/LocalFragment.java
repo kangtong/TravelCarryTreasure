@@ -210,46 +210,55 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     // 1, 先加载本地
-    onLoadDataWithSP();
-    if (NetworkUtil.isNetworkAvailable()) {
-      onLoadData(); // 2,网络请求
-    } else {
-      ToastUtils.toast("本地网络检查错误!!!");
+    if (!onLoadDataWithSP()) { // 如果本地无缓存数据，再使用网络请求
+      if (NetworkUtil.isNetworkAvailable()) {
+        onLoadData(); // 2,网络请求
+      } else {
+        ToastUtils.toast("本地网络检查错误!!!");
+      }
     }
   }
 
-  private void onLoadDataWithSP() {
+  private boolean onLoadDataWithSP() {
+    boolean result = false;
     // 大头数据
     String json = SPUtils.getString(getContext(), KEY_LOCATION_RESPONSE);
     if (!json.isEmpty()) {
       LocationResponse response = JSON.parseObject(json, LocationResponse.class);
       onShowData(response.getData());
+      result = true;
     }
     // 城市名天气
     String json_city = SPUtils.getString(getContext(), KEY_CITY);
     if (!json_city.isEmpty()) {
       mTvCity.setText(json_city);
+      result = true;
     }
     String json_city_pinyin = SPUtils.getString(getContext(), KEY_CITY_PINYIN);
     if (!json_city_pinyin.isEmpty()) {
       mTvCityPinyin.setText(json_city_pinyin);
+      result = true;
     }
     // 经度
     String json_longitude = SPUtils.getString(getContext(), KEY_LONGITUDE);
     if (!json_longitude.isEmpty()) {
       LatitudeAndLongitude[0] = Double.valueOf(json_longitude);
+      result = true;
     }
     // 纬度
     String json_latitude = SPUtils.getString(getContext(), KEY_LATITUDE);
     if (!json_latitude.isEmpty()) {
       LatitudeAndLongitude[1] = Double.valueOf(json_latitude);
+      result = true;
     }
     // 当地此刻 Live 的数据展示
     String json_live = SPUtils.getString(getContext(), KEY_LOCATION_LIVE_RESPONSE);
     if (!json_live.isEmpty()) {
       LocationNowResponse response = JSON.parseObject(json_live, LocationNowResponse.class);
       onShowLive(response.getData());
+      result = true;
     }
+    return result;
   }
 
   @Override public void onClick(View v) {
@@ -264,7 +273,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 1.通过高德获取城市名 + 天气, 之后的东西，因为相互关联，所以依次调用
     getIP();
     // 2.当地此刻的数据，加载显示
-    getLocationLive();
+    getLocationLive(null);
     // 3,其他数据加载
     // getOtherData();
   }
@@ -304,9 +313,11 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
         break;
       }
       mTvSteps[i].setText(list.get(i).getName());
+      mImgSteps[i].setVisibility(View.VISIBLE);
     }
     for (int i = 4; i > sum - 1; i--) { // 没有的设置透明度
-      mImgSteps[i].setImageAlpha(125);
+      mTvSteps[i].setText("");
+      mImgSteps[i].setVisibility(View.INVISIBLE);
     }
   }
 
@@ -489,10 +500,21 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
         });
   }
 
-  public void getLocationLive() {
-    String url = // 这个返回的东西，相对清晰简单
-        "http://lvyou.baidu.com/destination/app/event/live?picture=1&apiv=v2&sid=9bb8ee381df41344144463f5&rn=20&d=android&"
-            + Constant.getInstance().getBaidulvyoukey();
+  public void getLocationLive(String sid) {
+    String url;
+    if (sid == null) {
+      url = // 这个返回的东西，相对清晰简单
+          "http://lvyou.baidu.com/destination/app/event/live?picture=1&apiv=v2&rn=20&d=android"
+              + "&sid="
+              + "9bb8ee381df41344144463f5"
+              + "&" + Constant.getInstance().getBaidulvyoukey();
+    } else {
+      url =
+          "http://lvyou.baidu.com/destination/app/event/live?picture=1&apiv=v2&rn=20&d=android"
+              + "&sid="
+              + sid
+              + "&" + Constant.getInstance().getBaidulvyoukey();
+    }
     OkHttpUtils
         .get()
         .url(url)
@@ -560,7 +582,16 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
               // + "116.488043" // 经度
               + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
               + Constant.getInstance().getBaidulvyoukey();
+      // 获取当地主要内容
       getOtherData(url);
+      // 获取当地，此刻的内容
+      getLocationLive(sid);
     }
+  }
+
+  /* 重新刷新一下 */
+  private void onRefresh() {
+    // TODO: 2017/5/5 dengqi: 还没想好，要不要这么做，刷新功能如何实现？ 
+    onLoadDataWithSP();
   }
 }

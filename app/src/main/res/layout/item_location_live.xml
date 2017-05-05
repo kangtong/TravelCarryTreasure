@@ -15,14 +15,14 @@
 
     <ImageView android:id="@+id/img_avatar"
         android:layout_width="60dp" android:layout_height="60dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="-25dp"
+        android:layout_gravity="center_horizontal" android:layout_marginTop="-25dp"
         tools:src="@drawable/temp_avatar"/>
 
     <TextView android:id="@+id/tv_desc"
         android:layout_width="wrap_content" android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="15dp" android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp" android:layout_marginLeft="15dp"
+        android:gravity="left|bottom" android:ellipsize="end" android:maxLines="2"
         tools:text="只发图，不说话~" android:textColor="@color/black"/>
 
     <TextView android:id="@+id/tv_place"

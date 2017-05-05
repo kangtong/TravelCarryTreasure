@@ -12,7 +12,7 @@ public class Constant {
 
   private List<City> cityList = new ArrayList<>();
   private String gaodewebkey = "2a38b88634373039be63970073305145";
-  private String baidulvyoukey = "LVCODE=e745c0d3241cbd007ebac4734e6f5c1b&T=1493801585";
+  private String baidulvyoukey = "LVCODE=3313b4fca643c1647cc2f85aa9f826c3&T=1493889979";
 
   private static final Constant ourInstance = new Constant();
 
