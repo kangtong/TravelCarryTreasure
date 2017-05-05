@@ -57,7 +57,8 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private static final String KEY_LOCATION_LIVE_RESPONSE = "key_location_live_response";
   private static final String KEY_LATITUDE = "key_latitude"; // 维度
   private static final String KEY_LONGITUDE = "key_longitude"; // 经度
-  private static final String KEY_CITY = "key_city"; // 城市名
+  private static final String KEY_CITY = "key_city"; // 上次选择城市名
+  private static final String KEY_CITY_LOCATION = "key_city_location"; // 定位的城市名
   private static final String KEY_CITY_PINYIN = "key_city_pinyin"; // 城市拼音
 
   private ScrollView mLayoutScroll;
@@ -97,6 +98,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private EasyRecyclerAdapter mAdapterLive;
 
   private String ip;
+  private String city; // 定位城市
   private String cityCode;
   private Double[] LatitudeAndLongitude = new Double[] {0.0, 0.0};
 
@@ -210,7 +212,8 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     // 1, 先加载本地
-    if (!onLoadDataWithSP()) { // 如果本地无缓存数据，再使用网络请求
+    // if (!onLoadDataWithSP()) { // 如果本地无缓存数据，再使用网络请求
+    if (onLoadDataWithSP()) { // 每次启动都要使用一次网络请求
       if (NetworkUtil.isNetworkAvailable()) {
         onLoadData(); // 2,网络请求
       } else {
@@ -228,7 +231,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
       onShowData(response.getData());
       result = true;
     }
-    // 城市名天气
+    // 上次选择城市名天气
     String json_city = SPUtils.getString(getContext(), KEY_CITY);
     if (!json_city.isEmpty()) {
       mTvCity.setText(json_city);
@@ -238,6 +241,14 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     if (!json_city_pinyin.isEmpty()) {
       mTvCityPinyin.setText(json_city_pinyin);
       result = true;
+    }
+    // 定位城市
+    String json_city_location = SPUtils.getString(getContext(), KEY_CITY_LOCATION);
+    if (!json_city_location.isEmpty()) {
+      city = json_city_location;
+      result = true;
+    } else {
+      city = "null";
     }
     // 经度
     String json_longitude = SPUtils.getString(getContext(), KEY_LONGITUDE);
@@ -264,7 +275,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.tv_city:
-        ChooseCityActivity.start((BaseActivity) getContext(), mTvCity.getText().toString(), 1006);
+        ChooseCityActivity.start((BaseActivity) getContext(), city, 1006);
         break;
     }
   }
@@ -394,6 +405,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             if (response.getStatus().equals("1")) { // 成功
               Log.d(TAG, "onResponse: " + "api返回数据成功~");
               // 展示数据
+              city = response.getCity();
               mTvCity.setText(response.getCity());
               cityCode = response.getAdcode();
               LatitudeAndLongitude = response.getCenterPoint();
@@ -414,7 +426,8 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
               // 保存至SP : 经纬度 + 城市名
               SPUtils.setString(getContext(), KEY_LATITUDE, LatitudeAndLongitude[1] + "");
               SPUtils.setString(getContext(), KEY_LONGITUDE, LatitudeAndLongitude[0] + "");
-              SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString());
+              SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString()); // 上次选择的城市
+              SPUtils.setString(getContext(), KEY_CITY_LOCATION, city); // 定位的城市名
               SPUtils.setString(getContext(), KEY_CITY_PINYIN, mTvCityPinyin.getText().toString());
               // getWeather(cityCode); // 获取天气
               getOtherData(null); // 获取其他数据
@@ -591,7 +604,10 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   /* 重新刷新一下 */
   private void onRefresh() {
-    // TODO: 2017/5/5 dengqi: 还没想好，要不要这么做，刷新功能如何实现？ 
-    onLoadDataWithSP();
+    if (NetworkUtil.isNetworkAvailable()) {
+      onLoadData(); // 2,网络请求
+    } else {
+      ToastUtils.toast("本地网络检查错误!!!");
+    }
   }
 }

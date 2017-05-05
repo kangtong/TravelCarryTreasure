@@ -16,6 +16,7 @@
     <ImageView android:id="@+id/img_avatar"
         android:layout_width="60dp" android:layout_height="60dp"
         android:layout_gravity="center_horizontal" android:layout_marginTop="-25dp"
+        android:scaleType="centerCrop"
         tools:src="@drawable/temp_avatar"/>
 
     <TextView android:id="@+id/tv_desc"
