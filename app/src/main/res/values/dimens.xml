@@ -8,5 +8,7 @@
   <!-- search view -->
   <dimen name="toolbar_height">56dp</dimen>
 
+  <!-- fixed -->
+  <dimen name="dp100">100dp</dimen>
 
 </resources>

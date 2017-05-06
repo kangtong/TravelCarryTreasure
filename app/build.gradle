@@ -71,4 +71,5 @@ dependencies {
   compile 'com.huxq17.xrefreshview:xrefreshview:3.6.6'
   compile 'jp.wasabeef:glide-transformations:2.0.2'
   compile 'com.android.support:support-v4:25.3.1'
+  compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
 }
