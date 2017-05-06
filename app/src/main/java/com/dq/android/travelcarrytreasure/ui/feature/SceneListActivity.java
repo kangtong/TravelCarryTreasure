@@ -38,6 +38,7 @@ public class SceneListActivity extends BaseActivity implements View.OnClickListe
   private static final String KEY_SID = "sid";
 
   private String sid = null;
+  private int start_number = 0;
 
   private CustomToolBar mToolbar;
   private FrameLayout mLayoutType, mLayoutSort;
@@ -85,8 +86,7 @@ public class SceneListActivity extends BaseActivity implements View.OnClickListe
     mLayoutRefresh.setOnRefreshListener(new RefreshListenerAdapter() {
       @Override public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
         super.onLoadMore(refreshLayout);
-        ToastUtils.toast("加载更多完毕~");
-        refreshLayout.finishLoadmore();
+        onLoadMoreData();
       }
     });
   }
@@ -137,7 +137,8 @@ public class SceneListActivity extends BaseActivity implements View.OnClickListe
     if (sid == null) {
       url = // 这个返回的东西，相对清晰简单
           "http://lvyou.baidu.com/destination/app/topscenes?apiv=v2&rn=10" // 每页10个
-              + "&pn=0" // 分页的起始
+              + "&pn=" // 分页的起始
+              + start_number
               + "&sid="
               + "9bb8ee381df41344144463f5" // 西安的固定值
               + "&" + Constant.getInstance().getBaidulvyoukey()
@@ -145,7 +146,8 @@ public class SceneListActivity extends BaseActivity implements View.OnClickListe
     } else {
       url =
           "http://lvyou.baidu.com/destination/app/topscenes?apiv=v2&rn=10" // 每页10个
-              + "&pn=0" // 分页的起始
+              + "&pn=" // 分页的起始
+              + start_number
               + "&sid="
               + sid
               + "&" + Constant.getInstance().getBaidulvyoukey()
@@ -169,6 +171,7 @@ public class SceneListActivity extends BaseActivity implements View.OnClickListe
             if (response.getErrno() == 0) { // 成功
               Log.d(TAG, "onResponse: " + "全部景点列表页 请求,api返回数据成功~");
               // 展示数据
+              start_number += 10;
               onShowData(response.getData().getScene_list());
             } else {
               Log.d(TAG, "onResponse: " + "全部景点列表页 请求,api返回数据失败!!!");
@@ -181,6 +184,51 @@ public class SceneListActivity extends BaseActivity implements View.OnClickListe
     mImgLoading.setVisibility(View.GONE);
     mLayoutRefresh.setVisibility(View.VISIBLE);
     mAdapter.addAll(data);
+  }
+
+  private void onLoadMoreData() {
+    // 开始请求数据
+    String url;
+    if (sid == null) {
+      url = // 这个返回的东西，相对清晰简单
+          "http://lvyou.baidu.com/destination/app/topscenes?apiv=v2&rn=10" // 每页10个
+              + "&pn=" // 分页的起始
+              + start_number
+              + "&sid="
+              + "9bb8ee381df41344144463f5" // 西安的固定值
+              + "&" + Constant.getInstance().getBaidulvyoukey()
+              + "&" + Constant.getInstance().getBaidulvyouXY();
+    } else {
+      url =
+          "http://lvyou.baidu.com/destination/app/topscenes?apiv=v2&rn=10" // 每页10个
+              + "&pn=" // 分页的起始
+              + start_number
+              + "&sid="
+              + sid
+              + "&" + Constant.getInstance().getBaidulvyoukey()
+              + "&" + Constant.getInstance().getBaidulvyouXY();
+    }
+    OkHttpUtils
+        .get()
+        .url(url)
+        .build()
+        .execute(new SceneCallBack() {
+          @Override public void onError(Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "全部景点列表页 加载更多 请求,发生网络错误");
+            Log.d(TAG, "onError: " + e.toString());
+          }
+
+          @Override public void onResponse(SceneResponse response, int id) {
+            if (response.getErrno() == 0) { // 成功
+              Log.d(TAG, "onResponse: " + "全部景点列表页 加载更多 请求,api返回数据成功~");
+              // 展示数据
+              start_number += 10;
+              onShowLoadMore(response.getData().getScene_list());
+            } else {
+              Log.d(TAG, "onResponse: " + "全部景点列表页 加载更多 请求,api返回数据失败!!!");
+            }
+          }
+        });
   }
 
   private void onShowLoadMore(List<SceneResponse.DataBean.SceneListBean> data) {

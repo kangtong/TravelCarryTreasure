@@ -49,6 +49,8 @@ public class SceneViewHolder extends EasyViewHolder<SceneResponse.DataBean.Scene
     if (i <= 2) {
       mTvPosition.setText(String.valueOf(i + 1));
       mTvPosition.setVisibility(View.VISIBLE);
+    } else {
+      mTvPosition.setVisibility(View.GONE);
     }
     mTvTitle.setText(values.getSname());
     mRate.setRating(values.getAvg_remark_score());
@@ -74,6 +76,7 @@ public class SceneViewHolder extends EasyViewHolder<SceneResponse.DataBean.Scene
         .load(values.getPic_url())
         .placeholder(R.drawable.bg_default_place_holder)
         .thumbnail(0.1f)
+        .centerCrop()
         .into(mImg);
   }
 }
