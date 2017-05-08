@@ -12,7 +12,6 @@
 
   <!-- 百度地图 -->
   <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-  <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
   <uses-permission android:name="android.permission.INTERNET"/>
@@ -23,6 +22,11 @@
   <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_GPS"/>
+  <!-- 用于申请调用A-GPS模块 -->
+  <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+  <!-- 用于申请获取蓝牙信息进行室内定位 -->
+  <uses-permission android:name="android.permission.BLUETOOTH"/>
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
   <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
   <uses-permission android:name="android.permission.GET_TASKS"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -35,15 +39,6 @@
   <uses-permission android:name="android.permission.RECORD_AUDIO"/>
   <!-- 摄影机 -->
   <uses-permission android:name="android.permission.CAMERA"/>
-
-  <meta-data
-      android:name="com.baidu.lbsapi.API_KEY"
-      android:value="jpFLPSargnsC4wbBxafhPOeYQrPAyQQa"/>
-
-  <service
-      android:name="com.baidu.location.f"
-      android:enabled="true"
-      android:process=":remote"/>
 
   <application
       android:name=".app.TravelApp"
@@ -59,8 +54,9 @@
         android:name="com.amap.api.v2.apikey"
         android:value="97df157b14e47e976fe64e2adb322855"/>
 
-    <!--启动页面-->
-    <activity android:name=".ui.main.SplashActivity"
+    <!-- 启动页面 -->
+    <activity
+        android:name=".ui.main.SplashActivity"
         android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -69,29 +65,43 @@
       </intent-filter>
     </activity>
 
-    <!--引导页面-->
-    <activity android:name=".ui.main.GuidePageActivity" android:screenOrientation="portrait"/>
+    <!-- 引导页面 -->
+    <activity
+        android:name=".ui.main.GuidePageActivity"
+        android:screenOrientation="portrait"/>
 
     <!-- 主界面 -->
-    <activity android:name=".ui.main.MainActivity"
-        android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
-    </activity>
-
-    <!-- 选择城市页面 -->
-    <activity android:name=".ui.local.ChooseCityActivity"
-        android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
-    </activity>
-
-    <!-- 加载H5的专属页面 -->
-    <activity android:name=".ui.web.WebActivity"
-        android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
-    </activity>
-
-    <!-- 百度地图专属页面 -->
-    <activity android:name=".ui.map.BaiDuMapActivity" android:screenOrientation="portrait"
+    <activity
+        android:name=".ui.main.MainActivity"
+        android:screenOrientation="portrait"
         android:windowSoftInputMode="adjustPan">
     </activity>
 
+    <!-- 选择城市页面 -->
+    <activity
+        android:name=".ui.local.ChooseCityActivity"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan">
+    </activity>
+
+    <!-- 加载H5的专属页面 -->
+    <activity
+        android:name=".ui.web.WebActivity"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan">
+    </activity>
+
+    <!-- 百度地图专属页面 -->
+    <activity
+        android:name=".ui.map.BaiDuMapActivity"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan">
+    </activity>
+
+    <service android:name="com.amap.api.location.APSService"/>
+
+    <activity android:name=".ui.map.LocationActivity">
+    </activity>
   </application>
 
 </manifest>
