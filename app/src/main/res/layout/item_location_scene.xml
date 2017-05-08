@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+  <View android:layout_width="match_parent" android:layout_height="8dp"
+      android:background="@color/page_bg"/>
+
+  <RelativeLayout
+      android:layout_width="match_parent" android:layout_height="wrap_content"
+      android:padding="8dp">
+
+    <ImageView android:id="@+id/img"
+        android:layout_width="100dp" android:layout_height="100dp"
+        tools:src="@drawable/temp_avatar" android:scaleType="centerCrop"/>
+    <TextView android:id="@+id/tv_position"
+        android:layout_width="20dp" android:layout_height="20dp"
+        android:background="@android:color/holo_orange_dark"
+        android:gravity="center"
+        tools:text="1" android:textColor="@color/white"
+        android:visibility="gone"/>
+
+    <TextView android:id="@+id/tv_title"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/img"
+        android:layout_marginLeft="10dp" android:layout_marginTop="5dp"
+        tools:text="秦始皇兵马俑" android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+    <RatingBar android:id="@+id/rate"
+        style="@style/Base.Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_title" android:layout_below="@id/tv_title"
+        android:layout_marginTop="5dp" android:layout_marginBottom="5dp"
+        android:rating="4.5"
+        android:progressTint="@android:color/holo_orange_light"/>
+
+    <TextView android:id="@+id/tv_remark"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/rate" android:layout_alignBottom="@id/rate"
+        android:layout_marginLeft="10dp"
+        tools:text="(4510)" android:textSize="14sp"/>
+
+    <TextView android:id="@+id/tv_desc"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_title" android:layout_below="@id/rate"
+        android:maxLines="2" android:ellipsize="end"
+        tools:text="西安最有名的景点，兵马俑十分精美。实在是很震撼，虽然只开发了一部分。"
+        android:textSize="12sp"/>
+
+    <ImageView android:id="@+id/img_tickets"
+        android:layout_width="18dp" android:layout_height="18dp"
+        android:src="@drawable/ic_scene_ticket"
+        android:layout_alignParentRight="true"/>
+
+    <TextView android:id="@+id/tv_price"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" android:layout_alignTop="@id/rate"
+        tools:text="¥ 28" android:textColor="@color/Orange"
+        android:textSize="16sp"/>
+
+    <TextView android:id="@+id/tv_price_old"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_price" android:layout_toLeftOf="@+id/tv_price"
+        android:layout_marginRight="5dp" android:layout_marginBottom="1dp"
+        tools:text="¥ 40" android:textSize="12sp"/>
+
+    <TextView android:id="@+id/tv_distance"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" android:layout_alignBottom="@id/img"
+        android:drawableLeft="@drawable/local_scene_image_distance"
+        android:drawablePadding="2dp"
+        android:gravity="center"
+        android:text="38.4km" android:textSize="12sp"/>
+
+  </RelativeLayout>
+
+</LinearLayout>

@@ -11,9 +11,22 @@ android {
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
+
     ndk {
       abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
     }
+
+    // java 8 ： AS 2.4 后需要删除
+    jackOptions {
+      enabled true
+    }
+  }
+
+  // java 8
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+
   }
 
   packagingOptions {
@@ -62,6 +75,12 @@ dependencies {
   compile 'com.huxq17.xrefreshview:xrefreshview:3.6.6'
   compile 'jp.wasabeef:glide-transformations:2.0.2'
   compile 'com.android.support:support-v4:25.3.1'
+
   compile 'com.amap.api:location:latest.integration'
   testCompile 'junit:junit:4.12'
+
+  compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
+  compile 'com.lzy.widget:imagepicker:0.5.5'
+  compile 'com.rengwuxian.materialedittext:library:2.1.4'
+
 }

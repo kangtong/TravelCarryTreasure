@@ -1,28 +1,40 @@
 package com.dq.android.travelcarrytreasure.ui.local;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
+import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.Constant;
+import com.dq.android.travelcarrytreasure.model.baidulvyou.LocationNowResponse;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.LocationResponse;
 import com.dq.android.travelcarrytreasure.model.common.City;
 import com.dq.android.travelcarrytreasure.model.common.FuzzyAddress;
 import com.dq.android.travelcarrytreasure.model.common.Weather;
 import com.dq.android.travelcarrytreasure.service.baidulvyou.LocationCallBack;
+import com.dq.android.travelcarrytreasure.service.baidulvyou.LocationNowCallBack;
 import com.dq.android.travelcarrytreasure.service.common.FuzzyAddressCallBack;
 import com.dq.android.travelcarrytreasure.service.common.WeatherCallBack;
+import com.dq.android.travelcarrytreasure.ui.feature.SceneListActivity;
 import com.dq.android.travelcarrytreasure.util.NetworkUtil;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
-import com.dq.android.travelcarrytreasure.widget.ScrollableLayout;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.List;
@@ -30,6 +42,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import okhttp3.Call;
+import support.ui.adapters.EasyRecyclerAdapter;
+import support.ui.adapters.EasyViewHolder;
 import support.ui.utilities.ToastUtils;
 
 /**
@@ -41,12 +55,14 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private static final String TAG = LocalFragment.class.getSimpleName();
 
   private static final String KEY_LOCATION_RESPONSE = "key_location_response";
+  private static final String KEY_LOCATION_LIVE_RESPONSE = "key_location_live_response";
   private static final String KEY_LATITUDE = "key_latitude"; // 维度
   private static final String KEY_LONGITUDE = "key_longitude"; // 经度
-  private static final String KEY_CITY = "key_city"; // 城市名
+  private static final String KEY_CITY = "key_city"; // 上次选择城市名
+  private static final String KEY_CITY_LOCATION = "key_city_location"; // 定位的城市名
   private static final String KEY_CITY_PINYIN = "key_city_pinyin"; // 城市拼音
 
-  private ScrollableLayout mLayoutScroll;
+  private ScrollView mLayoutScroll;
 
   /* toolbar */
   private RelativeLayout mLayoutCityDetails;
@@ -55,6 +71,9 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private ImageView mIvSearch;
   private View mViewDivider;
   private TextView mTvCover;
+
+  /* 功能项 */
+  private LinearLayout mLayoutFeatures_1, mLayoutFeatures_2, mLayoutFeatures_3, mLayoutFeatures_4, mLayoutFeatures_5, mLayoutFeatures_6;
 
   /* 定位+天气 */
   private TextView mTvCity;
@@ -69,7 +88,23 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   private TextView[] mTvSteps;
   private ImageView[] mImgSteps;
 
+  /* 附近推荐 */
+  private LinearLayout mLayoutNearby;
+  private TextView mTvTitleSubNearby;
+  private RecyclerView mRecycleNearby;
+  private EasyRecyclerAdapter mAdapterNearby;
+
+  /* 当地此刻 */
+  private LinearLayout mLayoutLive;
+  private TextView mTvTitleLive;
+  private TextView mTvTitleSubLive;
+  private RecyclerView mRecycleLive;
+  private EasyRecyclerAdapter mAdapterLive;
+
+  /* 部分需要记录的东西 */
   private String ip;
+  private String city; // 定位城市
+  private String sid; // 百度旅游城市的sid
   private String cityCode;
   private Double[] LatitudeAndLongitude = new Double[] {0.0, 0.0};
 
@@ -86,7 +121,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   @Override protected void initView(View view, Bundle savedInstanceState) {
 
-    mLayoutScroll = (ScrollableLayout) view.findViewById(R.id.layout_scroll);
+    mLayoutScroll = (ScrollView) view.findViewById(R.id.layout_scroll);
     /* toolbar */
     mLayoutCityDetails = (RelativeLayout) view.findViewById(R.id.layout_city_details);
     mIvCityBanner = (ImageView) view.findViewById(R.id.iv_city_banner);
@@ -94,6 +129,13 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mIvSearch = (ImageView) view.findViewById(R.id.iv_search);
     mViewDivider = view.findViewById(R.id.view_divider);
     mTvCover = (TextView) view.findViewById(R.id.tv_cover);
+    /* 功能栏 */
+    mLayoutFeatures_1 = (LinearLayout) view.findViewById(R.id.ll_features_1);
+    mLayoutFeatures_2 = (LinearLayout) view.findViewById(R.id.ll_features_2);
+    mLayoutFeatures_3 = (LinearLayout) view.findViewById(R.id.ll_features_3);
+    mLayoutFeatures_4 = (LinearLayout) view.findViewById(R.id.ll_features_4);
+    mLayoutFeatures_5 = (LinearLayout) view.findViewById(R.id.ll_features_5);
+    mLayoutFeatures_6 = (LinearLayout) view.findViewById(R.id.ll_features_6);
     /* 定位 + 天气 */
     mTvCity = (TextView) view.findViewById(R.id.tv_city);
     mTvCityPinyin = (TextView) view.findViewById(R.id.tv_city_pinyin);
@@ -114,12 +156,25 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvStroke_4 = (TextView) view.findViewById(R.id.tv_stroke_4);
     mTvStroke_5 = (TextView) view.findViewById(R.id.tv_stroke_5);
     mTvSteps = new TextView[] {mTvStroke_1, mTvStroke_2, mTvStroke_3, mTvStroke_4, mTvStroke_5};
+    /* 附近推荐 */
+    mLayoutNearby = (LinearLayout) view.findViewById(R.id.ll_nearby);
+    mTvTitleSubNearby = (TextView) view.findViewById(R.id.tv_title_sub_2);
+    mRecycleNearby = (RecyclerView) view.findViewById(R.id.recycle_nearby);
+    /* 当地此刻 */
+    mLayoutLive = (LinearLayout) view.findViewById(R.id.ll_location_now);
+    mTvTitleLive = (TextView) view.findViewById(R.id.tv_title_3);
+    mTvTitleSubLive = (TextView) view.findViewById(R.id.tv_title_sub_3);
+    mRecycleLive = (RecyclerView) view.findViewById(R.id.recycle_location_now);
+
     // 滑动监听, 改变透明度
-    mLayoutScroll.setOnScrollListener(new ScrollableLayout.OnScrollListener() {
-      @Override public void onScroll() {
-        changeSearchViewAlpha();
-      }
-    });
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      mLayoutScroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+        @Override public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+          changeSearchViewAlpha();
+        }
+      });
+    }
+
     // 搜索栏处理
     mViewDivider.getBackground().mutate().setAlpha(0);
     mLayoutSearch.getBackground().mutate().setAlpha(0);
@@ -130,6 +185,49 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     });
     // 城市选择页跳转
     mTvCity.setOnClickListener(this);
+
+    // 功能栏相关
+    mLayoutFeatures_1.setOnClickListener(this);
+    mLayoutFeatures_2.setOnClickListener(this);
+    mLayoutFeatures_3.setOnClickListener(this);
+    mLayoutFeatures_4.setOnClickListener(this);
+    mLayoutFeatures_5.setOnClickListener(this);
+    mLayoutFeatures_6.setOnClickListener(this);
+
+    // 附近推荐相关
+    final LinearLayoutManager mLayoutManager =
+        new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+    mLayoutManager.setSmoothScrollbarEnabled(true);
+    mLayoutManager.setAutoMeasureEnabled(true);
+    mRecycleNearby.setLayoutManager(mLayoutManager);
+    mRecycleNearby.setHasFixedSize(true);
+    mRecycleNearby.setNestedScrollingEnabled(false);
+    mRecycleNearby.setItemAnimator(new DefaultItemAnimator());
+    mAdapterNearby =
+        new EasyRecyclerAdapter(getContext(), LocationResponse.DataBean.ModListBean.ListBean.class, LocalViewHolder.class);
+    mAdapterNearby.setOnClickListener(new EasyViewHolder.OnItemClickListener() {
+      @Override public void onItemClick(int i, View view) {
+        ToastUtils.toast("点击了第" + i + "个item~");
+      }
+    });
+    mRecycleNearby.setAdapter(mAdapterNearby);
+
+    // 当地此刻相关
+    final GridLayoutManager mLayoutManager_2 = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+    mLayoutManager_2.setSmoothScrollbarEnabled(true);
+    mLayoutManager_2.setAutoMeasureEnabled(true);
+    mRecycleLive.setLayoutManager(mLayoutManager_2);
+    mRecycleLive.setHasFixedSize(true);
+    mRecycleLive.setNestedScrollingEnabled(false);
+    mRecycleLive.setItemAnimator(new DefaultItemAnimator());
+    mAdapterLive =
+        new EasyRecyclerAdapter(getContext(), LocationNowResponse.DataBean.ListBean.class, LocalLiveViewHolder.class);
+    mAdapterLive.setOnClickListener(new EasyViewHolder.OnItemClickListener() {
+      @Override public void onItemClick(int i, View view) {
+        ToastUtils.toast("点击了第" + i + "个item~");
+      }
+    });
+    mRecycleLive.setAdapter(mAdapterLive);
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -143,47 +241,81 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     }
   }
 
-  private void onLoadDataWithSP() {
+  private boolean onLoadDataWithSP() {
+    boolean result = false;
     // 大头数据
     String json = SPUtils.getString(getContext(), KEY_LOCATION_RESPONSE);
     if (!json.isEmpty()) {
       LocationResponse response = JSON.parseObject(json, LocationResponse.class);
       onShowData(response.getData());
+      result = true;
+      // 获取对应的sid
+      sid = response.getData().getScene_info().getInfo().getSid();
     }
-    // 城市名天气
+    // 上次选择城市名天气
     String json_city = SPUtils.getString(getContext(), KEY_CITY);
     if (!json_city.isEmpty()) {
       mTvCity.setText(json_city);
+      result = true;
     }
     String json_city_pinyin = SPUtils.getString(getContext(), KEY_CITY_PINYIN);
     if (!json_city_pinyin.isEmpty()) {
       mTvCityPinyin.setText(json_city_pinyin);
+      result = true;
+    }
+    // 定位城市
+    String json_city_location = SPUtils.getString(getContext(), KEY_CITY_LOCATION);
+    if (!json_city_location.isEmpty()) {
+      city = json_city_location;
+      result = true;
+    } else {
+      city = "null";
     }
     // 经度
     String json_longitude = SPUtils.getString(getContext(), KEY_LONGITUDE);
     if (!json_longitude.isEmpty()) {
       LatitudeAndLongitude[0] = Double.valueOf(json_longitude);
+      result = true;
     }
     // 纬度
     String json_latitude = SPUtils.getString(getContext(), KEY_LATITUDE);
     if (!json_latitude.isEmpty()) {
       LatitudeAndLongitude[1] = Double.valueOf(json_latitude);
+      result = true;
     }
+    // 当地此刻 Live 的数据展示
+    String json_live = SPUtils.getString(getContext(), KEY_LOCATION_LIVE_RESPONSE);
+    if (!json_live.isEmpty()) {
+      LocationNowResponse response = JSON.parseObject(json_live, LocationNowResponse.class);
+      onShowLive(response.getData());
+      result = true;
+    }
+    return result;
   }
 
   @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.tv_city:
-        ChooseCityActivity.start(getContext(), mTvCity.getText().toString());
+        ChooseCityActivity.start((BaseActivity) getContext(), city, 1006);
+        break;
+      case R.id.ll_features_1:
+        SceneListActivity.start(getContext(), sid);
+        break;
+      case R.id.ll_features_2:
+      case R.id.ll_features_3:
+      case R.id.ll_features_4:
+      case R.id.ll_features_5:
+      case R.id.ll_features_6:
+        ToastUtils.toast("此功能正在开发，敬请期待~");
         break;
     }
   }
 
   private void onLoadData() {
-    // 1.通过高德获取城市名 + 天气
+    // 1.通过高德获取城市名 + 天气, 之后的东西，因为相互关联，所以依次调用
     getIP();
-    // 2.glide加载大图
-    // getBanner();
+    // 2.当地此刻的数据，加载显示
+    getLocationLive(null);
     // 3,其他数据加载
     // getOtherData();
   }
@@ -193,7 +325,6 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     // 先把天气给填进去
     mTvWeather.setText(data.getScene_info().getInfo().getWeather().getDescribe());
     // 加载 Banner
-    Log.d(TAG, "加载Banner的url: " + data.getScene_info().getInfo().getPic_url());
     Glide.with(LocalFragment.this)
         .load(data.getScene_info().getInfo().getPic_url())
         .placeholder(R.drawable.bg_default_place_holder)
@@ -207,17 +338,28 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
     mTvTitleSub.setText(data.getMod_list().get(0).getSubtitle()); // 副标题
     updateTravelStep(data.getMod_list().get(0).getList()); // 更新5个步骤
     // 附近推荐 /* 这里有可能是空的，比如北京就没有 */
-
+    if (data.getMod_list().size() == 1) { // 只有推荐行程， 没有附近推荐
+      mLayoutNearby.setVisibility(View.GONE);
+      return;
+    }
+    mTvTitleSubNearby.setText(data.getMod_list().get(1).getSubtitle());
+    mAdapterNearby.addAll(data.getMod_list().get(1).getList());
   }
 
+  /* 更新推荐行程 */
   private void updateTravelStep(List<LocationResponse.DataBean.ModListBean.ListBean> list) {
     // 1，先判断一共，有几个景点
     int sum = list.size();
     for (int i = 0; i < list.size(); i++) {
+      if (i >= 5) {
+        break;
+      }
       mTvSteps[i].setText(list.get(i).getName());
+      mImgSteps[i].setVisibility(View.VISIBLE);
     }
     for (int i = 4; i > sum - 1; i--) { // 没有的设置透明度
-      mImgSteps[i].setImageAlpha(125);
+      mTvSteps[i].setText("");
+      mImgSteps[i].setVisibility(View.INVISIBLE);
     }
   }
 
@@ -294,6 +436,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             if (response.getStatus().equals("1")) { // 成功
               Log.d(TAG, "onResponse: " + "api返回数据成功~");
               // 展示数据
+              city = response.getCity();
               mTvCity.setText(response.getCity());
               cityCode = response.getAdcode();
               LatitudeAndLongitude = response.getCenterPoint();
@@ -314,10 +457,11 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
               // 保存至SP : 经纬度 + 城市名
               SPUtils.setString(getContext(), KEY_LATITUDE, LatitudeAndLongitude[1] + "");
               SPUtils.setString(getContext(), KEY_LONGITUDE, LatitudeAndLongitude[0] + "");
-              SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString());
+              SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString()); // 上次选择的城市
+              SPUtils.setString(getContext(), KEY_CITY_LOCATION, city); // 定位的城市名
               SPUtils.setString(getContext(), KEY_CITY_PINYIN, mTvCityPinyin.getText().toString());
               // getWeather(cityCode); // 获取天气
-              getOtherData(); // 获取其他数据
+              getOtherData(null); // 获取其他数据
             } else {
               Log.d(TAG, "onResponse: " + response.getInfo());
               Log.d(TAG, "onResponse: " + "api返回数据失败!!!");
@@ -328,7 +472,6 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   /* 获取天气 */
   private void getWeather(String cityCode) {
-    // TODO: 2017/4/27 dengqi: 这个天气不准,将来换成高德地图的
     String url = "http://restapi.amap.com/v3/weather/weatherInfo?city="
         + cityCode
         + "&key="
@@ -363,16 +506,18 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   }
 
   /* 获取其他数据: 这个数据很多, 小心处理, fastjson 经常报错 */
-  public void getOtherData() {
-    String url = // 很多东西, 慢慢分析, 拆解
-        "http://lvyou.baidu.com/destination/app/local?apiv=v2&around=0"
-            + "&sid=9bb8ee381df41344144463f5" // 城市的id 不知道是怎么拿到的，现在这个写死是西安的
-            + "&y=" + LatitudeAndLongitude[1]
-            // + "40.001743" // 维度
-            + "&x=" + LatitudeAndLongitude[0]
-            // + "116.488043" // 经度
-            + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
-            + "LVCODE=e6607590f956caba448f69298d91e475&T=1493720240";
+  public void getOtherData(String url) {
+    if (url == null) {
+      url = // 很多东西, 慢慢分析, 拆解
+          "http://lvyou.baidu.com/destination/app/local?apiv=v2&around=0"
+              + "&sid=9bb8ee381df41344144463f5" // 城市的id 不知道是怎么拿到的，现在这个写死是西安的
+              + "&y=" + LatitudeAndLongitude[1]
+              // + "40.001743" // 维度
+              + "&x=" + LatitudeAndLongitude[0]
+              // + "116.488043" // 经度
+              + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
+              + Constant.getInstance().getBaidulvyoukey();
+    }
     OkHttpUtils
         .get()
         .url(url)
@@ -386,6 +531,7 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
           @Override public void onResponse(LocationResponse response, int id) {
             if (response.getErrno() == 0) { // 成功
               Log.d(TAG, "onResponse: " + "当地界面网络请求,api返回数据成功~");
+              sid = response.getData().getScene_info().getInfo().getSid();
               // 展示数据
               onShowData(response.getData());
               // 保存至SP
@@ -396,5 +542,103 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
             }
           }
         });
+  }
+
+  public void getLocationLive(String sid) {
+    String url;
+    if (sid == null) {
+      url = // 这个返回的东西，相对清晰简单
+          "http://lvyou.baidu.com/destination/app/event/live?picture=1&apiv=v2&rn=20&d=android"
+              + "&sid="
+              + "9bb8ee381df41344144463f5"
+              + "&" + Constant.getInstance().getBaidulvyoukey();
+    } else {
+      url =
+          "http://lvyou.baidu.com/destination/app/event/live?picture=1&apiv=v2&rn=20&d=android"
+              + "&sid="
+              + sid
+              + "&" + Constant.getInstance().getBaidulvyoukey();
+    }
+    OkHttpUtils
+        .get()
+        .url(url)
+        .build()
+        .execute(new LocationNowCallBack() {
+          @Override public void onError(Call call, Exception e, int id) {
+            Log.d(TAG, "onError: " + "当地界面 Live 请求,发生网络错误");
+            Log.d(TAG, "onError: " + e.toString());
+          }
+
+          @Override public void onResponse(LocationNowResponse response, int id) {
+            if (response.getErrno() == 0) { // 成功
+              Log.d(TAG, "onResponse: " + "当地界面 Live 请求,api返回数据成功~");
+              // 展示数据
+              onShowLive(response.getData());
+              // 保存至SP
+              String discover = JSON.toJSONString(response);
+              SPUtils.setString(getContext(), KEY_LOCATION_LIVE_RESPONSE, discover);
+            } else {
+              Log.d(TAG, "onResponse: " + "当地界面 Live 请求,api返回数据失败!!!");
+            }
+          }
+        });
+  }
+
+  /* 展示 当地此刻  */
+  private void onShowLive(LocationNowResponse.DataBean data) {
+    mAdapterLive.addAll(data.getList());
+    mTvTitleLive.setText(data.getSname() + "·" + "此刻");
+    mTvTitleSubLive.setText(data.getCount() + "人来过");
+  }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == 1006 && resultCode == Activity.RESULT_OK) {
+      String city = data.getStringExtra("city");
+      String sid = data.getStringExtra("cityCode");
+      double x = data.getDoubleExtra("x", 0.0);
+      double y = data.getDoubleExtra("y", 0.0);
+      Log.d(TAG, "onActivityResult: " + city + "|" + sid + "|" + x + "|" + y);
+      // 显示
+      mTvCity.setText(city);
+      LatitudeAndLongitude[1] = x;
+      LatitudeAndLongitude[0] = y;
+      List<City> list = Constant.getInstance().getCityList();
+      for (int i = 0; i < list.size(); i++) {
+        if (city.contains(list.get(i).getSname())) {
+          mTvCityPinyin.setText(list.get(i).getSurl().toUpperCase());
+          break;
+        }
+      }
+      // 存储
+      SPUtils.setString(getContext(), KEY_LATITUDE, LatitudeAndLongitude[1] + "");
+      SPUtils.setString(getContext(), KEY_LONGITUDE, LatitudeAndLongitude[0] + "");
+      SPUtils.setString(getContext(), KEY_CITY, mTvCity.getText().toString());
+      SPUtils.setString(getContext(), KEY_CITY_PINYIN, mTvCityPinyin.getText().toString());
+      // 网络加载
+      String url = // 很多东西, 慢慢分析, 拆解
+          "http://lvyou.baidu.com/destination/app/local?apiv=v2&around=0"
+              + "&sid=" // 城市的id 不知道是怎么拿到的，现在这个写死是西安的
+              + sid
+              + "&y=" + LatitudeAndLongitude[1]
+              // + "40.001743" // 维度
+              + "&x=" + LatitudeAndLongitude[0]
+              // + "116.488043" // 经度
+              + "&format=app&m=8e66d8f81fdea5a65e83102dd354f290&"
+              + Constant.getInstance().getBaidulvyoukey();
+      // 获取当地主要内容
+      getOtherData(url);
+      // 获取当地，此刻的内容
+      getLocationLive(sid);
+    }
+  }
+
+  /* 重新刷新一下 */
+  private void onRefresh() {
+    if (NetworkUtil.isNetworkAvailable()) {
+      onLoadData(); // 2,网络请求
+    } else {
+      ToastUtils.toast("本地网络检查错误!!!");
+    }
   }
 }

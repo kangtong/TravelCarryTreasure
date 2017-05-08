@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+  <!-- toolbar -->
+  <com.dq.android.travelcarrytreasure.widget.CustomToolBar android:id="@+id/tool_bar"
+      android:layout_width="match_parent" android:layout_height="wrap_content"
+      app:toolbarTitle="全部景点" app:isShowLeftImg="true"
+      app:rightTxt="搜索" app:isShowRight="true"/>
+
+  <!-- 主体内容 -->
+  <FrameLayout android:id="@+id/container"
+      android:layout_width="match_parent" android:layout_height="0dp"
+      android:layout_weight="1">
+
+    <!-- 列表 -->
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout android:id="@+id/twinkling_refresh_layout"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:visibility="gone">
+      <android.support.v7.widget.RecyclerView android:id="@+id/recycle_all_scene"
+          android:layout_width="match_parent" android:layout_height="wrap_content"
+          android:overScrollMode="never"/>
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+    <!-- 加载图 -->
+    <ImageView android:id="@+id/iv_loading"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+  </FrameLayout>
+
+  <!-- 底部一个分割线 -->
+  <View
+      android:layout_width="match_parent" android:layout_height="0.5dp"
+      android:background="@color/divider"/>
+
+  <!-- 最下面的筛选排序 -->
+  <LinearLayout
+      android:layout_width="match_parent" android:layout_height="@dimen/toolbar_height">
+
+    <FrameLayout android:id="@+id/fl_type"
+        android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1" android:background="?android:attr/selectableItemBackground">
+      <TextView android:id="@+id/tv_type"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_gravity="center" android:gravity="center"
+          android:text="全部类型" android:textSize="16sp"
+          android:textColor="@drawable/selector_scene_tv_color"
+          android:drawableLeft="@drawable/ic_footbar_filter_type"
+          android:drawablePadding="5dp"/>
+    </FrameLayout>
+
+    <FrameLayout android:id="@+id/fl_sort"
+        android:layout_width="0dp" android:layout_height="match_parent"
+        android:layout_weight="1" android:background="?android:attr/selectableItemBackground">
+      <TextView android:id="@+id/tv_sort"
+          android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:layout_gravity="center" android:gravity="center"
+          android:text="默认排序" android:textSize="16sp"
+          android:textColor="@drawable/selector_scene_tv_color"
+          android:drawableLeft="@drawable/ic_footbar_filter_sort"
+          android:drawablePadding="5dp"/>
+    </FrameLayout>
+
+  </LinearLayout>
+
+</LinearLayout>

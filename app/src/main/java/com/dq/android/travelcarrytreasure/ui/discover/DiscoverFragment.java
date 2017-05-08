@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
+import com.dq.android.travelcarrytreasure.model.Constant;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.DiscoverResponse;
 import com.dq.android.travelcarrytreasure.model.baidulvyou.TravellerNoteResponse;
 import com.dq.android.travelcarrytreasure.service.baidulvyou.DiscoverCallBack;
@@ -132,7 +133,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
   private void onLoadData() {
     String url_1 = // 3个楼层的东西
         "http://lvyou.baidu.com/main/app/index?apiv=v4&d=android&v=7.3.0&"
-            + "LVCODE=8be7e7f32494c3043993b9b7e3d7ac9d&T=1493719962";
+            + Constant.getInstance().getBaidulvyoukey();
     OkHttpUtils
         .get()
         .url(url_1)
@@ -164,7 +165,7 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
         "http://lvyou.baidu.com/main/app/praisedlist?apiv=v2&page_num="
             + random
             + "&format=app&d=android&"
-            + "LVCODE=7b99d98bd034a810fa301a058bb65396&T=1493720196";
+            + Constant.getInstance().getBaidulvyoukey();
     OkHttpUtils
         .get()
         .url(url_2)
@@ -190,8 +191,6 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
             if (!isLoadMore) {
               // 额外多请求一次
               onLoadTravellerNote(true);
-            } else {
-              // TODO: 2017/4/21 dengqi: 底部显示, 更多按钮, 跳转至另一界面
             }
           }
         });
