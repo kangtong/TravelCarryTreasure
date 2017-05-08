@@ -12,6 +12,7 @@ import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
 import com.dq.android.travelcarrytreasure.model.wyt.UserInfo;
+import com.dq.android.travelcarrytreasure.ui.local.ChooseCityActivity;
 import com.dq.android.travelcarrytreasure.ui.main.MainActivity;
 import com.dq.android.travelcarrytreasure.util.SPUtils;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -148,6 +149,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         break;
       case R.id.tv_residence:
       case R.id.tv_modify:
+        //ChooseCityActivity.start();
         ToastUtils.toast("修改居住地");
         break;
       case R.id.ll_travel_map:
