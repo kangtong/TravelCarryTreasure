@@ -6,10 +6,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
 import com.dq.android.travelcarrytreasure.R;
+import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.base.BaseFragment;
+import com.dq.android.travelcarrytreasure.model.wyt.UserInfo;
 import com.dq.android.travelcarrytreasure.ui.main.MainActivity;
+import com.dq.android.travelcarrytreasure.util.SPUtils;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import support.ui.utilities.ToastUtils;
+
+import static com.dq.android.travelcarrytreasure.ui.mine.LoginActivity.KEY_USER_INFO;
 
 /**
  * Created by DQDana on 2017/4/5
@@ -31,6 +39,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
   private LinearLayout mLayoutLogout;
 
   private ImageView mImgAvatar;
+  private TextView mTvUserLevel;
+  private TextView mTvNickName;
+  private TextView mTvResidence;// 居住地
 
   /* 未登录 */
   private TextView mTvLogin;
@@ -44,7 +55,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
   }
 
   @Override public int getLayoutId() {
-    if (!isLoggedIn) {
+    isLoggedIn = !SPUtils.getString(getContext(), KEY_USER_INFO).isEmpty();
+    if (isLoggedIn) {
       return R.layout.fragment_mine;
     } else {
       return R.layout.fragment_mine_temp;
@@ -52,7 +64,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
   }
 
   @Override protected void initView(View view, Bundle savedInstanceState) {
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
       initViewNormal(view);
     } else {
       initViewTemp(view);
@@ -72,6 +84,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     mLayoutLogout = (LinearLayout) view.findViewById(R.id.ll_logout);
     // 控件
     mImgAvatar = (ImageView) view.findViewById(R.id.img_avatar);
+    mTvUserLevel = (TextView) view.findViewById(R.id.tv_user_level);
+    mTvNickName = (TextView) view.findViewById(R.id.tv_nick_name);
+    mTvResidence = (TextView) view.findViewById(R.id.tv_residence);
 
     // 单击事件
     mLayoutAvatar.setOnClickListener(this);
@@ -105,6 +120,25 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
   /* 加载用户数据：头像，昵称，居住地，等级 */
   private void onLoadData() {
+    String json = SPUtils.getString(getContext(), KEY_USER_INFO);
+    if (!json.isEmpty()) {
+      UserInfo response = JSON.parseObject(json, UserInfo.class);
+      onShowUserInfo(response);
+    }
+  }
+
+  private void onShowUserInfo(UserInfo response) {
+    mTvNickName.setText(response.getUserName());
+    mTvUserLevel.setText("Level " + response.getUserLevel());
+    if (!response.getUserResidence().isEmpty()) {
+      mTvResidence.setText("居住地：" + response.getUserResidence());
+    }
+    if (!response.getUserAvatar().isEmpty()) {
+      Glide.with(this)
+          .load(response.getUserAvatar())
+          .bitmapTransform(new CropCircleTransformation(getContext()))
+          .into(mImgAvatar);
+    }
   }
 
   @Override public void onClick(View v) {
@@ -112,14 +146,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
       case R.id.rl_avatar:
         ToastUtils.toast("切换头像");
         break;
-      case R.id.rl_user_info:
+      case R.id.tv_residence:
+      case R.id.tv_modify:
         ToastUtils.toast("修改居住地");
         break;
       case R.id.ll_travel_map:
         ToastUtils.toast("此功能正在开发，敬请期待");
         break;
       case R.id.ll_album:
-        ToastUtils.toast("此功能正在开发，敬请期待");
+        ToastUtils.toast("此功能正在开发，敬请期1待");
         break;
       case R.id.ll_notes:
         ToastUtils.toast("此功能正在开发，敬请期待");
@@ -134,15 +169,14 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         FeedBackActivity.start(getContext());
         break;
       case R.id.ll_logout:
-        // 清空登录数据
-        // TODO: 2017/5/8 dengqi：清空登录数据
-        MainActivity.start(getContext());
+        SPUtils.removeString(getContext(), KEY_USER_INFO);
+        MainActivity.start((BaseActivity) getContext(),true);
         break;
       case R.id.tv_login:
-        ToastUtils.toast("登录页面");
+        LoginActivity.start(getContext(), LoginActivity.KEY_LOGIN);
         break;
       case R.id.tv_register:
-        ToastUtils.toast("注册页面");
+        LoginActivity.start(getContext(), LoginActivity.KEY_REGISTER);
         break;
       default:
         break;

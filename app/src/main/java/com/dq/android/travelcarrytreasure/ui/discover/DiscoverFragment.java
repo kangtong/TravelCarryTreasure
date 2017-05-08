@@ -191,8 +191,6 @@ public class DiscoverFragment extends BaseFragment implements SwipeRefreshLayout
             if (!isLoadMore) {
               // 额外多请求一次
               onLoadTravellerNote(true);
-            } else {
-              // TODO: 2017/4/21 dengqi: 底部显示, 更多按钮, 跳转至另一界面
             }
           }
         });

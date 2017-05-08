@@ -233,13 +233,11 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     // 1, 先加载本地
-    // if (!onLoadDataWithSP()) { // 如果本地无缓存数据，再使用网络请求
-    if (onLoadDataWithSP()) { // 每次启动都要使用一次网络请求
-      if (NetworkUtil.isNetworkAvailable()) {
-        onLoadData(); // 2,网络请求
-      } else {
-        ToastUtils.toast("本地网络检查错误!!!");
-      }
+    onLoadDataWithSP();
+    if (NetworkUtil.isNetworkAvailable()) {
+      onLoadData(); // 2,网络请求
+    } else {
+      ToastUtils.toast("本地网络检查错误!!!");
     }
   }
 
@@ -474,7 +472,6 @@ public class LocalFragment extends BaseFragment implements View.OnClickListener 
 
   /* 获取天气 */
   private void getWeather(String cityCode) {
-    // TODO: 2017/4/27 dengqi: 这个天气不准,将来换成高德地图的
     String url = "http://restapi.amap.com/v3/weather/weatherInfo?city="
         + cityCode
         + "&key="

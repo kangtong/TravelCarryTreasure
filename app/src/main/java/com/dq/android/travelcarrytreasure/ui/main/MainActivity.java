@@ -2,8 +2,6 @@ package com.dq.android.travelcarrytreasure.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,8 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 import com.dq.android.travelcarrytreasure.R;
 import com.dq.android.travelcarrytreasure.base.BaseActivity;
 import com.dq.android.travelcarrytreasure.ui.discover.DiscoverFragment;
@@ -49,22 +45,22 @@ public class MainActivity extends BaseActivity {
     }
   };
 
-  public static void start(BaseActivity activity) {
-    Intent intent = new Intent(activity, MainActivity.class);
-    activity.startActivity(intent);
-  }
-
   public static void start(Context context) {
     Intent intent = new Intent(context, MainActivity.class);
+    context.startActivity(intent);
+  }
+
+  public static void start(BaseActivity activity, boolean init) {
+    Intent intent = new Intent(activity, MainActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    context.startActivity(intent);
+    activity.startActivity(intent);
+    activity.finish();
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setDarkStatusIcon(true);
     setContentView(R.layout.activity_main);
     initViews();
     initListener();
@@ -128,23 +124,6 @@ public class MainActivity extends BaseActivity {
    */
   @Override protected void onSaveInstanceState(Bundle outState) {
 
-  }
-
-  private void setDarkStatusIcon(boolean bDark) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      View decorView = getWindow().getDecorView();
-      if (decorView != null) {
-        int vis = decorView.getSystemUiVisibility();
-        if (bDark) {
-          vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        } else {
-          vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        }
-        decorView.setSystemUiVisibility(vis);
-      }
-      getWindow().setStatusBarColor(Color.TRANSPARENT);
-    }
   }
 
   @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
