@@ -84,6 +84,16 @@
         android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
     </activity>
 
+    <!-- 关于界面 -->
+    <activity android:name=".ui.mine.AboutActivity"
+        android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
+    </activity>
+
+    <!-- 意见反馈界面 -->
+    <activity android:name=".ui.mine.FeedBackActivity"
+        android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
+    </activity>
+
     <!-- 加载H5的专属页面 -->
     <activity android:name=".ui.web.WebActivity"
         android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
@@ -93,6 +103,10 @@
     <activity android:name=".ui.map.BaiDuMapActivity" android:screenOrientation="portrait"
         android:windowSoftInputMode="adjustPan">
     </activity>
+
+    <!-- 展示本地图片的专属页面 -->
+    <activity android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+        android:theme="@style/ImagePickerThemeFullScreen"/>
 
   </application>
 

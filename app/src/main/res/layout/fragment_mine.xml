@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
   <RelativeLayout
@@ -26,7 +26,7 @@
         android:layout_marginBottom="10dp">
       <ImageView android:id="@+id/iv_avatar"
           android:layout_width="60dp" android:layout_height="60dp"
-          android:src="@drawable/temp_avatar"/>
+          tools:src="@drawable/travel_img_avatar_default"/>
       <TextView android:id="@+id/tv_user_level"
           android:layout_width="wrap_content" android:layout_height="wrap_content"
           android:text="Level 1" android:textColor="@color/white"
@@ -39,7 +39,7 @@
     </RelativeLayout>
 
     <!-- 昵称 + 常居地 -->
-    <RelativeLayout
+    <RelativeLayout android:id="@+id/rl_user_info"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_alignTop="@id/rl_avatar" android:layout_toRightOf="@id/rl_avatar"
         android:layout_marginLeft="30dp" android:gravity="center_horizontal|top"
@@ -67,7 +67,8 @@
         android:orientation="vertical"
         android:layout_marginTop="10dp" android:layout_below="@id/img_mine_banner"
         android:background="@color/white">
-      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp">
+      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
+          android:background="?android:attr/selectableItemBackground">
         <TextView
             android:layout_width="wrap_content" android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -132,8 +133,10 @@
         android:background="@color/white">
 
       <!-- 画册：尚未开发 -->
-      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
-          android:paddingLeft="16dp" android:paddingRight="20dp">
+      <LinearLayout android:id="@+id/ll_album"
+          android:layout_width="match_parent" android:layout_height="50dp"
+          android:paddingLeft="16dp" android:paddingRight="20dp"
+          android:background="?android:attr/selectableItemBackground">
         <ImageView android:layout_width="20dp" android:layout_height="20dp"
             android:src="@drawable/icon_setting_image" android:layout_gravity="center"
             android:layout_marginRight="10dp"/>
@@ -151,8 +154,10 @@
           android:background="@color/divider"/>
 
       <!-- 游记：尚未开发 -->
-      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
-          android:paddingLeft="16dp" android:paddingRight="20dp">
+      <LinearLayout android:id="@+id/ll_notes"
+          android:layout_width="match_parent" android:layout_height="50dp"
+          android:paddingLeft="16dp" android:paddingRight="20dp"
+          android:background="?android:attr/selectableItemBackground">
         <ImageView android:layout_width="20dp" android:layout_height="20dp"
             android:src="@drawable/icon_setting_note" android:layout_gravity="center"
             android:layout_marginRight="10dp"/>
@@ -170,8 +175,10 @@
           android:background="@color/divider"/>
 
       <!-- 收藏：尚未开发 -->
-      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
-          android:paddingLeft="16dp" android:paddingRight="20dp">
+      <LinearLayout android:id="@+id/ll_collection"
+          android:layout_width="match_parent" android:layout_height="50dp"
+          android:paddingLeft="16dp" android:paddingRight="20dp"
+          android:background="?android:attr/selectableItemBackground">
         <ImageView android:layout_width="20dp" android:layout_height="20dp"
             android:src="@drawable/icon_setting_recommend" android:layout_gravity="center"
             android:layout_marginRight="10dp"/>
@@ -189,8 +196,10 @@
           android:background="@color/divider"/>
 
       <!-- 关于 -->
-      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
-          android:paddingLeft="16dp" android:paddingRight="20dp">
+      <LinearLayout android:id="@+id/ll_about"
+          android:layout_width="match_parent" android:layout_height="50dp"
+          android:paddingLeft="16dp" android:paddingRight="20dp"
+          android:background="?android:attr/selectableItemBackground">
         <ImageView android:layout_width="20dp" android:layout_height="20dp"
             android:src="@drawable/icon_setting_about" android:layout_gravity="center"
             android:layout_marginRight="10dp"/>
@@ -208,8 +217,10 @@
           android:background="@color/divider"/>
 
       <!-- 意见反馈 -->
-      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
-          android:paddingLeft="16dp" android:paddingRight="20dp">
+      <LinearLayout android:id="@+id/ll_feedback"
+          android:layout_width="match_parent" android:layout_height="50dp"
+          android:paddingLeft="16dp" android:paddingRight="20dp"
+          android:background="?android:attr/selectableItemBackground">
         <ImageView android:layout_width="20dp" android:layout_height="20dp"
             android:src="@drawable/icon_setting_feedback" android:layout_gravity="center"
             android:layout_marginRight="10dp"/>
@@ -227,8 +238,10 @@
           android:background="@color/divider"/>
 
       <!-- 退出账号 -->
-      <LinearLayout android:layout_width="match_parent" android:layout_height="50dp"
-          android:paddingLeft="16dp" android:paddingRight="20dp">
+      <LinearLayout android:id="@+id/ll_logout"
+          android:layout_width="match_parent" android:layout_height="50dp"
+          android:paddingLeft="16dp" android:paddingRight="20dp"
+          android:background="?android:attr/selectableItemBackground">
         <ImageView android:layout_width="20dp" android:layout_height="20dp"
             android:src="@drawable/icon_setting_quit" android:layout_gravity="center"
             android:layout_marginRight="10dp"/>

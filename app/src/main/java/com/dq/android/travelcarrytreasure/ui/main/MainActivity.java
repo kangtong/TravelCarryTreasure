@@ -1,5 +1,6 @@
 package com.dq.android.travelcarrytreasure.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -51,6 +52,14 @@ public class MainActivity extends BaseActivity {
   public static void start(BaseActivity activity) {
     Intent intent = new Intent(activity, MainActivity.class);
     activity.startActivity(intent);
+  }
+
+  public static void start(Context context) {
+    Intent intent = new Intent(context, MainActivity.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(intent);
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
