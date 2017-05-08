@@ -55,6 +55,9 @@
       android:theme="@style/AppTheme"
       tools:ignore="AllowBackup,GoogleAppIndexingWarning"
       tools:replace="android:icon">
+    <meta-data
+        android:name="com.amap.api.v2.apikey"
+        android:value="97df157b14e47e976fe64e2adb322855"/>
 
     <!--启动页面-->
     <activity android:name=".ui.main.SplashActivity"
