@@ -1,5 +1,7 @@
 package com.dq.android.travelcarrytreasure.ui.mine;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,6 +45,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
   private TextView mTvUserLevel;
   private TextView mTvNickName;
   private TextView mTvResidence;// 居住地
+  private TextView mTvModify;// 修改
 
   /* 未登录 */
   private TextView mTvLogin;
@@ -88,6 +91,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     mTvUserLevel = (TextView) view.findViewById(R.id.tv_user_level);
     mTvNickName = (TextView) view.findViewById(R.id.tv_nick_name);
     mTvResidence = (TextView) view.findViewById(R.id.tv_residence);
+    mTvModify = (TextView) view.findViewById(R.id.tv_modify);
 
     // 单击事件
     mLayoutAvatar.setOnClickListener(this);
@@ -99,6 +103,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     mLayoutAbout.setOnClickListener(this);
     mLayoutFeedback.setOnClickListener(this);
     mLayoutLogout.setOnClickListener(this);
+    mTvResidence.setOnClickListener(this);
+    mTvModify.setOnClickListener(this);
 
     //Intent intent = new Intent(getContext(), ImageGridActivity.class);
     // intent.putExtra(ImageGridActivity.EXTRAS_TAKE_PICKERS,true); // 是否是直接打开相机
@@ -149,8 +155,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         break;
       case R.id.tv_residence:
       case R.id.tv_modify:
-        //ChooseCityActivity.start();
-        ToastUtils.toast("修改居住地");
+        ChooseCityActivity.start((BaseActivity) getContext(), 1025);
         break;
       case R.id.ll_travel_map:
         ToastUtils.toast("此功能正在开发，敬请期待");
@@ -172,7 +177,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         break;
       case R.id.ll_logout:
         SPUtils.removeString(getContext(), KEY_USER_INFO);
-        MainActivity.start((BaseActivity) getContext(),true);
+        MainActivity.start((BaseActivity) getContext(), true);
         break;
       case R.id.tv_login:
         LoginActivity.start(getContext(), LoginActivity.KEY_LOGIN);
@@ -182,6 +187,26 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         break;
       default:
         break;
+    }
+  }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == 1025 && resultCode == Activity.RESULT_OK) {
+      // 展示
+      String city = data.getStringExtra("city");
+      mTvResidence.setText(city);
+      // 存储
+      String json = SPUtils.getString(getContext(), KEY_USER_INFO);
+      if (!json.isEmpty()) {
+        UserInfo response = JSON.parseObject(json, UserInfo.class);
+        response.setUserResidence(city);
+        String discover = JSON.toJSONString(response);
+        SPUtils.setString(getContext(), KEY_USER_INFO, discover);
+      }
+      // 修改服务器
+      // 开始请求 网络
+
     }
   }
 }

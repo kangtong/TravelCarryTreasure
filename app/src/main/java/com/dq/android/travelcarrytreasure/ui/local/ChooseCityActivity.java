@@ -31,6 +31,7 @@ public class ChooseCityActivity extends BaseActivity {
   private static final String TAG = ChooseCityActivity.class.getSimpleName();
   private static final String KEY_HOT_CITY_RESPONSE = "key_hot_city_response";
   private static final String KEY_LOCATION_CITY = "key_location_city";
+  private static final String KEY_CITY = "key_city"; // 上次选择城市名
 
   private CustomToolBar mToolbar;
   private TextView mTvLocationCity;
@@ -46,6 +47,11 @@ public class ChooseCityActivity extends BaseActivity {
   public static void start(BaseActivity activity, String city, int requestCode) {
     Intent starter = new Intent(activity, ChooseCityActivity.class);
     starter.putExtra(KEY_LOCATION_CITY, city);
+    activity.startActivityForResult(starter, requestCode);
+  }
+
+  public static void start(BaseActivity activity, int requestCode) {
+    Intent starter = new Intent(activity, ChooseCityActivity.class);
     activity.startActivityForResult(starter, requestCode);
   }
 
@@ -95,7 +101,16 @@ public class ChooseCityActivity extends BaseActivity {
   }
 
   private void initData() {
-    mTvLocationCity.setText(getIntent().getStringExtra(KEY_LOCATION_CITY));
+    if (getIntent().getStringExtra(KEY_LOCATION_CITY) == null) {
+      // SP 存储的值
+      String json_city = SPUtils.getString(this, KEY_CITY);
+      if (!json_city.isEmpty()) {
+        mTvLocationCity.setText(json_city);
+      }
+    } else {
+      // 传过来的值
+      mTvLocationCity.setText(getIntent().getStringExtra(KEY_LOCATION_CITY));
+    }
 
     String json = SPUtils.getString(this, KEY_HOT_CITY_RESPONSE);
     if (!json.isEmpty()) {
